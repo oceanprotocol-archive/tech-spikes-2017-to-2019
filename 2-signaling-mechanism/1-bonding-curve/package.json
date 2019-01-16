@@ -1,0 +1,51 @@
+{
+  "name": "@oceanprotocol/keeper-contracts",
+  "version": "0.5.1",
+  "description": "Integration of TCRs, CPM and Ocean Tokens in Solidity",
+  "bugs": {
+    "url": "https://github.com/oceanprotocol/keeper-contracts/issues"
+  },
+  "homepage": "https://github.com/oceanprotocol/keeper-contracts#readme",
+  "main": "truffle.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "migrate:spree": "npm run migrate -- --network spree",
+    "migrate:nile": "npm run migrate -- --network nile",
+    "migrate:kovan": "npm run migrate -- --network kovan",
+    "migrate:rinkeby": "npm run migrate -- --network rinkeby",
+    "migrate:mainnet": "npm run migrate ----network mainnet",
+    "test": "truffle test",
+    "test:cover": "solidity-coverage",
+    "release": "./bumpversion.sh patch",
+    "clean": "rm -rf ./build/ && rm -rf ./artifacts/*.development.json",
+    "lint": "npm run lint:eslint && npm run lint:solium",
+    "lint:eslint": "eslint --ignore-pattern '/coverage/' .",
+    "lint:solium": "solium -d ./contracts/",
+    "lint:solium:watch": "npm run lint:solium -- --watch",
+    "lint:mythril": "truffle compile && myth -x --truffle --max-depth 8 --outform markdown > mythril-report.md",
+    "lint:fix": "npm run lint:eslint -- --fix && npm run lint:solium -- --fix"
+  },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "files": [
+    "artifacts/**/*",
+    "doc/**/*",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oceanprotocol/keeper-contracts.git"
+  },
+  "author": "Ocean Protocol",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "openzeppelin-eth": "^2.0.2",
+    "truffle-hdwallet-provider": "^1.0.1"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "^2.1.1"
+  }
+}
