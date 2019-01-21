@@ -5,9 +5,9 @@
 ```
 name: repository of research work what we are interested.
 type: research
-status: initial draft
+status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 01/14/2019
+date: 01/21/2019
 ```
 
 ## Introduction
@@ -22,7 +22,7 @@ This repository maintains on-going research work and will be updated frequently 
 
 Folder Name  | SubFolder Name |  Description |
 --- | --- | ---|
-1-fitchain-analysis | | 
+1-fitchain-analysis | | 	analysis of Fitchain work (WIP) |
 2-signaling-mechanism | 1-bonding-curve | PoC of bonding curve |
 
 
@@ -31,6 +31,7 @@ Folder Name  | SubFolder Name |  Description |
 
 ## Major Updates
 
+* [01/21/2019] update fitchain analysis repo
 
 * [01/16/2019] setup framework of repository
 
