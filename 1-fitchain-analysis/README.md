@@ -179,6 +179,7 @@ Current implementation (i.e., fitchain service condition) is a very early-stage 
 	* return validation dataset to Fitchain network;
 	* fufill the service condition with validated model;
 	* need bridge contract to communicate with Fitchain network.
+	* transfer Ocean tokens to Fitchain as payment or reward.
 
 
 ### 6.2 Fitchain - Smart Contracts
