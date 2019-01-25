@@ -1,9 +1,9 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-# Fitchain Analysis
+# Fitchain/Ocean Integration Analysis
 
 ```
-name: repository of fitchain analysis.
+name: repository of fitchain/Ocean integration analysis.
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
