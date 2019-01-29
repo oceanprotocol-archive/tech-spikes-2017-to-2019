@@ -79,7 +79,6 @@ The overall fitchain architecture is illustrated as below and includes several m
 
 <img src="img/fitchain_pod.jpg" width=800 />
 
-
 ### 4.2 Gossiper Network
 
 * When running the training on the model, **POD** on the data provider side will emit log messages to the Gossiper network as a sequence of messages.
@@ -103,7 +102,7 @@ The overall fitchain architecture is illustrated as below and includes several m
 
 **Concern of Fraudulent Attack:**
 
-Is that possible the gossiper network is susceptible to fraudulent attacks due to malicious gossiper node? 
+(1) Is that possible the gossiper network is susceptible to fraudulent attacks due to malicious gossiper node? 
 
 * one malicious gossiper node may generate fake log messages in its local and broadcast to its neighbors. 
 * over the time all nodes in the gossiper network will receive this fake message. 
@@ -115,6 +114,11 @@ Suggestion:
 * each gossiper who receives a new log message should verify the corresponding signature before confirm it. 
 * it is better to add this layer of security protection if there is no any.
 
+(2) POD component in data provider side may be compromised and emitted fake log messages. 
+
+Suggestions:
+
+* POD component must be investigated for potential security issues before deployment.
 
 ### 4.3 Verifier Network
 
@@ -241,6 +245,7 @@ Current implementation (i.e., fitchain service condition) is a very early-stage 
 	*  verify the validation from Fitchain to fulfill the service condition.
 *  Ocean needs utility component to store and access the dataset & model in IPFS.
 *  Fitchain needs to add more functionalities in contracts, gossiper network and verifier network as described in the above.
+*  POD component of Fitchain should be investigated or audited for potential security compromise. 
 
 
 ### 7.2 Fitchain Capability:
