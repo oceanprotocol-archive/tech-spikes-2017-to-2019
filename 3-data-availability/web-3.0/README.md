@@ -20,17 +20,17 @@ This repository maintains on-going research work and will be updated frequently 
 
 ## List of Research Work
 
-Folder Name   |  Description | Issue |
---- | ---| ---|
-0-enigma-mpc |  investigation of Enigma MPC to identify issues of integration with Ocean. | 
-1-fitchain-analysis | 	analysis of Ocean/Fitchain integration; identify "gaps" of integration. | [257](https://github.com/oceanprotocol/ocean/issues/257) |
-2-signaling-mechanism  | research on token mechanism for signaling | |
-3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) |
+Folder Name   |  Description |
+--- | ---|
+0-enigma-mpc |  investigation of Enigma MPC to identify issues of integration with Ocean.
+1-fitchain-analysis | 	analysis of Ocean/Fitchain integration; identify "gaps" of integration. |
+2-signaling-mechanism / 1-bonding-curve | PoC of bonding curve |
+
+
+
 
 
 ## Major Updates
-
-* [01/30/2019] add data availability folder
 
 * [01/28/2019] copy enigma analysis into research repo
 
