@@ -7,7 +7,7 @@ name: repository of research work what we are interested.
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 01/28/2019
+date: 01/31/2019
 ```
 
 ## Introduction
@@ -30,9 +30,9 @@ Folder Name   |  Description | Issue |
 
 ## Major Updates
 
-* [01/30/2019] add data availability folder
+* [01/31/2019] update data availability (web 2.0)
 
-* [01/28/2019] copy enigma analysis into research repo
+* [01/28/2019] add enigma analysis
 
 * [01/26/2019] finish ocean/fitchain analysis
 

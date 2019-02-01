@@ -27,6 +27,10 @@ web-3.0 | solutions in web-3.0 framework (decentralized scenario) |
 
 Both options are given mainly by cloud providers (Amazon S3, Azure) and on-premise solutions.
 
+The most straightforward approach is **challenge-response solution**:
+
+<img src="web-2.0/img/architecture.jpg" width=1000 />
+
 ## Web 3.0 Solutions
 
 * Retrieveability (High level background):
