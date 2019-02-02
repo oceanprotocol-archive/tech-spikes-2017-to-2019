@@ -10,6 +10,28 @@ editor: Fang Gong <fang@oceanprotocol.com>
 date: 01/31/2019
 ```
 
+* [1. Introduction](#1-introduction)
+* [2. Architecture](#2-architecture)
+	+ [2.1 Data Provider Workflow](#21-data-provider-workflow)
+	+ [2.2 Data Verifier Workflow](#22-data-verifier-workflow)
+* [3. Amazon S3 as Storage](#3-amazon-s3-as-storage)
+	+ [3.1 Data Attributes](#31-data-attributes)
+	+ [3.2 AWS S3 Experiment](#32-aws-s3-experiment)
+	+ [3.3 Required File Attributes in DDO](#33-required-file-attributes-in-ddo)
+	  - [3.3.1 Syntax](#331-syntax)
+	  - [3.3.2 file attributes stored in DDO](#332-file-attributes-stored-in-ddo)
+* [4. Microsoft Azure as Storage](#4-microsoft-azure-as-storage)
+	+ [4.1 Data Attributes](#41-data-attributes)
+	+ [4.2 Azure Experiment](#42-azure-experiment)
+	+ [4.3 Required File Attributes in DDO](#43-required-file-attributes-in-ddo)
+	  - [4.3.1 Syntax](#431-syntax)
+	  - [4.3.2 file attributes stored in DDO](#432-file-attributes-stored-in-ddo)
+* [5. On-Premise Case](#5-on-premise-case)
+	+ [5.1 Design](#51-design)
+	+ [5.2 file attributes stored in DDO](#52-file-attributes-stored-in-ddo)
+* [6. Reference](#6-reference)
+* [7. License](#7-license)
+
 ## 1. Introduction
 
 Nowadays the big volumes of data are typically stored in enterprise/organization silos in Big Data Lakers, Data Warehouse solutions or similar bespoke solutions.
