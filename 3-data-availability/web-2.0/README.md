@@ -1,9 +1,9 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-# Data Availability in Web 2.0 settings
+# Proof of Data Availability in Web 2.0 Settings
 
 ```
-name: data availability (web 2.0).
+name: proof of data availability (web 2.0).
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
@@ -82,7 +82,7 @@ Consider the solution cannot move or modify the source data, the most straightfo
 * If matched, the data availability is verified and data verifier receives the confirmation;
 * Otherwise, the data is either changed or unavailable at this time. Verifier will receive the notice of unavailability from the off-chain component.
 
-## 3. Amazon S3 Proof of Availability
+## 3. Amazon S3 as Storage
 
 
 ### 3.1 Data Attributes 
@@ -116,7 +116,7 @@ The metadata of a data file is similar to below. Clearly, each data file and fol
 * **Key**: The dataset name that identifies the data file inside S3 bucket.
 * **Size**: The length in bytes of the data.
 
-### 3.2 Original File Info
+### 3.2 AWS S3 Experiment
 
 Let us take the data file `subfolder/subdata.csv` as an example. The original contents of this file is:
 
@@ -154,8 +154,6 @@ If the data file is available, S3 should return the metadata information as:
         }
 ```
 
-### 3.3 Modify File Contents
-
 As an experiment, we change "Berlin" to be "Paris" in the first line:
 
 ```
@@ -169,7 +167,7 @@ Note that the information of `subdata.csv` has some changes:
 * "Size" is changed from 41Bytes to be 40Bytes;
 * "ETag" is changed from `997f0517b9e486de9e879e9bd0ae9be1` to be `a0145a3c0f81f2f9e995ccd5024d8e94`.
 
-**But the info of folder remains the same.**
+**Note: ETag of folder remains the same even though the contained files had been modified.**
 
 So, any changes on data file can be detected by comparing the "ETag" against its original records.
 
@@ -198,66 +196,267 @@ So, any changes on data file can be detected by comparing the "ETag" against its
         }
 ```
 
-### 3.4 Add New File
+### 3.3 Required File Attributes in DDO
 
-We can add a new data file `subdata2.csv` into the same folder `subfolder`:
+In order to retrieves metadata of a specific file in Amazon S3 without returning the file itself, the [`HEAD OBJECT`](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectHEAD.html) REST API shall be used. Note API caller must have READ access to the file.
+
+
+#### 3.3.1 Syntax
+
+To retrieve the metadata including ETag of a file, some information are required:
+
+* ObjectName: the name identifies the file (as shown `Key` field in the above).
+* BucketName: the unique name of bucket which includes the file object.
+* authorization string: the string used to authorize the read access to the file.
+
+The syntax of request is:
 
 ```
-1,left,Rome
+HEAD /ObjectName HTTP/1.1
+Host: BucketName.s3.amazonaws.com
+Authorization: authorization string
+Date: date
+```
+
+* Sample Request: The following request returns the metadata of a specific file.
+
+```
+HEAD /my-image.jpg HTTP/1.1
+Host: bucket.s3.amazonaws.com
+Date: Wed, 28 Oct 2009 22:32:00 GMT
+Authorization: AWS AKIAIOSFODNN7EXAMPLE:02236Q3V0RonhpaBX5sCYVf1bNRuU=
+```
+
+* Sample Response
+
+```
+HTTP/1.1 200 OK
+x-amz-id-2: ef8yU9AS1ed4OpIszj7UDNEHGran
+x-amz-request-id: 318BC8BC143432E5
+x-amz-version-id: 3HL4kqtJlcpXroDTDmjVBH40Nrjfkd
+Date: Wed, 28 Oct 2009 22:32:00 GMT
+Last-Modified: Sun, 1 Jan 2006 12:00:00 GMT
+ETag: "fba9dede5f27731c9771645a39863328"
+Content-Length: 434234
+Content-Type: text/plain
+Connection: close
+Server: AmazonS3
+```
+
+more details can be found in [document](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectHEAD.html)
+
+#### 3.3.2 file attributes stored in DDO
+
+Some file attributes need to be stored in DDO so that Ocean can generate the Requst Query to retrieve checksum of a specific file:
+
+Attribute       |   Type        |   Description |
+----------------|---------------|---------------|
+ObjectName      |   String      |  filename or "Key" field of metadata. E.g., `data1.csv` & `subfolder/subdata.csv` |
+BucketName      |   String      |  bucket name that is unique in S3. E.g., `fangocean` |
+
+The `authorization` string can be set as a global environment variable that should not be stored in DDO.
+
+
+
+## 4. Microsoft Azure as Storage
+
+
+### 4.1 Data Attributes 
+
+With Azure, we create a data file with operations: `ResourceGroup->Blobs->Container->File`. 
+
+[`Blobs`](https://azure.microsoft.com/en-us/services/storage/blobs/) is REST-based object storage for unstructured data, which is under study in this research. Other choices are [`Files`](http://aka.ms/learnmore/filestorage), [`Tables`](http://aka.ms/learnmore/tablestorage), [`Queues`](http://aka.ms/learnmore/queuestorage).
+
+The metadata information of a testing data file is:
+
+<img src="img/azuredata.jpg" width=800 />
+
+Similarly, each data file in Azure has its own unique attributes:
+
+<img src="img/azurecli.jpg" width=600 />
+
+* **Etag**: It is a fingerprint/checksum of the data file, which can be used to uniquely identify a specific file. The ETag reflects changes only to the name & contents of an file. 
+
+* **name**: The file name that identifies the data inside Azure container.
+* **contentLength**: The length in bytes of the contents.
+
+### 4.2 Azure Experiment
+
+The original data file `data.csv` has contents as:
+
+```
+1,left,Berlin
+2,right,Paris
+3,middle,SF
+```
+
+At this time, the Etag of this file is `0x8D68892AED7332B`. 
+
+```
+ {
+    "content": null,
+    "deleted": false,
+    "metadata": null,
+    "name": "data.csv",
+    "properties": {
+      ...
+      "blobTierInferred": true,
+      "blobType": "BlockBlob",
+      "contentLength": 40,
+      ...
+      "creationTime": "2019-02-01T22:14:49+00:00",
+      "deletedTime": null,
+      "etag": "0x8D68892AED7332B",
+      "lastModified": "2019-02-01T22:14:49+00:00",
+      ...
+      "serverEncrypted": true
+    },
+    "snapshot": null
+  },
+```
+
+We change `Paris` to be `London` the second line:
+
+```
+1,left,Berlin
 2,right,London
-3,middle,Madrid
+3,middle,SF
 ```
 
-The metadata information of `subfolder` remains the same. 
+The Etag becomes `0x8D688972CAF7507` after we modify the data file.
 
 ```
 {
-            "LastModified": "2019-02-01T00:28:15.000Z", 
-            "ETag": "\"d41d8cd98f00b204e9800998ecf8427e\"", 
-            "StorageClass": "STANDARD", 
-            "Key": "subfolder/", 
-            "Owner": {
-                "DisplayName": "webaccount", 
-                "ID": "a5af246e1a2d8986ddb54302d839152f27823e44e9dc73414037190634ec749c"
-            }, 
-            "Size": 0
-        }, 
-        {
-            "LastModified": "2019-02-01T00:44:35.000Z", 
-            "ETag": "\"a0145a3c0f81f2f9e995ccd5024d8e94\"", 
-            "StorageClass": "STANDARD", 
-            "Key": "subfolder/subdata.csv", 
-            "Owner": {
-                "DisplayName": "webaccount", 
-                "ID": "a5af246e1a2d8986ddb54302d839152f27823e44e9dc73414037190634ec749c"
-            }, 
-            "Size": 40
-        }, 
-        {
-            "LastModified": "2019-02-01T00:52:36.000Z", 
-            "ETag": "\"be382b71761909b99e47b474248a849b\"", 
-            "StorageClass": "STANDARD", 
-            "Key": "subfolder/subdata2.csv", 
-            "Owner": {
-                "DisplayName": "webaccount", 
-                "ID": "a5af246e1a2d8986ddb54302d839152f27823e44e9dc73414037190634ec749c"
-            }, 
-            "Size": 43
-        }
+    "content": null,
+    "deleted": false,
+    "metadata": null,
+    "name": "data.csv",
+    "properties": {
+      ...
+      "blobTierInferred": true,
+      "blobType": "BlockBlob",
+      "contentLength": 41,
+      ...
+      "creationTime": "2019-02-01T22:14:49+00:00",
+      "deletedTime": null,
+      "etag": "0x8D688972CAF7507",
+      "lastModified": "2019-02-01T22:46:59+00:00",
+      ...
+      "serverEncrypted": true
+    },
+    "snapshot": null
+  },
 ```
 
-## 4. Microsoft Azure Proof of Availability
+
+### 4.3 Required File Attributes in DDO
+
+In order to retrieves metadata of a specific file in Azure without returning the file itself, the [`Get Blob Properties`](https://docs.microsoft.com/en-us/rest/api/storageservices/Get-Blob-Properties) REST API shall be used depends. Note API caller must have READ access to the file.
+
+
+#### 4.3.1 Syntax
+
+To retrieve the metadata including Etag of a file, some information are required:
+
+* BlobName: the name identifies the file (as shown `name` field in the above).
+* ContainerName: the unique name of bucket which includes the file object.
+* Storage account: name of storage account that is authorized to access the file.
+
+The GET and HEAD operations both retrieve metadata headers for the specified blob. These operations return headers only; they do not return a response body.
+
+The URI syntax for retrieving metadata headers on a blob is as follows:
+
+```
+GET/HEAD https://<storageaccount>.blob.core.windows.net/<containername>/<blobname>  
+```
+
+* Sample Response
+
+```
+Response Status:  
+HTTP/1.1 200 OK  
+
+Response Headers:  
+x-ms-meta-Name: myblob.txt  
+x-ms-meta-DateUploaded: <date>  
+x-ms-blob-type: AppendBlob  
+x-ms-lease-status: unlocked  
+x-ms-lease-state: available  
+Content-Length: 11  
+Content-Type: text/plain; charset=UTF-8  
+Date: <date>  
+ETag: "0x8CAE97120C1FF22"  
+Accept-Ranges: bytes  
+x-ms-blob-committed–block-count: 1  
+x-ms-version: 2015-02-21  
+Last-Modified: <date>  
+Server: Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0  
+x-ms-copy-id: 36650d67-05c9-4a24-9a7d-a2213e53caf6  
+x-ms-copy-source: <url>  
+x-ms-copy-status: success  
+x-ms-copy-progress: 11/11  
+x-ms-copy-completion-time: <date>  
+```
+
+more details can be found in [document](https://docs.microsoft.com/en-us/rest/api/storageservices/Get-Blob-Properties)
+
+#### 4.3.2 file attributes stored in DDO
+
+Some file attributes need to be stored in DDO so that Ocean can generate the Requst Query to retrieve checksum/Etag of a specific file:
+
+Attribute       |   Type        |   Description |
+----------------|---------------|---------------|
+BlobName        |   String      |  blob name corresponding to data file or "name" field in metadata. E.g., `data.csv`|
+ContainerName   |   String      |  container name that contains the data file and is unique in Azure. E.g., `fangocean` |
 
 
 
-## 5. Reference
+## 5. On-Premise Case
 
-* [Amazon S3 API Reference](https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html)
+The solution in On-Premise Case is very similar to that in Cloud Provider case. The critical difference is the data provider who serves data on premise should response with Etag header of data file upon request.
+
+### 5.1 Design
+
+Data provider must config a HTTP server, which should interact with Ocean off-chain query component and consumers. To prove the data availability, the HTTP server shall response Ocean's query with Etag header, which is calculated in its local upon query. (Details in [document](https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers#content-based))
+
+<img src="img/onpremise.jpg" width=1000 />
+
+**Pros:**
+
+* straightforward, implementable and easy to be integrated with Ocean;
+* no need to move or modify the data;
+* compatible with the workflow using cloud providers (i.e., Amazon S3 and Azure).
+
+**Cons:**
+
+* all parties must trust data provider to be honest. 
+* potential attack vector: data provider stores the Etags of files in the cache of HTTP server and returns them upon requst, even though the corresponding files had been removed from local storage.
+* it becomes very difficult to detect fraudulence on data provider in this scenario.
+
+
+### 5.2 file attributes stored in DDO
+
+Some file attributes need to be stored in DDO so that Ocean can generate the Requst Query to retrieve checksum/Etag of a specific file:
+
+Attribute       |   Type        |   Description |
+----------------|---------------|---------------|
+Name            |   String      | file name. E.g., `data.csv`|
+Path            |   String      | relative path of data file in local storage. E.g., `data/volume1` |
+
+The server (i.e., IP & port) and authorization information can be set as environment variables rather than attributes in DDO.
+
+## 6. Reference
+
+* [Amazon S3 REST API Reference](https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html)
+* [Azure REST API Reference](https://docs.microsoft.com/en-us/rest/api/storageservices/blob-service-rest-api)
+* [Azure CLI Reference](https://docs.microsoft.com/en-us/cli/azure/storage?view=azure-cli-latest)
 * [Data Security Privacy Availability and Integrity](http://thesai.org/Downloads/Volume7No4/Paper_64-Data_Security_Privacy_Availability_and_Integrity.pdf)
 * [OEP-7 ASSET-DID](https://github.com/oceanprotocol/OEPs/tree/master/7#integrity)
 * [OEP-8 ASSET-DDO](https://github.com/oceanprotocol/OEPs/tree/master/8#base-attributes)
+* [Increasing Application Performance with HTTP Cache Headers](https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers#content-based)
+* [http cache headers](https://www.keycdn.com/blog/http-cache-headers)
 
-## 6. License
+## 7. License
 
 ```
 Copyright 2018 Ocean Protocol Foundation
