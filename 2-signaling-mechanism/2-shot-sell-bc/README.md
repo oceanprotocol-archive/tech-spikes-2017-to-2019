@@ -1,21 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
 
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
@@ -162,26 +144,26 @@ There are two factors need to be taken into the account:
 
 we need first to define **"threshold price"** as: 
 
-$Balance = \int_{N}^{N + k}f(x)dx$
+<img src="img/formulaimage.jpg" width=200 />
 
 where:
 
-* $Balance = proceeds + collaterals$ is the balance of short seller in the Broker contract. 
-* $k$ is the number of bonded tokens sold in short selling. 
-* $f(x)$ is the analytic formula for bonding curve and $x$ is the supply of bonded token.
-* as such, it is key to solve the equation for $N$ so that **threshold price** $TP = f(N)$
+* `Balance = proceeds + collaterals` is the balance of short seller in the Broker contract. 
+* `k` is the number of bonded tokens sold in short selling. 
+* `f(x)` is the analytic formula for bonding curve and `x` is the supply of bonded token.
+* as such, it is key to solve the equation for `N` so that **threshold price** `TP = f(N)`
 
 Here, **"threshold price"** represents **the highest price that short seller can tolerate** before he must cover the short position (shown in the left as below). 
 
-Note: if cost of **interests** is considered, the maximum budget of short seller for closing short position is $proceeds + collaterals - interest$.
+Note: if cost of **interests** is considered, the maximum budget of short seller for closing short position is `proceeds + collaterals - interest`.
 
 <img src="img/many_shorts.jpg" width=1000 />
 
 #### 4.2.2 Remove Overlapping
 
-Another issue is overlapping among different short positions as shown in the right of above image. If the first short position is covered at the $TP1$, the second short position can never be covered at the $TP2$ due to overlapping.
+Another issue is overlapping among different short positions as shown in the right of above image. If the first short position is covered at the `TP1`, the second short position can never be covered at the `TP2` due to overlapping.
 
-The solution is to eliminate the overlapping by moving the $TP1$ of first short position towards the left while keeping the #bonded token $k$ until these two short position has no overlapping. 
+The solution is to eliminate the overlapping by moving the `TP1` of first short position towards the left while keeping the #bonded token `k` until these two short position has no overlapping. 
 
 Note: the cost to cover the first short position after the adjustment is **smaller** than the total balance of short seller in Broker contract.
 
@@ -229,11 +211,11 @@ In this way, we try our best to reduce the number of transactions and keep the s
 
 ### 5.1 Settings
 
-For demo purpose, the prototype uses **linear bonding curve** + **single short seller scenario**. Mathmatically, linear bonding curve: $f(x) = x$ where $x$ is supply of bonded token and $f(x)$ is the price of bonded token.
+For demo purpose, the prototype uses **linear bonding curve** + **single short seller scenario**. Mathmatically, linear bonding curve: `f(x) = x` where `x` is supply of bonded token and `f(x)` is the price of bonded token.
 
 ### 5.2 Demo
 
-* **Step 1**: Alice buy 10 bonded tokens with cost of 50 reserved tokens. Note that: $cost = n^2 /2$ where $n$ is the number of bonded tokens to buy.
+* **Step 1**: Alice buy 10 bonded tokens with cost of 50 reserved tokens. Note that: `cost = n^2 /2` where `n` is the number of bonded tokens to buy.
 
 <img src="img/step1.jpg" width=400 />
 
@@ -248,9 +230,9 @@ For demo purpose, the prototype uses **linear bonding curve** + **single short s
 	* deposit collateral of 50 reserved tokens
 	* his total balance in Broker contract is 150 + 50 = 200 reserved tokens
 	* threshold price of his short position:
-		*  assume threshold price is $p$
-		*  the equation becomes $((p + 10)^2 - p^2)/2 = 200$
-		*  solution is $p = 15$, which is the maximum price Bob can tolerate before he is forced to cover;
+		*  assume threshold price is `p`
+		*  the equation becomes `((p + 10)^2 - p^2)/2 = 200`
+		*  solution is `p = 15`, which is the maximum price Bob can tolerate before he is forced to cover;
 		*  if current price > threshold price, Bob cannot cover his short position by any means.
 	
 <img src="img/step4.jpg" width=600 />
