@@ -7,7 +7,7 @@ name: repository of research work what we are interested.
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 01/31/2019
+date: 02/11/2019
 ```
 
 ## Introduction
@@ -29,6 +29,8 @@ Folder Name   |  Description | Issue |
 
 
 ## Major Updates
+
+* [02/11/2019] add research of short selling in bonding curves (in signaling mechanism folder)
 
 * [01/31/2019] update data availability (web 2.0)
 

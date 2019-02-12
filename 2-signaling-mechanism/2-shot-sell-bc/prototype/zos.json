@@ -1,0 +1,10 @@
+{
+  "zosversion": "2",
+  "name": "keeper",
+  "version": "0.1.0",
+  "contracts": {
+    "OceanToken": "OceanToken",
+    "OceanVoting": "OceanVoting",
+    "OceanRegistry": "OceanRegistry"
+  }
+}
