@@ -8,26 +8,27 @@ name: investigate short selling in Bonding Curves.
 type: research
 status: initial draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 02/11/2019
+date: 02/19/2019
 ```
 
 
 ## 1. Introduction
-With the regular bonding curve settings, users can sell bonded tokens and push down the bonded token price, which generates a *negative signal* for the asset asscoiated with the bonded token. However, this approach requires users to purchase bonded tokens before they can sell. 
+With the regular bonding curve settings, users can sell bonded tokens and push down the bonded token price, which serves as *negative signal* for the asset asscoiated with the bonded token. However, this approach requires users to purchase bonded tokens before they can sell. 
 
-In this research, we investigate another way to generate negative singles: **short selling**, which has long been a popular trading technique to depreciate the asset value for decades. We will study it in the framework of bonding curves, identify the critical challenges and explore the proper approach to implement it.
+In this research, we investigate an alternative approach to generate negative singles: **short selling**, which has long been a popular trading technique to depreciate the asset value for decades. We will study it in the framework of bonding curves, identify the critical challenges and explore the proper approach to implement it.
 
 ## 2. Background
 
-In existing stock market, **Short selling** involves the sale of stock that the seller does not own, or shares that the seller has taken on loan from a broker. In this way, the seller expects to make a profit by buying the same amount of stock shares (or "short position") back at a "lower" price to pay off the loan to the broker. 
+In the existing stock market, **Short selling** involves the sale of stock that the seller does not own, or shares that the seller has taken on loan from a broker. In other words, short sellers bet on the prediction that stock price will move downward in the future.
 
-Traders short sell stocks because they believe the stock prices must become lower in the future. If the stock price jumps up, short sellers need to buy back the short position at a higher price and lose money, which is called "*Short Squeeze*". Clearly, a large amount of **short selling** serves as a negative signal to the stocks in the market.
+* If stock price moves downward in favor of their interests, short sellers can buy stock shares back (or "covering short position") at a "lower" price to pay off the loan and porket the profits. 
+* Otherwise, in the case of "*Short Squeeze*" (i.e., stock price moves up), they need to buy at a "higher" price to close their short positions and lose their money.
 
-The process of short selling is illustrated as follows, which consists of three parties:
+Short selling involves some parties as illustrated as below:
 
-* **Stock holder**: buy stock shares from the open markets and keep stock holdings in their Brokers (i.e., Schwab, Vanguard, Etrade, etc.). 
-* **Broker**: borrow their clients' stock shares to short sellers for interest returns.
-* **Short seller**: borrow stock shares from Broker and promise to return the same amount of stock shares along with interests (depends on "days to cover") to their lending Brokers.
+* **Lender**: purchase stock shares from the open market and keep them in the Brokers. 
+* **Broker**: borrow custodial stock shares to short sellers for interest returns.
+* **Short seller**: borrow stock shares from Broker and promise to return them along with interest.
 * **Market**: the stock market matches buy and sell orders and executes trading of stock shares. 
 
 <img src="img/basic_shorting.jpg" width=600 />
@@ -36,43 +37,62 @@ The process of short selling is illustrated as follows, which consists of three 
 
 ### 3.1 Modules
 
-The design of short selling in bonding curves includes following modules:
+The design of short selling in bonding curves includes following components:
 
-* **Token borrower**: 
-	* buy bonded tokens from the bonding curves
-	* keep tokens in the Broker contract for potential interest returns.
-* **Broker**:
-	* borrow bonded tokens to short sellers;
-	* short sellers must deposit collateral tokens to prevent "short squeeze";
-	* automatically cover the short position by buying bonded tokens back;
-	* return the borrowed bonded tokens to borrower along with interest.
-* **Short seller**:
-	* borrow bonded tokens from the Broker contract;
-	* deposit collateral tokens in case of "short squeeze"; 
-	* sell borrowed bonded tokens at a specific price.
-* **Token Market**:
-	* bonding curve is automated market maker;
-	* it serves as the market for bonded tokens.
+* **Lender**: buy bonded tokens and keep tokens in the Broker contract for lending.
+* **Broker**: lend bonded tokens to short seller with collateral depsoit, and cover short position if needed.
+* **Short seller**: borrow bonded tokens and short sell them in the market to make a profit.
+* **Token Market**: it is the bonding curves that executes trading transactions of boned tokens.
 
 
 ### 3.2 Workflow Summary
 
-* token buyers should buy bonded tokens from bonding curves (i.e., ETH <> Bonded Tokens);
-* token buyers send the bonded tokens to Broker contract so these tokens can be borrowed for interest;
-* short sellers borrow bonded tokens from the Broker contract and sell these tokens back into bonding curve;
-* in the same time, short sellers must deposit collateral tokens (i.e., ETH) in case of short squeeze;
-	* more deposit of collateral tokens indicates short sellers can tolerate more fluctuation in token price;
-	* otherwise, short sellers are required to cover their short positions with a small price jump.
-* bonding curves need to check open short positions before any "buy" transaction to make sure each short position can be covered with associated collateral tokens in the worst case;
-* if the token price goes up, bonding curve needs to check whether collateral tokens can cover the short position if the incoming buy transaction is executed. If not, bonding curve will cover the short position before execute the incoming buy transaction. 
-* if the token price goes down, short sellers can choose to cover their short positions in the lower prices to make profits. 
-* After the short position is covered, Broker contract will deduct interests from the proceeds and send both bonded tokens and interests to the borrower;
-* short seller can withdraw profits after if there is any.
-
 <img src="img/design.jpg" width=1000 />
+
+* Step 1: purchase and lending by token lenders
+	* purchases bonded tokens from bonding curves;
+	* sends the bonded tokens to Broker contract for lending;
+* Step 2: short selling by short sellers
+	* borrow bonded tokens from the Broker contract and sell them to bonding curves for proceeds;
+	* deposit collateral tokens (i.e., ETH, OCEAN, etc.) to manage short squeeze;
+* Step 3: cover short position by Broker contract or short seller
+	* Broker contract automatically cover short position using proceeds + collateral if needed;
+	* short sellers can place an order to close short position to make a profit;
+* Step 4: distribute funds by Broker contract
+	* send interest to token lenders;
+	* allow short sellers to withdraw profits if there is any.
+
+
 
 
 ## 4. Challenges
+
+### 4.1 Design of Broker Contract
+
+The proposed structure in our design of Broker contract is following:
+
+* a gloabl hashtable can map a specific bonded token to a double linked list (DLL);
+* each DLL includes all available tokens for lending. 
+
+<img src="img/broker_design.jpg" width=1000 />
+
+The key problems & our proposed solution:
+
+* **Question 1**: match the lending and borrowing orders to fulfill the borrowing request:
+	* Broker contract will access the DLL of a specific bonded token to lend the next available tokens to short seller when receiving the borrowing request;
+	* short seller may borrow tokens from multiple lenders towards his borrowing amount.
+* **Question 2**: handle the withdrawal request from lenders when their tokens had been sold by short seller:
+	* Broker finds the next available bonded tokens to fulfill the withdrawal request from the original lenders (but lender may be not eligible for interest in this case);
+	* the loan of bonded tokens will be transferred to new lenders;
+	* if there is no new lender available, Broker forces to close the short position and return the bonded tokens to the lender.
+* **Question 3**: the calculation of interest for lending:
+	* it can depends on the duration of lending period (e.g., accumulated daily);
+	* there is a cap that is the maximum amount of accumulated interest;
+	* lender is not eligible for interest if he requests to withdraw lended tokens before the interest cap is reached. (In this case Broker contract pockets the interest and make money! :)
+
+<img src="img/interest_curve.jpg" width=450 />
+
+### 4.2 Short Squeeze Issue
 
 The key challenge is to handle "short squeeze", which guarantees the short position can be covered so that borrowed bonded tokens can be returned in case of token price increase. 
 
@@ -87,7 +107,7 @@ The key of solution:
 * assuming the new "buy" transaction is executed and token price moves up, we need to check whether the short position can be covered at the moment. 
 * If not, the short position must be closed **before** the "buy" transaction can execute.
 
-### 4.1 Single Short Seller Scenario
+### 4.2.1 Single Short Seller Scenario
 
 We can walk through the process to understand the challenge:
 
@@ -104,6 +124,8 @@ We can walk through the process to understand the challenge:
 	* short seller must deposit reserved tokens as collaterals to tolerate token price fluctuation. 
 	* current reserved token balance of short seller = proceeds + collateral
 	* however, short seller has negative balance of bonded tokens that need to be covered in the future.
+	* more deposit of collateral tokens indicates short sellers can tolerate more fluctuation in token price;
+	* otherwise, short sellers are required to cover their short positions with a small price jump.
 
 <img src="img/depsoit_collateral.jpg" width=1000 />
 
@@ -125,7 +147,7 @@ We can walk through the process to understand the challenge:
 <img src="img/cover_short_position.jpg" width=1000 />
 
 
-### 4.2 Multiple Short Seller Scenario
+### 4.2.2 Multiple Short Seller Scenario
 
 When there are many short positions exist at the same time, it is possible that closing of one short position moves token price up, therefore, causing other short positions must be closed as well. 
 
@@ -140,7 +162,7 @@ There are two factors need to be taken into the account:
 * the price after the short sell;
 * the total cost to cover the short position compared with the balance (= proceeds + collaterals) in Broker contract.
 
-#### 4.2.1 Threshold Price
+#### 4.2.2.1 Threshold Price
 
 we need first to define **"threshold price"** as: 
 
@@ -159,7 +181,7 @@ Note: if cost of **interests** is considered, the maximum budget of short seller
 
 <img src="img/many_shorts.jpg" width=1000 />
 
-#### 4.2.2 Remove Overlapping
+#### 4.2.2.2 Remove Overlapping
 
 Another issue is overlapping among different short positions as shown in the right of above image. If the first short position is covered at the `TP1`, the second short position can never be covered at the `TP2` due to overlapping.
 
@@ -170,7 +192,7 @@ Note: the cost to cover the first short position after the adjustment is **small
 <img src="img/remove_overlapping.jpg" width=500 />
 
 
-#### 4.2.3 Solution for Multiple Short Positions
+#### 4.2.2.3 Solution for Multiple Short Positions
 
 * Pre-Processing:
 	* first, all open short positions must be sorted by threshold price from low to high;
@@ -183,7 +205,7 @@ Note: the cost to cover the first short position after the adjustment is **small
 		* either all short positions need to be closed;
 		* or the "buy" transaction can be executed without need of closing short position anymore.
 
-### 4.3 Improved Solution using Batched Bonding Curve
+### 4.2.3 Improved Solution using Batched Bonding Curve
 
 It is possible the "buy" and "sell" transaction may cancel out each other so that token price remains the same in the end. Therefore, the short position remains to be open as long as possible.
 
