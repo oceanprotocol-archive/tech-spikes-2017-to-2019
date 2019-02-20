@@ -88,7 +88,7 @@ The key problems & our proposed solution:
 * **Question 3**: the calculation of interest for lending:
 	* The interest cost of short selling in the stock market is calculated based on dynamic stock price and accumulated over time. 
 	* However, it is very expensive to do the same in Bonding Curves due to frequent token price updates and on-chain computations.
-	* Instead, our design calculates the interest based on the lending period and accumulated in the lending time window. Note that the accumulated interest increases faster at the beginning and the growth slows down over time. It encourages more lenders to participate in lending. 
+	* Instead, our design calculates the interest based on the token amount and lending period, which accumulates over time. Note that the accumulated interest increases faster at the beginning and the growth slows down over time. It encourages more lenders to participate in lending. 
 	* In addition, we set a cap for the total interest that a short seller needs to pay for the borrowed bonded tokens from the same lender. Once the interest hits the cap, the lender can choose to withdraw and transfer the loan of bonded tokens to a new lender. Therefore, the interest is reset to be zero for the new lender and computation starts over.
 
 <img src="img/interest_curve.jpg" width=450 />
