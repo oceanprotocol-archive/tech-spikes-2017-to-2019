@@ -86,9 +86,10 @@ The key problems & our proposed solution:
 	* the loan of bonded tokens will be transferred to new lenders;
 	* if there is no new lender available, Broker forces to close the short position and return the bonded tokens to the lender.
 * **Question 3**: the calculation of interest for lending:
-	* it can depends on the duration of lending period (e.g., accumulated daily);
-	* there is a cap that is the maximum amount of accumulated interest;
-	* lender is not eligible for interest if he requests to withdraw lended tokens before the interest cap is reached. (In this case Broker contract pockets the interest and make money! :)
+	* The interest cost of short selling in the stock market is calculated based on dynamic stock price and accumulated over time. 
+	* However, it is very expensive to do the same in Bonding Curves due to frequent token price updates and on-chain computations.
+	* Instead, our design calculates the interest based on the lending period and accumulated in the lending time window. Note that the accumulated interest increases faster at the beginning and the growth slows down over time. It encourages more lenders to participate in lending. 
+	* In addition, we set a cap for the total interest that a short seller needs to pay for the borrowed bonded tokens from the same lender. Once the interest hits the cap, the lender can choose to withdraw and transfer the loan of bonded tokens to a new lender. Therefore, the interest is reset to be zero for the new lender and computation starts over.
 
 <img src="img/interest_curve.jpg" width=450 />
 
