@@ -27,17 +27,19 @@ contract('OceanBondingCurve', (accounts) => {
     let gasPrice = 22000000000;
 
     describe('Test OceanBondingCurve', () => {
+      beforeEach('mint tokens before each test', async () => {
+            token = await OceanToken.new()
+            await token.initialize(accounts[0], accounts[0])
+            await token.mint(accounts[0], 1000 * scale)
+            let balance = await token.balanceOf(accounts[0])
+            console.log("user Ocean token balance :=", balance / scale)
+        })
+
+
       it('Should set gas price for buy/sell tx using bonding curve', async () => {
           bondingCurve = await OceanBondingCurve.deployed()
           // set gasPrice for buy/sell
           await bondingCurve.setGasPrice(gasPrice, { from: accounts[0]})
-      })
-
-      it('Should mint initial Ocean tokens', async () => {
-          token = await OceanToken.deployed()
-          await token.mintInitialSupply(accounts[0])
-          let balance = await token.balanceOf(accounts[0])
-          console.log("user Ocean token balance :=", balance / scale)
       })
 
       it('Should create new bonding curve', async () => {
