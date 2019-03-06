@@ -17,10 +17,16 @@ We had investigated the web2.0 data availability proof, which is a centralized s
 There are many different approaches, such as:
 
 * each POA authority node needs to verify the data availability proof, where data is stored in the cloud provider such as AWS S3 or Azure.
+<img src="img/poa.jpg" width=600 />
+
 * build a verifier network
+<img src="img/vn.jpg" width=600 />
+
 * leverage the decentralized oracle network, such as Chainlink, Oraclize, etc.
+<img src="img/chainlink.jpg" width=600 />
 
 In this part, we will investigate the possibility of running verification in each POA authority node, which is the most straightfoward approach.
+
 
 ## 2. Architecture
 
