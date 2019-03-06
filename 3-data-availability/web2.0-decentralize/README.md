@@ -16,16 +16,44 @@ We had investigated the web2.0 data availability proof, which is a centralized s
 
 There are many different approaches, such as:
 
-* each POA authority node needs to verify the data availability proof, where data is stored in the cloud provider such as AWS S3 or Azure.
-<img src="img/poa.jpg" width=600 />
+* **POA authority nodes**:
+	* each POA node interacts with the storage (i.e., cloud provider such as AWS S3 or Azure) and submit the checksum along with its signature to the smart contract in Ocean network. 
+	* signatures from multiple POA nodes should reach a consensus to prove the data availability.
+	* Pro:
+		* straightforward to implement; 
+		* use POA nodes in the network;
+		* no need to stake as POA nodes are trusted.
+	* Con:
+		* need to trust POA nodes and create certain centralization. 
+	
+	<img src="img/poa.jpg" width=600 />
 
-* build a verifier network
-<img src="img/vn.jpg" width=600 />
+* **Verifier network**:
+	* any node can register as a verifier; all verifier nodes form a verifier network;
+	* each verifier node should interact with the storage and submit the checksum along with its signature to the smart contract in Ocean network. 
+	* in the same time, each verifier node should put in stake (i.e.,Ocean tokens or Ethers) on their submission.
+	* majority of the submissions from verifier nodes determine whether the data availability can be confirmed or not (similar to TCR).
+	* smart contract in Ocean network will send rewards to winner party and slash stakes of the other party. 
+	* Pro:
+		* more decentralized and flexible (anyone  can join the verifier network and serve as a verifier)
+		* all verifier nodes can use Ocean tokens as stakes which is more convenient in Ocean network. 
+	* Con:
+		* build verifier network and handles the staking.
+		* need to handle attack vectors such as malicious nodes try to manipulate the result;
+	<img src="img/vn.jpg" width=600 />
 
 * leverage the decentralized oracle network, such as Chainlink, Oraclize, etc.
-<img src="img/chainlink.jpg" width=600 />
+	* Oracle network interact with storage to verify the data availability for Ocean;
+	* Ocean only needs to pay Chainlink tokens to the Chainlink network for its service;
+	* Pro:
+		* leverage the established work such as Chainlink.
+		* more flexible and decentralized approach due to Oracle network.
+	* Con:
+		* need to have Chainlink tokens to pay for service (i.e., a Chainlink/Ocean exchange pair)
+		
+	<img src="img/chainlink.jpg" width=600 />
 
-In this part, we will investigate the possibility of running verification in each POA authority node, which is the most straightfoward approach.
+In this article, we will investigate the possibility of running verification in each POA authority node, which is the most straightfoward approach.
 
 
 ## 2. Architecture
