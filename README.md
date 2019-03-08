@@ -7,7 +7,6 @@ name: repository of research work what we are interested.
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 02/11/2019
 ```
 
 ## Introduction
@@ -24,11 +23,15 @@ Folder Name   |  Description | Issue |
 --- | ---| ---|
 0-enigma-mpc |  investigation of Enigma MPC to identify issues of integration with Ocean. | 
 1-fitchain-analysis | 	analysis of Ocean/Fitchain integration; identify "gaps" of integration. | [257](https://github.com/oceanprotocol/ocean/issues/257) |
-2-signaling-mechanism  | research on token mechanism for signaling | |
-3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) |
+2-signaling-mechanism  | research on token mechanism for signaling | [258](https://github.com/oceanprotocol/ocean/issues/258)|
+3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) |
+4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
 
 
-## Major Updates
+## Updates
+* [03/07/2019] integration of Chainlink and Ocean ([281](https://github.com/oceanprotocol/ocean/issues/281) data availability folder)
+
+* [03/04/2019] add Uniswap research [286](https://github.com/oceanprotocol/ocean/issues/286)
 
 * [02/11/2019] add research of short selling in bonding curves (in signaling mechanism folder)
 

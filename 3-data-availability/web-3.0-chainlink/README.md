@@ -138,12 +138,22 @@ It will deposit 100 LINK tokens into the requester contract:
 
 ### 3.6 Use Script to Interact with Contract
 
-A javascript file is created to send transactions to the deployed Chainlink contracts on Kovan network. The high-level structure looks like below:
+A javascript file is created to send transactions to the deployed Chainlink contracts on Kovan network. 
+
+Note that `jobId` is very important for Chainlink to recognize the request in different network. Please refer to core request jobs in the [list](https://docs.chain.link/docs/addresses-and-job-specs) that are provided by Chainlink.
+
+In this test, the request tries to GET the UINT256 variable from the webpage. So we use the jobId `2c6578f488c843588954be403aba2deb` for `HttpGet JsonParse EthUint256` on Kovan network.
+
+
 
 ```javascript
 contract("OceanRequester", (accounts) => {
   const LinkToken = artifacts.require("LinkToken.sol");
   const OceanRequester = artifacts.require("OceanRequester.sol");
+  const jobId = web3.utils.toHex("2c6578f488c843588954be403aba2deb");
+  const url = "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,JPY";
+  const path = "USD";
+  const times = 100;
   let link, ocean;
 
   beforeEach(async () => {
@@ -163,27 +173,19 @@ contract("OceanRequester", (accounts) => {
       let tx = await ocean.createRequest(jobId, url, path, times);
       request = h.decodeRunRequest(tx.receipt.rawLogs[3]);
       console.log("request has been sent. request id :=" + request.id)
+      ...
+      data = await ocean.getRequestResult(request.id)
+	  console.log("Request is fulfilled. data := " + data)
+	   ...
      });
    });
 });
 
 ```
 
-The output is:
+The output is the `ETH` price in the unit of `USD`, which is 137 USD at this moment:
 
-```
-$ truffle test test/OceanRequester.Test.js --network kovan
-Using network 'kovan'.
-
-  Contract: OceanRequester
-    should request data and receive callback
-Ocean contract has :=96 LINK tokens
-      ✓ initial balance (1855ms)
-request has been sent. request id :=0xdc88b3ebf7305e3519d04870368316c3b106bcfeb50c8d9bf52cfab34051d273
-      ✓ create a request and send to Chainlink (9344ms)
-
-  2 passing (18s)
-```
+<img src="img/test.jpg" />
 
 
 

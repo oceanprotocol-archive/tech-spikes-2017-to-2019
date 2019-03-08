@@ -17,9 +17,8 @@ function wait(ms) {
 
 contract("OceanRequester", (accounts) => {
   const LinkToken = artifacts.require("LinkToken.sol");
-  const Oracle = artifacts.require("Oracle.sol");
   const OceanRequester = artifacts.require("OceanRequester.sol");
-  const jobId = web3.utils.toHex("4c7b7fcb66b344fbaa64995af81e351a");
+  const jobId = web3.utils.toHex("2c6578f488c843588954be403aba2deb");
   const url = "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,JPY";
   const path = "USD";
   const times = 100;
