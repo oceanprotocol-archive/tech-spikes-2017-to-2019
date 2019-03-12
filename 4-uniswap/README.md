@@ -20,6 +20,18 @@ To this end, we investigate how to integrate OCEAN tokens to Uniswap in this res
 
 ## 2. Uniswap Structure  
 
+* **Token contract**: the token contract must be first deployed on the blockchain network;
+* **Uniswap Factory contract**: 
+	* it is the manager of exchange contracts for all token contracts; 
+	* it maintains a mapping from token contract address to corresponding exchange contract address;
+	* it creates a new exchange contract for a specific token contract;
+* **Uniswap Exchage contract**:
+	* execute the swap order to exchange tokens;
+	* accept token deposit to enhance liquidity of Uniswap.
+
+<img src="img/uniswap.jpg" width=800 />
+
+
 
 
 ## 3. POC in Rinkeby Testnet 
@@ -144,8 +156,10 @@ web3.eth.getTransactionCount(addressFrom).then(txCount => {
 
 })
 ```
+The tx can be found at EtherScan:
+[https://rinkeby.etherscan.io/tx/0x3be6084010a96c15ba2d7b4e766ec080ccff2e6f223e37da05a8fbadebfe8430](https://rinkeby.etherscan.io/tx/0x3be6084010a96c15ba2d7b4e766ec080ccff2e6f223e37da05a8fbadebfe8430)
 
-The output is the exchange address for Ocean token:
+Here is the output from this tx:
 
 <img src="img/sendtx.jpg" width=800 />
 
@@ -178,15 +192,14 @@ getTokenExchange()
 
 Output is the exchange address for Ocean token:
 
-```
-$ node test/Uniswap.js
-the exchange address for Ocean token is: 0x416F1Ac032D1eEE743b18296aB958743B1E61E81
-```
+<img src="img/query.jpg" width=600 />
 
 It proves that **we had successfully add Ocean token into the Uniswap Exchange**!
 
 
 ## 3.4 Interact with Exchange via Javascript 
+
+Now we are ready to interact with the exchange contract for Ocean tokens. In particular, we can exchange Ether<>Ocean pair on Uniswap.
 
 * Ocean Token contract address: `0xCC4d8eCFa6a5c1a84853EC5c0c08Cc54Cb177a6A`
 * Ocean Token Exchange contract address: `0x416F1Ac032D1eEE743b18296aB958743B1E61E81`
