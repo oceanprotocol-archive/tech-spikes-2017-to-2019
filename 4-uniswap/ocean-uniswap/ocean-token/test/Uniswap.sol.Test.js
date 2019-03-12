@@ -1,5 +1,7 @@
 "use strict";
 
+// javascript:  transact with deployed token contract
+
 let fs = require("fs");
 const Web3 = require('web3')
 const BN = require('bignumber.js')

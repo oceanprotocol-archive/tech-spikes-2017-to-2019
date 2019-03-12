@@ -1,3 +1,5 @@
+// javascript:  query the new exchange contract address for given token contract
+
 let fs = require("fs");
 let Web3 = require("web3");
 

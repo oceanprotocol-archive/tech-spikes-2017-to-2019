@@ -1,3 +1,6 @@
+
+// javascript:  transact with deployed Uniswap Factory contract - createExchange
+
 let Web3 = require("web3");
 const Tx = require('ethereumjs-tx')
 
