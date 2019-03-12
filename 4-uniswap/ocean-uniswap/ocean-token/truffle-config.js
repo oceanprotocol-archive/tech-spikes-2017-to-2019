@@ -1,6 +1,7 @@
 const HDWalletProvider = require('truffle-hdwallet-provider')
 var mnemonic = process.env.NMEMORIC
 
+
 module.exports = {
     networks: {
         // only used locally, i.e. ganache
@@ -26,8 +27,7 @@ module.exports = {
             provider: function() {
               return new HDWalletProvider(process.env.NMEMORIC, "https://rinkeby.infura.io/Kuo1lxDBsFtMnaw6GiN2")
             },
-            network_id: '1',
-            websockets: true,
+            network_id: '4',
             gas: 6000000,
             gasPrice: 10000000000 // 10 Gwei
         },
@@ -42,13 +42,13 @@ module.exports = {
     },
     compilers: {
         solc: {
-            version: '0.4.24'
-        }
-    },
-    solc: {
-        optimizer: {
-            enabled: true,
-            runs: 200
+            version: '0.5.3',
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                }
+            }
         }
     }
 }
