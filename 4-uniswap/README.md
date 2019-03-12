@@ -20,6 +20,7 @@ date: 03/11/2019
 		+ [3.4.1 Approve token transfer to the exchange contract](#341-approve-token-transfer-to-the-exchange-contract)
 		+ [3.4.2 Add liquidity to the exchange contract](#342-add-liquidity-to-the-exchange-contract)
 		+ [3.4.3 Swap ETH<>Ocean tokens](#342-swap-eth--ocean-tokens)
+	+ [3.5 Interact via Frontend](#35-Interact-via-Frontend)
 * [Reference](#reference)
 
 ## 1. Introduction
@@ -437,6 +438,13 @@ The transaction can be verified in Etherscan, where 0.5 Ether has been deposited
 
 <img src="img/tx.jpg" width=1000 />
 
+At this moment, we use Javascript codes to interact with the deployed Uniswap exchange contract and prove it works. 
+
+### 3.5 Interact via Frontend
+
+Uniswap provides a frontend to swap or transfer tokens, which should be updated after a new exchange contract is created. 
+
+The github of frontend is [https://github.com/Uniswap/uniswap-frontend](https://github.com/Uniswap/uniswap-frontend)
  
 ## Reference
 
