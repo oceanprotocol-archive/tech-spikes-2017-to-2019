@@ -10,6 +10,29 @@ editor: Fang Gong <fang@oceanprotocol.com>
 date: 03/18/2019
 ```
 
+* [1. Introduction](#1-introduction)
+* [2. Architecture Overview](#2-architecture-overview)
+* [3. POC of Integration](#3-poc-of-integration)
+	+ [3.1 Install Chainlink Packages](#31-install-chainlink-packages)
+	+ [3.2 Setup of Chainlink network (Kovan testnet)](#32-setup-of-chainlink-network--kovan-testnet-)
+	+ [3.3 Create and Send Oracle Request](#33-create-and-send-oracle-request)
+	+ [3.4 Deploy Requester Contract to Kovan](#34-deploy-requester-contract-to-kovan)
+	+ [3.5 Deposit LINK tokens to Requester Contract](#35-deposit-link-tokens-to-requester-contract)
+	+ [3.6 Use Script to Interact with Contract](#36-use-script-to-interact-with-contract)
+* [4. Build Customized Adapter for Ocean](#4-build-customized-adapter-for-ocean)
+	+ [4.1 Overview of Workflow](#41-overview-of-workflow)
+	+ [4.2 Run a new Chainlink node](#42-run-a-new-chainlink-node)
+	+ [4.3 Deploy Oracle contract to Kovan](#43-deploy-oracle-contract-to-kovan)
+	+ [4.4 Build a new external adapter](#44-build-a-new-external-adapter)
+	+ [4.5 deploy new adapter to GCP/Amazon Lambda](#45-deploy-new-adapter-to-gcp-amazon-lambda)
+	+ [4.6 register external adapter in Chainlink node](#46-register-external-adapter-in-chainlink-node)
+	+ [4.7 register Chainlink nodes in Oracle contract](#47-register-chainlink-nodes-in-oracle-contract)
+	+ [4.8 Create and Deploy Requester Contract](#48-create-and-deploy-requester-contract)
+	+ [4.9 Send Request to the External Adapter](#49-send-request-to-the-external-adapter)
+* [5. Conclusion](#5-conclusion)
+* [Reference](#reference)
+* [License](#license)
+
 ## 1. Introduction
 
 Ocean Protocol needs the web 2.0 data availability proof (i.e., data is available for access in the storage) to distribute reward tokens and fulfill the service agreements. It is a fundamental building block for great success of Ocean. 
