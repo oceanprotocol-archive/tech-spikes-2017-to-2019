@@ -18,6 +18,8 @@ A decentralized approach is urgently sought. We had researched POA network, veri
 
 In this research, we explore the integration of Chainlink & Ocean. In this way, Ocean can access the external information through Chainlink network. 
 
+*Note*: the POC in folder `poc` uses Truffle v5.0.3 and Node v8.11.1.
+
 ## 2. Architecture Overview
 
 The high-level architecture design is following:
