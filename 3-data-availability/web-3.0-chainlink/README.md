@@ -12,14 +12,14 @@ date: 03/18/2019
 
 * [1. Introduction](#1-introduction)
 * [2. Architecture Overview](#2-architecture-overview)
-* [3. POC of Integration](#3-poc-of-integration)
+* [3. POC of Integration using Built-in Adapter](#3-poc-of-integration)
 	+ [3.1 Install Chainlink Packages](#31-install-chainlink-packages)
 	+ [3.2 Setup of Chainlink network (Kovan testnet)](#32-setup-of-chainlink-network--kovan-testnet-)
 	+ [3.3 Create and Send Oracle Request](#33-create-and-send-oracle-request)
 	+ [3.4 Deploy Requester Contract to Kovan](#34-deploy-requester-contract-to-kovan)
 	+ [3.5 Deposit LINK tokens to Requester Contract](#35-deposit-link-tokens-to-requester-contract)
 	+ [3.6 Use Script to Interact with Contract](#36-use-script-to-interact-with-contract)
-* [4. Build Customized Adapter for Ocean](#4-build-customized-adapter-for-ocean)
+* [4. Build External Adapter for Ocean](#4-build-customized-adapter-for-ocean)
 	+ [4.1 Overview of Workflow](#41-overview-of-workflow)
 	+ [4.2 Run a new Chainlink node](#42-run-a-new-chainlink-node)
 	+ [4.3 Deploy Oracle contract to Kovan](#43-deploy-oracle-contract-to-kovan)
@@ -55,7 +55,7 @@ The high-level architecture design is following:
 * **Adapters**: service interfaces to the external data sources. It accepts and responds with JSON formatted data;
 * **External Data**: the information source including Web pages, Cloud dataset, Database, etc. 
 
-## 3. POC of Integration
+## 3. POC of Integration using Built-in Adapter
 
 In this POC, we try to build the workflow in the architecture with all components in place. To this end, we leverage the [existing core adapters](ttps://docs.chain.link/docs/available-oracles) provided by Chainlink. 
 
@@ -214,7 +214,7 @@ The output is the `ETH` price in the unit of `USD`, which is 137 USD at this mom
 
 
 
-## 4. Build Customized Adapter for Ocean
+## 4. Build External Adapter for Ocean
 
 ### 4.1 Overview of Workflow
 
