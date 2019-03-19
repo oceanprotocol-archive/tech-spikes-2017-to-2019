@@ -7,7 +7,7 @@ name: research on Uniswap/Ocean integration.
 type: research
 status: initial draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 03/11/2019
+date: 03/18/2019
 ```
 
 * [1. Introduction](#1-introduction)
@@ -31,7 +31,7 @@ Uniswap is a decentralized token exchange for cryptocurrencies, which facilitate
 
 To this end, we investigate how to integrate OCEAN tokens to Uniswap in this research. To be clear, it is desired to leverage the existing deployed Uniswap contract rather than building Uniswap-type exchange internally. 
 
-*Note: this POC uses web3.js v1.0, node v8.11.1 and truffle v5.0.3 to complete.*
+*Note: this POC in directory `ocean-uniswap` uses web3.js v1.0, node v8.11.1 and truffle v5.0.3 to complete.*
 
 ## 2. Uniswap Structure  
 
@@ -72,7 +72,7 @@ rinkeby: {
      network_id: '4',
      websockets: true,
      gas: 6000000,
-     gasPrice: 10000000000 // 10 Gwei
+     gasPrice: 10000000000
  },
 ```
 
@@ -430,7 +430,7 @@ web3.eth.getTransactionCount(addressFrom).then(txCount => {
 })
 ```
 
-Output is:
+The output should looks like:
 
 <img src="img/swap.jpg" width=1000 />
 
@@ -448,11 +448,11 @@ The github of frontend is [https://github.com/Uniswap/uniswap-frontend](https://
  
 ## Reference
 
-* [Uniswap](https://uniswap.io/)
-* [Uniswap Mainnet Exchange](https://uniswap.exchange/)
-* [Uniswap contract](https://github.com/Uniswap/contracts-vyper)
-* [Uniswap frontend](https://github.com/Uniswap/uniswap-frontend)
-* [Sends a raw transaction with web3 v1.0 and Infura](https://gist.github.com/raineorshine/c8b30db96d7532e15f85fcfe72ac719c)
+* 1. [Uniswap](https://uniswap.io/)
+* 2. [Uniswap Mainnet Exchange](https://uniswap.exchange/)
+* 3. [Uniswap contract](https://github.com/Uniswap/contracts-vyper)
+* 4. [Uniswap frontend](https://github.com/Uniswap/uniswap-frontend)
+* 5. [Sends a raw transaction with web3 v1.0 and Infura](https://gist.github.com/raineorshine/c8b30db96d7532e15f85fcfe72ac719c)
 
 ## License
 
