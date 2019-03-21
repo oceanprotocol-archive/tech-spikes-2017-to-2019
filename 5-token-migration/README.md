@@ -69,7 +69,7 @@ Users take less efforts to migrate tokens with Swap Partners, however, **they ca
 
 <img src="img/KinSwap.jpg" />
 
-### 2.3 Uniswap
+### 2.2 Uniswap
 
 Uniswap is a decentralized exchange to swap tokens in the Ethereum network. Since both tokens are in the same blockchain, user can use **the same wallet** to hold both tokens. The on-chain smart contract of Uniswap will fulfill the exchange with low gas cost. 
 
@@ -90,7 +90,7 @@ The mechanism is illustrated as below:
 * **Limitation**: it is limited to Ethereum network and homogeneous (EVM<>EVM) swapping.
 * **Effort**: users need very limited efforts to use it.
 
-### 2.4 Token Bridge
+### 2.3 Token Bridge
 
 Token Bridge is a **cross-chain** and **two-way** token transfer service, which moves a token from one blockchain network to the other. It deploys bridge contract on both networks and handle the token transfer transactions. The off-chain validators listen to the on-chain transaction event messages from one blockchain and trigger new transaction to the other.
 
@@ -116,7 +116,7 @@ Token Bridge is a **cross-chain** and **two-way** token transfer service, which 
 	* user needs to switch network in their wallet (e.g., MetaMask) to find new tokens;
 	* Ocean team needs more efforts to deploy bridge contract, off-chain validator network, and brige UI.
 
-### 2.5 Mirror Copy
+### 2.4 Mirror Copy
 
 Mirror copy is an **one-way**, **1-to-1** approch to migrate tokens across blockchains. At a specified timestamp, the token contract fixes all tokens (non-transferable) and takes a "**snapshot**" of the token balance in the Ethereum network (i.e., token holder wallet address and corresponding ERC20 token balance). 
 
