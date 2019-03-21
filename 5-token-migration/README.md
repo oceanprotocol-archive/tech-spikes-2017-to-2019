@@ -246,9 +246,10 @@ The porposed solution is **Mirror Copy + (optional: Token Bridge for Exchange)**
 	* users can use the SAME wallet to keep the tokens in both network (mainnet & POA);
 	* users have almost zero effort and no chance of phishing attack;
 	* Ocean team controls the migration process and ensures the security;
-	* Technical efforts are limited to Ocean team (similar to getting Procean tokens into Ocean tokens);
+	* technical efforts are limited to Ocean team (similar to getting Procean tokens into Ocean tokens);
 	* it requires no support from the exchange;
-	* the time of migration is controled by Ocean team.
+	* the time of migration is controled by Ocean team;
+	* for better security, a multi-sgi wallet should be used to send tx in order to credit new tokens to holders.
 
 <img src="img/mirrorCopyMigration.jpg" />
 
