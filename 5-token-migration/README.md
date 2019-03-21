@@ -32,7 +32,7 @@ Ocean will launch V1 Beta network in our own POA without "real" Ocean tokens. In
 4. Ease of use for our users (e.g. we "pull" versus user "pushing"). 
 5. Time constraints: any changes to token contract should be done before 04/01 and migration happens in the coming months.
 
-In this research we aim to enumerate the possible ways to migrate "real" Ocean tokens from Ethereum mainnet to V1 Production Ocean POA network. In the end, we try to find the best solution to fit Ocean's need and identify required changes to Ocean token contract.
+In this research we aim to enumerate the possible ways to migrate "real" Ocean tokens from Ethereum mainnet to V1 Production Ocean POA network. In the end, we try to find the most suitable solution to fit Ocean's need and identify required changes to Ocean token contract.
 
 ## 2. Available Options
 
@@ -132,6 +132,7 @@ Note: the ERC20 token in the Ethereum network will be burnt after the migration 
 * **Con**:
 	* token holders must trust the team will correctly perform the migration;
 	* all tokens become non-transferable during the migration;
+	* with heterogeneous migration, users may lose their tokens if they do not have new wallets to receive the new tokens because Ethereum wallet cannot store them.
 * **Security**: high
 	* there is no action needed from the users, therefore, there is no chance of phishing attack;
 	* all the token operations are internal to the team. The safety can be ensured with proper supervision (e.g., use multisig wallet to perform mirror copying).
@@ -141,7 +142,7 @@ Note: the ERC20 token in the Ethereum network will be burnt after the migration 
 	* the "real" token contract must have `freeze`, `burn` and `getSnapShot` functions;
 	* users only need to switch to the new blockchain network;
 
-## 3. Previous Case Study
+## 3. Case Study
 
 ### 3.1 Aeternity - using Token Bridge
 
@@ -180,8 +181,10 @@ When the EOS mainnet is launched, it will go through the Ethereum blockchain loo
 
 Once the EOS snapshot is taken, all (ERC-20) EOS tokens will be frozen on the Ethereum blockchain and you will no longer be able to send or exchange them.  
 
-* **Pro**: user only need to register and do nothing else;
-* **Con**: user need to trust EOS team in the migration process;
+* **Pro**: users only need to register and do nothing else;
+* **Con**: 
+	* users need to trust EOS team in the migration process;
+	* users may lose their tokens if they do not register EOS wallet in the registration period, because Ethereum wallet cannot hold EOS tokens.
 * **Security**: (**low risk**) the migration process is controled by the EOS team. 
 
 ### 3.3 Melonport - using Uniswap-type Exchange
@@ -211,7 +214,7 @@ Several exchanges will help their members to complete the migration. However, if
 **key points:**
 
 * one-way, 1-to-1 migration from Ethereum to Cosmos (or any Tendermint) chain;
-* [`hard spoon`](https://blog.cosmos.network/introducing-the-hard-spoon-4a9288d3f0df) mints new tokens and credits users with the same balance in Ethereum network;
+* [`hard spoon`](https://blog.cosmos.network/introducing-the-hard-spoon-4a9288d3f0df) mints new tokens and credits users with the same Ethereum token balance;
 * old ERC20 tokens on Ethereum will be intact in the end;
 * heterogeneous migration (Ethereum network -> Tendermint network)
 
@@ -221,41 +224,64 @@ A `hard spoon` occurs when a new cryptocurrency is minted by replicating the acc
 
 <img src="img/cosmos.jpg" />
 
-## 3. Potential Solution
+## 3. Recommended Solution
 
-Consider our real situation of token migration in Ocean:
+* **Consider our situation of token migration in Ocean**:
 
-* one-way and one-to-one migration from ERC20@Ethereum-mainnet to ERC20@POA-network;
-* old tokens shall be burnt to ensure that the total supply never exceeds 1.4 billion;
-* temporary supporting for migration;
-* migrate to different blockchain (Mainnet -> POA);
-* homogeneous migration between EVM and EVM (i.e., ERC20 <> ERC20)
+	* one-way and one-to-one migration from ERC20@Ethereum-mainnet to ERC20@POA-network;
+	* old tokens shall be burnt to ensure that the total supply never exceeds 1.4 billion;
+	* temporary supporting for migration;
+	* migrate to different blockchain (Mainnet -> POA);
+	* homogeneous migration between EVM and EVM (i.e., ERC20 <> ERC20)
 
-Our objectives:
+* **Our objectives**:
 
-* minimize chance of phishing
-* maximize security 
-* minimize technical efforts to Ocean team
-* low cost to get exchange support
-* ease of use for users
-* time constraint
+	* minimize chance of phishing
+	* maximize security 
+	* minimize technical efforts to Ocean team
+	* low cost to get exchange support
+	* ease of use for users
+	* time constraint
 
-The porposed solution is **Mirror Copy + (optional: Token Bridge for Exchange)**
+* The recommended solution is **Mirror Copy (or One-way 1:1 Mapping)**
 
-* **Mirror Copy**
-	* users can use the SAME wallet to keep the tokens in both network (mainnet & POA);
-	* users have almost zero effort and no chance of phishing attack;
-	* Ocean team controls the migration process and ensures the security;
-	* technical efforts are limited to Ocean team (similar to getting Procean tokens into Ocean tokens);
-	* it requires no support from the exchange;
-	* the time of migration is controled by Ocean team;
-	* for better security, a multi-sgi wallet should be used to send tx in order to credit new tokens to holders.
+	* **Step 1: Pause token transfer**
+		* the token contract is controlled by a multisig wallet;
+		* the multisig wallet should pause all token transfers at a pre-announced time;
+	* **Step 2: Generate snapshot in Ethereum mainnet**
+		* the multisig wallet retrieve the complete list of existing holders;
+		* their token balance on Ethereum mainnet can be requested;
+		* complete token holder list along with their token balances form the "snapshot";
+	* **Step 3: Mint tokens in POA network**
+		* the total amount of tokens to be migrated can be calculated from Step 2;
+		* the owner of the new token contract on POA network can mint the same amount of new tokens;
+		* initially those new tokens are kept in owner's wallet in POA network;
+	* **Step 4: Distribute new tokens to users according to the snapshot**
+		* leverage [token-distribution](https://github.com/oceanprotocol/token-distribution) to credit the same amount of new tokens to holders in the snapshot;
+		* new token in POA network is distributed on a 1:1 to the old token in the Ethereum mainnet;
+	* **Step 5: Appeal if there is any error**
+		* after the migration period is closed, anyone can submit an appeal to Ocean if they are supposed to receive new tokens but have not (or token amount is not correct);
+		* Ocean will look at the snapshot to verify the token amount and fix any error;
+	* **Step 6: Kill old token contract to destroy all old tokens**
+		* after the appeal period is closed, the old token contract in Ethereum mainnet will be killed and all tokens will be destroyed.
+		* the entire migration process is complete at this moment.
 
-<img src="img/mirrorCopyMigration.jpg" />
+	<img src="img/oceanMirror.jpg" />
 
-
-
-* **Optional: Token Bridge for Exchange**:
+	* **Pro**：
+		* users can use the **SAME** wallet to keep the tokens in both network (mainnet & POA);
+		* users have almost zero effort;
+		* the effort demand for Ocean technical team is very limited (in fact, the existing [token distribution procedure](https://github.com/oceanprotocol/token-distribution) can be leveraged for the token migration purpose)；
+		* it requires no support from the exchange;
+	* **Con**:
+		* tokens will be fixed and cannot be transferred during the migration process;
+		* token holders need to trust the Ocean team in the migration;
+	* **Security**:
+		* Ocean team controls the migration process and ensures the security;
+		* the chance of phishing attack is very low since users do not need to migrate on their own.
+		* all old tokens are enforced to be migrated and destroyed after, therefore, no token will be lost;
+	
+<!--* **Optional: Token Bridge for Exchange**:
 	* old token contract needs no change for this;
 	* exchange is more familiar with token bridge and has adequate technical knowledge;
 	* exchange is more cautious and less likely to get phished;
@@ -265,54 +291,128 @@ The porposed solution is **Mirror Copy + (optional: Token Bridge for Exchange)**
 		* exchange need to switch to POA network;
 		* add new token contract address in the wallet to find new tokens.
 	
-<img src="img/exchangeSwap.jpg" />
+<img src="img/exchangeSwap.jpg" />-->
 
-
-## 4. Contract Changes
+## 4. Token Contract Changes
 
 To enable Mirror Copy, existing Ocean token contract need some extra functions:
 
-* **list all balance accounts for snapshot** - (need to add)
-
-[TODO]
+* **list all token holder addresses to build a snapshot** - (need to add)
+	* it can loop through all holders and return the list of all token holders;
+	* it will render out-of-gas error when the size of token holders is huge (e.g., millions of holders);
 
 * **pause the token transfer in the contract** - (need to add)
+	* inherit the 'Pausable.sol' contract to enable the `whenNotPaused` modifier;
+
+* **kill the contract to destroy all old tokens** - (already exists)
+	* it should be invoked by the owner (e.g., multisig wallet) only.
+
+
+An example of the modified token contract including new functions is shown in the below. The [source file](token-contract/contracts/OceanToken.sol) locates in `token-contract/contracts` directory. More unit/integrated testing are needed to verify the functionality and contract behavior.
 
 ```solidity
-import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol"
-  
-contract ERC20Pausable is ERC20, Pausable {
-	...
+pragma solidity 0.5.3;
+
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol';
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+
+
+/**
+ * @title Ocean Protocol ERC20 Token Contract
+ * @author Ocean Protocol Team
+ *
+ * @dev Implementation of the Ocean Token.
+ */
+contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
+
+	using SafeMath for uint256;
+
+	uint256 CAP = 1410000000;
+	uint256 TOTALSUPPLY = CAP.mul(10 ** 18);
+
+  // maintain the list of token holders
+  mapping (address => bool) public accountExist;
+  address[] public accountList;
+
 	/**
+	* @dev OceanToken constructor
+	*      Runs only on initial contract creation.
+	* @param _owner refers to the owner of the contract
+	*/
+	constructor(
+		address _owner
+	)
+		public
+		ERC20Detailed('OceanToken', 'OCEAN', 18)
+		ERC20Capped(TOTALSUPPLY)
+		Ownable()
+	{
+		// add owner as minter
+		addMinter(_owner);
+		// renounce msg.sender as minter
+		renounceMinter();
+		// transfer the ownership to the owner
+		transferOwnership(_owner);
+    // add owner to the account list
+    accountList.push(_owner);
+    accountExist[_owner] = true;
+	}
+
+    // Pausable Transfer Functions
+    /**
      * @dev Transfer tokens when not paused
      **/
     function transfer(address _to, uint256 _value) public whenNotPaused returns (bool) {
+        // add receiver into the account list if he/she is not in the list
+        if( accountExist[_to] == false ){
+          accountList.push(_to);
+          accountExist[_to] = true;
+        }
         return super.transfer(_to, _value);
     }
-    
+
     /**
      * @dev transferFrom function to tansfer tokens when token is not paused
      **/
     function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused returns (bool) {
+        // add receiver into the account list if he/she is not in the list
+        if( accountExist[_to] == false ){
+          accountList.push(_to);
+          accountExist[_to] = true;
+        }
         return super.transferFrom(_from, _to, _value);
     }
-    ...
+
+    // retrieve the list of token holders (each time retrieve partial from the list to avoid out-of-gas error)
+    function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
+        // check input parameters are in the range
+        require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
+        address[] memory v = new address[](end.sub(begin).add(1));
+        for (uint256 i = begin; i < end; i++) {
+            // skip accounts whose balance is zero
+            if(super.balanceOf(accountList[i]) > 0){
+              v[i] = accountList[i];
+            }
+        }
+        return v;
+    }
+
+    // kill the contract and destroy all tokens
+  	function kill()
+  		public
+  		onlyOwner
+  	{
+  		selfdestruct(address(uint160(owner())));
+  	}
+
+  	function()
+  		external payable
+  	{
+  		revert();
+  	}
 }
-```
-
-* **exclude bridge contract from the snapshot to avoid double migrations** - (need to add)
-
-[TODO]
-
-* **kill the contract to destroy all old tokens** - (already exists)
-
-```solidity
-	function kill()
-		public
-		onlyOwner
-	{
-		selfdestruct(address(uint160(owner())));
-	}
 ```
 
 ## License
