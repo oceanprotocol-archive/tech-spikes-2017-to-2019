@@ -26,20 +26,25 @@ Folder Name   |  Description | Issue |
 2-signaling-mechanism  | research on token mechanism for signaling | [258](https://github.com/oceanprotocol/ocean/issues/258)|
 3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
+5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287)
+6-uniswap-chainlink-integration | integration of Ocean + Uniswap + Chainlink | [288](https://github.com/oceanprotocol/ocean/issues/288)
 
 
 ## Updates
+
+* [03/19/2019] token migration ([287](https://github.com/oceanprotocol/ocean/issues/287)) & Chainlink<>Uniswap integration ([288](https://github.com/oceanprotocol/ocean/issues/288))
+
 * [03/07/2019] integration of Chainlink and Ocean ([281](https://github.com/oceanprotocol/ocean/issues/281) data availability folder)
 
-* [03/04/2019] add Uniswap research [286](https://github.com/oceanprotocol/ocean/issues/286)
+* [03/04/2019] Uniswap research [286](https://github.com/oceanprotocol/ocean/issues/286)
 
-* [02/11/2019] add research of short selling in bonding curves (in signaling mechanism folder)
+* [02/11/2019] research of short selling in bonding curves (in signaling mechanism folder)
 
 * [01/31/2019] update data availability (web 2.0)
 
-* [01/28/2019] add enigma analysis
+* [01/28/2019] enigma analysis
 
-* [01/26/2019] finish ocean/fitchain analysis
+* [01/26/2019] ocean/fitchain analysis
 
 * [01/16/2019] setup framework of repository
 
