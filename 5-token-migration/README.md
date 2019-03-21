@@ -332,9 +332,9 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
 	uint256 CAP = 1410000000;
 	uint256 TOTALSUPPLY = CAP.mul(10 ** 18);
 
-  // maintain the list of token holders
-  mapping (address => bool) public accountExist;
-  address[] public accountList;
+  	// maintain the list of token holders
+  	mapping (address => bool) public accountExist;
+  	address[] public accountList;
 
 	/**
 	* @dev OceanToken constructor
@@ -355,51 +355,51 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
 		renounceMinter();
 		// transfer the ownership to the owner
 		transferOwnership(_owner);
-    // add owner to the account list
-    accountList.push(_owner);
-    accountExist[_owner] = true;
+    		// add owner to the account list
+    		accountList.push(_owner);
+    		accountExist[_owner] = true;
 	}
 
-    // Pausable Transfer Functions
-    /**
-     * @dev Transfer tokens when not paused
-     **/
-    function transfer(address _to, uint256 _value) public whenNotPaused returns (bool) {
-        // add receiver into the account list if he/she is not in the list
-        if( accountExist[_to] == false ){
-          accountList.push(_to);
-          accountExist[_to] = true;
-        }
-        return super.transfer(_to, _value);
-    }
+    	// Pausable Transfer Functions
+    	/**
+     	* @dev Transfer tokens when not paused
+     	**/
+    	function transfer(address _to, uint256 _value) public whenNotPaused returns (bool) {
+        	// add receiver into the account list if he/she is not in the list
+        	if( accountExist[_to] == false ){
+          		accountList.push(_to);
+          		accountExist[_to] = true;
+        	}
+        	return super.transfer(_to, _value);
+    	}
 
-    /**
-     * @dev transferFrom function to tansfer tokens when token is not paused
-     **/
-    function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused returns (bool) {
-        // add receiver into the account list if he/she is not in the list
-        if( accountExist[_to] == false ){
-          accountList.push(_to);
-          accountExist[_to] = true;
-        }
-        return super.transferFrom(_from, _to, _value);
-    }
+    	/**
+     	* @dev transferFrom function to tansfer tokens when token is not paused
+     	**/
+    	function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused returns (bool) {
+        	// add receiver into the account list if he/she is not in the list
+        	if( accountExist[_to] == false ){
+         	 accountList.push(_to);
+          	accountExist[_to] = true;
+       		}
+        	return super.transferFrom(_from, _to, _value);
+    	}
 
-    // retrieve the list of token holders (each time retrieve partial from the list to avoid out-of-gas error)
-    function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
-        // check input parameters are in the range
-        require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
-        address[] memory v = new address[](end.sub(begin).add(1));
-        for (uint256 i = begin; i < end; i++) {
-            // skip accounts whose balance is zero
-            if(super.balanceOf(accountList[i]) > 0){
-              v[i] = accountList[i];
-            }
-        }
-        return v;
-    }
+    	// retrieve the list of token holders (each time retrieve partial from the list to avoid out-of-gas error)
+    	function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
+        	// check input parameters are in the range
+        	require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
+        	address[] memory v = new address[](end.sub(begin).add(1));
+        	for (uint256 i = begin; i < end; i++) {
+            		// skip accounts whose balance is zero
+            		if(super.balanceOf(accountList[i]) > 0){
+              			v[i] = accountList[i];
+            		}
+        	}
+        	return v;
+    	}
 
-    // kill the contract and destroy all tokens
+    	// kill the contract and destroy all tokens
   	function kill()
   		public
   		onlyOwner
