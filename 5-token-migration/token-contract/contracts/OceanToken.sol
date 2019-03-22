@@ -72,7 +72,7 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
         return super.transferFrom(_from, _to, _value);
     }
 
-    // retrieve the list of token holders (each time retrieve partial from the list to avoid out-of-gas error)
+    // retrieve the list of token holders (each time retrieve partial from the list)
     function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
         // check input parameters are in the range
         require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
