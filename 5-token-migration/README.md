@@ -299,10 +299,9 @@ To enable Mirror Copy, existing Ocean token contract need some extra functions:
 
 * **list all token holder addresses to build a snapshot** - (need to add)
 	* it can loop through all holders and return the list of all token holders;
-	* it will render out-of-gas error when the size of token holders is huge (e.g., millions of holders);
 
 * **pause the token transfer in the contract** - (need to add)
-	* inherit the 'Pausable.sol' contract to enable the `whenNotPaused` modifier;
+	* inherit the 'ERC20Pausable.sol' contract to enable the `whenNotPaused` modifier;
 
 * **kill the contract to destroy all old tokens** - (already exists)
 	* it should be invoked by the owner (e.g., multisig wallet) only.
@@ -385,7 +384,7 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
         	return super.transferFrom(_from, _to, _value);
     	}
 
-    	// retrieve the list of token holders (each time retrieve partial from the list to avoid out-of-gas error)
+    	// retrieve the list of token holders (each time retrieve partial from the list)
     	function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
         	// check input parameters are in the range
         	require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
