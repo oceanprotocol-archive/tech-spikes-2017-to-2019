@@ -27,7 +27,7 @@ Folder Name   |  Description | Issue |
 3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
 5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287)
-6-uniswap-chainlink-integration | integration of Ocean + Uniswap + Chainlink | [288](https://github.com/oceanprotocol/ocean/issues/288)
+6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
 
 
 ## Updates
