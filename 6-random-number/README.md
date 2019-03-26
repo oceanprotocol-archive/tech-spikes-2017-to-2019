@@ -151,9 +151,7 @@ Moreover, Chainlink has setup an adapter for Random.org at [randomorg-chainlink-
 
 <img src="img/uniswap_chainlink.jpg" />
 
-### 3.1 Request from online Quantum Random Number Generator
-
-Create the Requester Contract
+### 3.1 Create the Requester Contract
 
 See contract `chainlink/contracts/OceanRequester.sol` for details. The key function is:
 
