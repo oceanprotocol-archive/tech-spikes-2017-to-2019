@@ -107,9 +107,9 @@ Note: LINK token for Chainlink has been deployed to Rinkeby at `0x01BE2358506083
 	the exchange address for LINK token is:0x094AeF967D361E2aE3Af472718e231DC9134724F
 	```
 
-### 2.3 add initial liquidity for LINK tokens
+### 2.3 add initial liquidity for Ocean tokens
 
-Before we can deposit initial tokens to the exchange contract, we need to first approve the exchange contract to withdraw OCEAN tokens from the sender's wallet. Use the script `uniswap-token/script/4.approve.ocean.deposit.js` for this purpose:
+Before we can deposit initial tokens to the Ocean exchange contract, we need to first approve the exchange contract to withdraw OCEAN tokens from the sender's wallet. Use the script `uniswap-token/script/4.approve.ocean.deposit.js` for this purpose:
 
 <img src="img/approve_withdraw.jpg" width=1000 />
 
