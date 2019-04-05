@@ -261,8 +261,6 @@ function sendSigned(txData, cb) {
 
 Current trading strategy is straightforward and simple: compare the price from Uniswap and Binance to buy LINK tokens with lower price and sell LINK tokens at higher price. 
 
-Below the framework of the one-pass trading strategy, which can be put into a loop and continuously trade for profits. To limit the gas cost, we can wait 1 minutes before start the next trading.
-
 ```Javascript
   // 1. if Binance has higher price -> buy from Uniswap and sell into Binance
   if(binanceLinkEth > buyPrice){
@@ -305,7 +303,7 @@ To run real integrated testing, we need to have Ether in mainnet and real accoun
 
 Here, I use the Uniswap contract in Rinkeby to simulate the trading to see how it can profit. It can be put into a loop to be conduct every 5 mins or a longer time. 
 
-In this testing, the trading bot bought 10 LINK tokens from Binance and sold them into Uniswap to make a profit of 0.03490843399661912 ETH (~$5.76)
+In this testing, the trading bot bought 10 LINK tokens from Uniswap and sold them into Binance to make a profit of 0.03490843399661912 ETH (~$5.76)
 
 <img src="img/test.jpg" width=600 />
 
