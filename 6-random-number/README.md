@@ -40,7 +40,8 @@ The folder structure is following:
 folder name | description |
 ---| ---|
 uniswap-token | scripts to add OCEAN<>LINK pair |
-chainlink | scripts to fulfill request with Chainlink |
+chainlink | scripts to submit request to Chainlink in Rinkeby network |
+kovan-receiver | smart contract that receives request results in POA network |
 img | image files for README.md |
 
 ## 2. Uniswap
@@ -264,6 +265,58 @@ contract("OceanRequester", (accounts) => {
 The integration testing on Rinkeby takes 1s to fulfill the random number request (i.e., generate a random number between 100 and 1000):
 
 <img src="img/testing.jpg" width=1000 />
+
+## 4. Transfer Data into Ocean POA network
+
+In Ocean's scenario, we deploy Keeper contract in our own POA network, therefore, it is needed to port the result of Chainlink requests into the POA network. In the meantime, we need to leverage the existing Chainlink network and pay real LINK tokens for the service. 
+
+The most lightweight approach is following:
+
+<img src="img/chainlink_poa.jpg" />
+
+The Chainlink network will need to regiter a new job specification, which triggers the transaction to transfer data into Ocean POA network. 
+
+As a Proof-of-Concept, we deploy the `requester` contract in **Rinkeby** as previous step, while deploy the `receiver` contract in **Kovan** testnet to receive the request result.
+
+When migrating to Ocean POA network, we need to privde:
+
+* URL endpoint of POA network that accepts transactions of JSON-RPC calls;
+* account information with private key in POA networth with available funds.
+
+### 4.1 Requester Contract 
+
+It was deployed in Rinkeby at `0x81C8A4BE1bf2491D3c90BdE4615EE4672F13E63b`. Source file is [here](chainlink/contracts/OceanRequester.sol)
+
+### 4.2 Create and Deploy Receiver Contract
+
+The source file of OceanReceiver smart contract is [here](kovan-receiver/contracts/OceanReceiver.sol)
+
+We deploy it into Kovan testnet at `0x0aBDB2bB26A4A34e16D146639FDE5b530AC86cFf`:
+
+```
+$ truffle migrate --network kovan
+2_oceanreceiver_migration.js
+============================
+
+   Deploying 'OceanReceiver'
+   -------------------------
+   > transaction hash:    0x6d9eff7b234c0f5df04cfab96cabae1475bd0402af4e64f925ba9f457c9c2f9d
+   > Blocks: 2            Seconds: 12
+   > contract address:    0x0aBDB2bB26A4A34e16D146639FDE5b530AC86cFf
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             4.123931865853937168
+   > gas used:            264762
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00264762 ETH
+```
+
+The signature of fulfill function is `function fulfill(bytes32 _requestId, uint256 _data)`
+
+
+### 4.3 Request Random Numbers
+
+
 
 ## License
 
