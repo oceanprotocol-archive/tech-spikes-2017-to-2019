@@ -28,10 +28,13 @@ Folder Name   |  Description | Issue |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
 5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287)
 6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
-7-arbitrage-bot | build an arbitrage bot between Uniswap and Exchange | |
+7-arbitrage-bot | build an arbitrage bot between Uniswap and Exchange | 
+8-pricing | research and development of a data pricing framework | |
 
 
 ## Updates
+
+* [04/10/2019] data pricing research
 
 * [04/04/2019] arbitrage bot
 
