@@ -1,26 +1,5 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
-**Table of Contents**
-
-- [Data pricing and value flows within an efficient data market](#data-pricing-and-value-flows-within-an-efficient-data-market)
-    - [1. Introduction](#1-introduction)
-    - [2. Challenges of pricing information goods](#2-challenges-of-pricing-information-goods)
-        - [2.1 Basic problem](#21-basic-problem)
-        - [2.2 Additional challenges](#22-additional-challenges)
-    - [3. Enabling price discovery for information goods](#3-enabling-price-discovery-for-information-goods)
-        - [3.1 License tokens](#31-license-tokens)
-        - [3.2 Open design choices](#32-open-design-choices)
-        - [3.3 Open problems](#33-open-problems)
-    - [4. Estimating an initial price](#4-estimating-an-initial-price)
-    - [5. Additional mechanisms](#5-additional-mechanisms)
-        - [5.1 Query-based data pricing](#51-query-based-data-pricing)
-        - [5.2 Quality-based pricing](#52-quality-based-pricing)
-        - [5.3 Other mechanisms](#53-other-mechanisms)
-
-<!-- markdown-toc end -->
-
-
 # Data pricing and value flows within an efficient data market
 
 ```
@@ -30,6 +9,28 @@ status: initial draft
 editor: Erwin Kuhn <erwin@oceanprotocol.com>
 date: 04/10/2019
 ```
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
+
+- [1. Introduction](#1-introduction)
+- [2. Challenges of pricing information goods](#2-challenges-of-pricing-information-goods)
+	- [2.1 Basic problem](#21-basic-problem)
+	- [2.2 Additional challenges](#22-additional-challenges)
+- [3. Enabling price discovery for information goods](#3-enabling-price-discovery-for-information-goods)
+	- [3.1 License tokens](#31-license-tokens)
+	- [3.2 Open design choices](#32-open-design-choices)
+	- [3.3 Open problems](#33-open-problems)
+- [4. Estimating an initial price](#4-estimating-an-initial-price)
+- [5. Additional mechanisms](#5-additional-mechanisms)
+	- [5.1 Query-based data pricing](#51-query-based-data-pricing)
+	- [5.2 Quality-based pricing (Name Your Own Price)](#52-quality-based-pricing-name-your-own-price)
+	- [5.3 Pricing personal data based on loss of privacy](#53-pricing-personal-data-based-on-loss-of-privacy)
+	- [5.4 Utility-based and generally optimal models](#54-utility-based-and-generally-optimal-models)
+	- [5.5 Auction models](#55-auction-models)
+
+<!-- markdown-toc end -->
+
+
 
 ## 1. Introduction
 
@@ -124,29 +125,46 @@ This is especially important when relying on a bonding curve mechanism. If someo
 
 Here are some possible solutions for deriving a reasonable initial price for a given data asset:
 
--   **Cost + margin:** the most simple way is to estimate the cost of the work needed to produce the asset, add a margin on top and set this as the price. This is well-suited to assets that were purposefully produced, and likely harder to apply to assets obtained as a side product of another activity. Can be expressed as \`production<sub>cost</sub> \* 1/k \* m\` with \`k\` the expected number of sales and \`m > 1\` the margin factor **[Should be a good approach to establish an initial price]**
+-   **Cost + margin:** the most simple way is to estimate the cost of the work needed to produce the asset, add a margin on top and set this as the price. This is well-suited to assets that were purposefully produced, and likely harder to apply to assets obtained as a side product of another activity. Can be expressed as `production_cost * 1/k * m` with `k` the expected number of sales and `m > 1` the margin factor **[Should be a good approach to establish an initial price]**
 -   **Endpoint pricing:** it's much easier to determine how much a solution to a problem is worth to a buyer than to price raw data that will go through multiples transformations down the road. This can take the form of a direct evaluation (**customer-based**) or bounties / prizes (**problem-based**)
 -   **Existing valuation frameworks:** for some types of data, it should already possible to rely on previous transactions between companies or established valuation frameworks (for consulting companies or acquisitions & mergers) to derive a price. **[Need more insight into this part]**
 
 
-## 5. Additional mechanisms
+## 5. Additional mechanisms [WIP]
 
 ### 5.1 Query-based data pricing
 
-[WIP]
+**References:**
 
-### 5.2 Quality-based pricing
+- [Query-Based Data Pricing](papers/QueryPricing_Koutris15.pdf) - Koutris et al., 2015
+- [Pricing Aggregate Queries in a Data Marketplace](papers/PricingAggregateQueries_LiMiklau2012.pdf) - Li, Miklau 2012
 
-[WIP]
+### 5.2 Quality-based pricing (Name Your Own Price)
 
 Can be on one criteria or multiple ones, with an adjustable distribution of discounts (solvable as a kind of multiple-choice knapsack problem)
 
-For ML models: accuracy-based
--> [Model-based Pricing for Machine Learning in a Data Marketplace](papers/MLpricing_Koutris2018.pdf) - Koutris et al., 2018
+**References**
 
-### 5.3 Other mechanisms
+- [Fair Knapsack Pricing for Data Marketplaces](papers/KnapsackPricingData_Stahl2016.pdf) - Stahl et al., 2016 (relational data)
+- [A Framework for Sampling-Based XML Data Pricing](papers/XMLDataPricing_Tang2016.pdf) - Tang et al., 2016 (tree-structured data, like in XML)
+
+For ML models:
+- [Model-based Pricing for Machine Learning in a Data Marketplace](papers/MLpricing_Koutris2018.pdf) - Koutris et al., 2018
+
+### 5.3 Pricing personal data based on loss of privacy
+
+**References:**
+
+- [How to Balance Privacy and Money through Pricing Mechanism in Personal Data Market](papers/PersonalDataPricing_NgetCao2018.pdf) - Nget, Cao et al., 2018
+  (quantifying both privacy and quality loss)
+- [A Theory of Pricing Private Data](papers/PricingPrivateData_LiMiklau2012.pdf) - Li, Miklau et al., 2012
+
+### 5.4 Utility-based and generally optimal models
+- [Market Model and Optimal Pricing Scheme of BigData and Internet of Things (IoT)](papers/UtilityOptimalDataPricing_Niyato2016.pdf) - Niyato et al., 2016
+- [Pricing for Data Markets](PricingDataMarkets_Kushal2012.pdf) - Kushal et al., 2012
+
+### 5.5 Auction models
 
 [WIP] 
 
-See [Pricing of Data Products in Data Marketplaces](papers/PricingDataMarketplaces2011.pdf)
 
