@@ -23,7 +23,7 @@ date: 04/10/2019
 	- [4.2 A Bayesian market maker](#42-a-bayesian-market-maker)
 	- [4.3 Bonding curves](#43-bonding-curves)
 	- [4.4 Other possible market makers](#44-other-possible-market-makers)
-- [5. Versioning and flexible pricing](#5-versioning-and-flexible-pricing-wip)
+- [5. Versioning and flexible pricing options](#5-versioning-and-flexible-pricing-options-wip)
 	- [5.1 Query-based data pricing](#51-query-based-data-pricing)
 	- [5.2 Quality-based pricing](#52-quality-based-pricing)
 - [6. Misc.](#6-misc)
@@ -34,6 +34,8 @@ date: 04/10/2019
 <!-- markdown-toc end -->
 
 
+
+
 ## 1. Overview
 
 ![Pricing workflow](./imgs/pricing_workflow.png)
@@ -42,7 +44,7 @@ Current data marketplaces suffer from **"seller paralysis"**, where owners of da
 
 Multiple mechanisms for data pricing have been introduced in the academic literature and existing data marketplaces, but none of them allows for scalable price discovery within a data market. Most papers also assume a current price for a data asset from which flexible pricing options are derived, without tackling the problem of deriving this current price.
 
-Instead, we propose to split the problem in two parts: **establishing an initial valuation** for the data asset or service based on simple heuristics, and then **enabling price discovery** to happen freely on the market through related financial instruments. This construction offers both a more precise price evolution for such assets as well as an easy way to express the pricing of different versions of an asset or service.
+Instead, we propose to split the problem in two parts: **establishing an initial valuation** for the data asset or service based on simple heuristics, and then **enabling price discovery** to happen freely on the market through related financial instruments. This construction offers both a more precise price evolution for such assets as well as an easy way to express the pricing of different options related to an asset or service.
 
 To put it simply, there is the **business problem** of getting a rough estimation of what a data asset is worth, and the **technical problem** of allowing an efficient financial market for emerge on top.
 
@@ -127,11 +129,9 @@ All these services are likely to improve overtime as more data becomes available
 
 Data by itself is hard to trade. Without introducing artificial scarcity, the supply of a given asset is expandable at will, only constrained by the network, storage and computation resources of the provider. In addition to that, we expect most assets to not be tradeable altogether, because the data or algorithm will not leave the premise. The assets themselves are non-rivalrous, which means typical bid / ask markets cannot emerge for them. 
 
-In order to enable the emergence of financial markets around data assets, which will ensure an efficient price discovery process, we introduce for each asset an **associated financial instrument** which aims to track the price for the underlying asset. These take the form of **"option tokens"** which can be redeemed at any time for the different services offered for that asset. Because each option token is a private good, that is to say a rivalrous, exclusive good, they can be easily traded on an open market. And as each token directly gives access to the underlying asset, **market forces can effectively drive price discovery.**
+In order to enable the emergence of financial markets around data assets, which will ensure an efficient price discovery process, we introduce for each asset an **associated financial instrument** which aims to track the price for the underlying asset. These take the form of **"option tokens"** which can be redeemed at any time for the different services offered for that asset. Because each option token is a private good, that is to say a rivalrous, exclusive good, they can be easily traded on an open market. And as each token directly gives access to the underlying asset, market forces can effectively drive price discovery.
 
-Additionally, these option tokens enable a simple way of **expressing the price of [different versions](#5-versioning-and-flexible-pricing-wip) of the asset**: they can be priced directly in the associated token, relatively to one another. As an example, assuming the price of 1 option token is `market_price`, the price of a query that very simply returns the first quarter of the dataset would be 0.25 option tokens, or `0.25*market_price`.
-
-These option tokens could also be sold to other parties, and rebundled together by curators to offer an interesting package of assets and services to an interested buyer.
+[PARAGRAPH on flexibility]
 
 Two mechanisms are needed for these financial instruments: an **issuance mechanism** and a **market maker**, to provide liquidity, especially in the case of long-tail assets.
 
@@ -139,7 +139,7 @@ In most cases, a central automated market maker also takes care of the issuance:
 
 ### 4.2 A Bayesian market maker
 
-The currently most promising area of research for such a mechanism seems to be that of Bayesian market makers. The design is inspired by prediction market makers, which exhibit interesting properties since they financially incentivize all participants to reveal their true beliefs and aggregate them in the price. They also allow short-selling as well as longs, since the two are symmetric in terms of outcomes. However, even scaled market maker which can provide information for a value on a continuous range (and not just Yes / No predictions) are limited to a predefined interval `[min, max]` and have to resolve at some point in order to distribute rewards.
+The currently most promising area of research for such a mechanism seems to be that of Bayesian market makers. The design is inspired by prediction market makers, which exhibit interesting properties since they financially incentivize all participants to reveal their true beliefs and aggregate them in the price. They also allow short-selling as well as longs, since the two are symmetric in terms of outcomes. However, even scaled market maker which can provide information for a value on a continuous range (and not just Yes / No predictions) are limited to a predefined interval <img src="https://tex.s2cms.ru/svg/%5Cinline%20%5B%5Cmin%2C%20%5Cmax%5D" alt="\inline [\min, \max]" /> and have to resolve at some point in order to distribute rewards.
 
 Bayesian market makers solve these problems: they can **aggregate information about a continuous variable** in the form of a price, **constantly offer bid and ask prices** and operate on an **indefinite timescale**.
 
@@ -192,10 +192,10 @@ Another possibility for the automated market maker of each option token consists
 
 
 ### 4.4 Other possible market makers
-- [LSMR](#63-market-maker-research) or [LS-LSMR](#63-market-maker-research) (liquidity-sensitive logarithmic market scoring rule) for a scaled prediction market on a `[min, max]` interval.
+- [LSMR](#63-market-maker-research) or [LS-LSMR](#63-market-maker-research) (liquidity-sensitive logarithmic market scoring rule) for a scaled prediction market on a <img src="https://tex.s2cms.ru/svg/%5Cinline%20%5B%5Cmin%2C%20%5Cmax%5D" alt="\inline [\min, \max]" /> interval.
 - [Equilibrium bonding market](https://blog.oceanprotocol.com/introducing-the-equilibrium-bonding-market-e7db528e0eff): doesn't include an issuance mechanism + cognitive load of maintaining a sell price at all times for traders.
 
-## 5. Versioning and flexible pricing [WIP]
+## 5. Versioning and flexible pricing options [WIP]
 
 Since data assets and services can be duplicated at nearly zero cost or offered to multiple buyers at the same time, it makes sense to price them based on the value the end-customer derives from them. An efficient way of doing so, while maintaining a coherence between different offers, is **versioning**: offering different versions of the same asset to buyers based on their needs. 
 
@@ -213,7 +213,7 @@ The two main mechanisms introduced here to do so are: **query-based pricing** an
 
 It remains to be seen whether an efficient algorithm for pricing general queries can be deduced and translated from relational algebra to a formal model of NoSQL databases.
 
-**Existing designs (technical notes, the reader is allowed to skip this section)**
+**Existing designs (technical notes)**
 
 The canonical design introduced by Koutris basically relies on providing a **base set of views** with prices `(Vi,pi)` for the database and deriving the price of any query (that fits some complexity constraints) from there. The price calculation is done by finding the minimal support needed for the query, i.e. the cheapest subset of the initial views that determines the query in the current database instance. This pricing method can be applied if and only if the base set of priced views is consistent, i.e. is both arbitrage-free and discount-free.
 
