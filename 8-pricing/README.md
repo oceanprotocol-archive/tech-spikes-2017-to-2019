@@ -165,8 +165,8 @@ Parameters can be tuned to **adjust the strategy of the market maker**: it can e
 - Can it allow for uncovered selling (~ short-selling)? How much, based on reserves?
 
 **References:**
-- [A Bayesian Market Maker](/papers/marketmakers/Das2012_BayesianMM.pdf) - Das et al., 2012
-- [Adapting to a Market Shock: Optimal Sequential Market-Making](/papers/marketmakers/Das2008_OptimalSequentialMM.pdf) - Das et al., 2008
+- [A Bayesian Market Maker](papers/marketmakers/Das2012_BayesianMM.pdf) - Das et al., 2012
+- [Adapting to a Market Shock: Optimal Sequential Market-Making](papers/marketmakers/Das2008_OptimalSequentialMM.pdf) - Das et al., 2008
 - [A Learning Market-Maker in the Glosten-Milgrom Model](papers/marketmakers/Das2005_LearningMM.pdf) - Das, 2005
 
 ### 4.3 Bonding curves
