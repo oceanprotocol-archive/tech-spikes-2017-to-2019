@@ -25,7 +25,7 @@ In general, Arweave is designed to host web apps & pages permanently (i.e., ["pe
 
 # 2. Deploy Data File to Arweave
 
-## 1.1 install arweave deploy toolkit
+## 2.1 install arweave deploy toolkit
 
 The recommended approach is to use `npm` with Node v10.12.0:
 
@@ -40,7 +40,7 @@ Alternatively, the pre-compiled binary files are available for downloaded:
 
 The file `arweave` in current directory is the MacOS version used in this research.
 
-## 1.2 create an account
+## 2.2 create an account
 
 To access arweave network, an account funded with AR tokens is required. Note that AR token is the native token circulated in Arweave network.
 
@@ -54,7 +54,7 @@ The Json file of the wallet account will be generated and downloaded. Example wa
 {"kty":"RSA","ext":true,"e":"AQAB","n":"swxKGMjVn60I6A9bJMcw8viuDxgL80aj3hJ4lLosN1MDNNVF-2K1H32pM3mrfXJqTgKXy5A3gCQ_LoDg6h-QFydxVu7xAlYYe0PCWiXqagErWawEVmZREjQPXuiUXA5V57HCJShjzPiZVyeauJg_XmYyJo7Auh_gOvhv3f-yh5g-BacIGMgvJYTbLb2MUTTmVGbsLWCn4u-P0bM0d2J2HHUK0srkeoGl5iSt8k1zZ5lWjSPB0bL8KPTybDLpPmPcDKypODwXOmI6U0pE81F9YQRPEqB5aDTOVgPazJBStS19QXA0GjRolzsM05SPpL1GffogvI6qOw8WCDguw-a2MwDcf7c3YXrW0YD8al7bhV6g7LLxMmcPhutXdxIkkzBy9nEFCS_jGvzltIIHcXDuCa0bZ9Fg-rIhg2nkWuoMVfYco23nL7OqAXZq_-7apMhxs47b06ewmyxnntZ75KY0OIdxRbvWIyXnC8W_gJArZNlgEdaNn_Z_TXfVLNtuy2bBFl7OmSasyBFK83LmYaEgzufPXi-x8SkOqWv4BfNp2_PHpUXQ2HTJcmKK48lsDxGvkfBuVcNPbvqeyTyUeTJNibFDXN2OCD84fUPGD49fTII5FYEMcvxRzjETW5J3oBrMmdahzplsdEZBzz3R3dVwwznuLq6NvrbF5eduMmdGn4E","d":"PTgOfbrtj9MSIIZfm4uf6POuT-rg6yVUEjIumGuvgpsXlZD2hKWTWFkW6UrIn_Pm9RVd4XRGBcJe9_-I54QzODd8QUUhkrLtW_gnE7uzEtujft2Z_hCt15OFTeYoE_Gy3a2hvCK7PPIjO_GGrWchA53dt-FHdFxBxuf7F-S9ni8nxbb-xbpspF9wsYsF1x5HQsSOLFXIEYfnnMOxRMCdsc0zDi_hPyHlH3ObJiXlN57uQQPg2VphbX-TA_vEVFjAfHTsxxWEu6mqV6AlQyyxueJHRw8nc8Haav6WaStPnDMZiK5cojkZKdw-3nkFREaTO6-yUcZV3iuiVN0g4EqaMPNAaAsB83Vp8E3b-e0qfXMTo26wdTdYNDsYfnvG0YnjV0NDjqI2LYmHBfN1DumgouH0eFTxgaRqNSn3J6Vj4JnFNGwcf1bGe1J2p4amKJzL3_b7ks4f5n9qsthGrYF__nu1SrlXYAUcDS3vt62wPR8wZb-o2i0vUKcgTzM8j1srLcbP7GTZOco5JiQq05cr6vmwDo7nt0p8hkS77UvFnHR6puhUI14_APsGsxq4-uIGfVPPMWjE2RKJ_g__NzWrqV7ZyrUT4o1iAIjXsgKLEOLwy9QDj5ehqC5pCPJ5kn26XRa-yglz4BbPXV9fWP24j4-oyXlUTfghcb2uGH8lbgE","p":"6UjvSUTFkQdhpnzqlXTBNi4WZlwkwspUIN8FSWjunWHdkxjqwKoSBCY_3o1EuEoRu06yx9sDTri_vnyYXmxeEFKVN101D-ZSWQHh0DORBuAYZIhkcgUrs3K7trN6lgU6SM1E_VbmAMCYQfbIL9TB4V-OQ8vu8ark9n3rA3cK0iU7TFZBdbnMmgz3EeoB9l_uuw799nOKm16d0cuAJubLN9gBkgYVBYVCt9oKVsyng7JbI1szsABgtDW7f2PZSGQJhdMAWqX7kqbrdOHfmts9AnG0BYaQRnxBZ5GhK7fP9YgT12ZciADHKmAoRe8E1ZxtnkgigPda30WdAlhZO39veQ","q":"xHtl5DD1Za54FNnkZo1OMZNkHnloN6FI3vsH_X_PKCtQiv53wPeZMqQK9OBrbxJqKOs1ERaSJTdNFNOuHLirD32rTr-WzEcWYakp2Wamx0aEAm_Wjx2JQQI0hiEAlxzOODMll6E4-ycn_8Cc_LfCJCyxdBBFYHuYmOj2IJWnoex0xwDZ96AaC0UcToNG4DnEmcCOTIxKYNwuUX0zupCuRt48TKmix2-zEieYFVonXEEJiKiwSbWUubeOT3RbrTFB5n2BLI2pxOtYGta4M23-tH68LwgVZggArSj9ciUdSq8933k4ZPr3qEWXcgdPe2EGF02nnk3UZBMi-b4hCisGSQ","dp":"fJFgjNw3LvklEJS1YrckkLzNYz0iuAz4HVFZblikyc8_VNPCTrzBwAt4oWsH3exXSZB9cLCnNHr8kEfRyOHO3KJsYVLZCbNwF20k2lsevvActloKYMQYEMtcJvPxqngCJmvNwgWL7azp4JdZUAkouiKfQd58qfkaJ_EW9BO16H7PCjUo4SckdMIlkCBHifqx7JrVy6rowYwlc6hZtuwYaapjNEkhIoCFHs1EJhNEA9PSTK_fisS43qGujBiSJtCcMSR5lO36xtVw90nBb9xP2KVEforbMXgaKKafzEtrtW1DQwq6sDjSIPOVrboy96l-8z0Lh5gNoxl1_JGWnGmw6Q","dq":"gogEShQog5PkHN4g-ex4fUERK5m2nfadZd3aEhSd-G7GRIEH5__WHCmVSdfqJ9FRC7wu9hpLn0PdBrAWpOgeZN01OMzZjv7PJLRwpAipVgxH2SKZpVyW-cRQRqeYL8woSHfaSqEGLPx3e1ZoNRCTftreTWAd5xpVZ4ilM0KZKl7fufGb3QHVK5WPV62pIX_fV9Hv93TgWPcOIn8OJazGyzgLUVcFWH-htLbvN4g8S_K9Nbfz3hQvKS6D8c84tJfb0xegAIxgs_0x_CqYFzrFEv57YLd7F9zLLj7kGbgEfMBtV5C94YBFldod4dhvemUb2dFyQR4tswpvmwEwDARHWQ","qi":"vMF_oaqte6A-mw_bHSRPXeffPOlzsh-CAGpD3s_aHsXkaeZRzhOzWbtt__AZhCTF4YXsRvVzii-0nE4tvJoO2GZSbm7eydOfrH7HI7K9ClNEiklQHuhgEewEo0b_FQrOpoPQNMIlB1Te8RnzxCp--E2DBDmPeaulPiga4M-2aVmZwTVb7reqsvO6e3axnrQ8fvXfs07742KGxyFGFC0hAtu4nq2-0evj8FcwesuYQuMlX7ffy_-BH8nqQ1cr7bIOKA8dTDbNbbn-UfyK93X8W1l-tz8hbOUFu2AcQGDui460TKVdtfaaJpTxsrzF-nBRv5tS2IWZ0GLdwQXHszky8w"}
 ```
 
-## 1.3 deploy dataset file into Arweave network
+## 2.3 deploy dataset file into Arweave network
 
 As an experiment, a simple dataset file is created as `data.csv`. 
 
@@ -94,7 +94,7 @@ Since now on, the data file can be accessed with URL:
 https://arweave.net/EzIML0ZTO0KeBvhg1zllcBRVfxm9tU5eL99rAcS3y34
 ```
 
-## 1.4 Size Limit on Data
+## 2.4 Size Limit on Data
 
 I experimented to upload large-size dataset files such as 5MB, 10MB, ... and found Arweave currently enforce a 2MB limit to data file per transaction:
 
@@ -124,7 +124,7 @@ paris,berlin,sf
 
 Here, the strings `paris,berlin,sf` is the data in the file `data.csv`.
 
-# 5. Conclusion
+# 4. Conclusion
 
 Arweave provides an on-chain storage solution for permanent web hosting, which aims to accomplish serverless web. The raw data is encoded with base64 method and mined into the blocks. It has 2MB limit on data size per transaction. So it is more suitable to deploy small-size web pages or apps into the Arweave blockchain network.
 
@@ -132,7 +132,7 @@ In the case of Ocean, large size datasets need to be stored and accessed, which 
 
 
 
-# 6. Reference
+# 5. Reference
 
 * [arweave website](https://www.arweave.org/)
 * [arweave deploy user guide](https://docs.arweave.org/developers/tools/arweave-deploy)
