@@ -30,9 +30,12 @@ Folder Name   |  Description | Issue |
 6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
 7-arbitrage-bot | build an arbitrage bot between Uniswap and Exchange | 
 8-pricing | research and development of a data pricing framework | |
+9-arweave | investigate ARWeave for data availability proof | [305](https://github.com/oceanprotocol/ocean/issues/305) |
 
 
 ## Updates
+
+* [04/25/2019] arweave investigation ([305](https://github.com/oceanprotocol/ocean/issues/305))
 
 * [04/10/2019] data pricing research
 
