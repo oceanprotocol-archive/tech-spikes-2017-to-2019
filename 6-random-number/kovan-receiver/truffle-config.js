@@ -15,7 +15,7 @@ module.exports = {
         // kovan testnet
         kovan: {
             provider: function() {
-              return new HDWalletProvider(process.env.NMEMORIC, "https://kovan.infura.io/Kuo1lxDBsFtMnaw6GiN2")
+              return new HDWalletProvider(process.env.NMEMORIC, "https://kovan.infura.io/v3/7ffbee98713e4856877d879508d242a0")
             },
             network_id: '42',
             websockets: true,
@@ -25,7 +25,7 @@ module.exports = {
         // Rinkeby testnet
         rinkeby: {
             provider: function() {
-              return new HDWalletProvider(process.env.NMEMORIC, "https://rinkeby.infura.io/Kuo1lxDBsFtMnaw6GiN2")
+              return new HDWalletProvider(process.env.NMEMORIC, "https://rinkeby.infura.io/v3/7ffbee98713e4856877d879508d242a0")
             },
             network_id: '4',
             gas: 6000000,
@@ -33,7 +33,7 @@ module.exports = {
         },
         ropsten: {
             provider: function() {
-              return new HDWalletProvider(process.env.NMEMORIC, "https://ropsten.infura.io/Kuo1lxDBsFtMnaw6GiN2")
+              return new HDWalletProvider(process.env.NMEMORIC, "https://ropsten.infura.io/v3/7ffbee98713e4856877d879508d242a0")
             },
             gas: 6000000,
             gasPrice: 10000000000, // 10 Gwei

@@ -12,15 +12,16 @@ contract OceanRequester is Chainlinked, Ownable {
   /*
    * global variables
    */
-  bytes32 constant JOB_ID = bytes32("75e0a756bbcc48678c498802a7c5929b");
+   // Rinkeby -> Kovan jobId for random.org
+  bytes32 constant JOB_ID = bytes32("683dcbab01cd49ec96d6d706f9df2381");
   uint256 constant private ORACLE_PAYMENT = 1 * LINK; // default price for each request
-  uint256 public data;
+  bytes32 public data;
 
   /*
    * events
    */
   event requestCreated(address indexed requester,bytes32 indexed jobId, bytes32 indexed requestId);
-  event requestFulfilled(bytes32 indexed _requestId, uint256 _data);
+  event requestFulfilled(bytes32 indexed _requestId, bytes32 _data);
   event tokenWithdrawn(address indexed recepient, uint256 amount);
   event tokenDeposited(address indexed sender, uint256 amount);
   /*
@@ -45,7 +46,7 @@ contract OceanRequester is Chainlinked, Ownable {
     return oracleAddress();
   }
 
-  function getRequestResult() public view returns (uint256) {
+  function getRequestResult() public view returns (bytes32) {
     return data;
   }
 
@@ -54,7 +55,9 @@ contract OceanRequester is Chainlinked, Ownable {
    */
   function getRandom(
     uint256 _min,
-    uint256 _max
+    uint256 _max,
+    string _exAddr,
+    string _funcId
   )
     public
     onlyOwner
@@ -65,6 +68,8 @@ contract OceanRequester is Chainlinked, Ownable {
     // fill in the pass-in parameters
     req.addUint("min", _min);
     req.addUint("max", _max);
+    req.add("exAddr", _exAddr);
+    req.add("funcId", _funcId);
     // send request & payment to Chainlink oracle (Requester Contract sends the payment)
     requestId = chainlinkRequest(req, ORACLE_PAYMENT);
     // emit event message
@@ -74,12 +79,12 @@ contract OceanRequester is Chainlinked, Ownable {
   /*
    * callback function to keep the returned value from Oracle contract
    */
-  function fulfill(bytes32 _requestId, uint256 _data)
+  function fulfill(bytes32 _requestId, bytes32 _hash)
     public
     recordChainlinkFulfillment(_requestId)
   {
-    data = _data;
-    emit requestFulfilled(_requestId, _data);
+    data = _hash;
+    emit requestFulfilled(_requestId, _hash);
   }
 
   // clear the data field
@@ -87,7 +92,7 @@ contract OceanRequester is Chainlinked, Ownable {
     public
     onlyOwner
   {
-    data = 0;
+    data = 0x0;
   }
 
   /*

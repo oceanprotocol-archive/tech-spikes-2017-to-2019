@@ -283,13 +283,119 @@ When migrating to Ocean POA network, we need to privde:
 * URL endpoint of POA network that accepts transactions of JSON-RPC calls;
 * account information with private key in POA networth with available funds.
 
+Chainlink team has implemented several adapeters for data transfer across networks:
+
+* With Random.org (these jobs will write a random number to your target contract)
+	* Ropsten -> Rinkeby: 4e8e60145fb94f09a0d95aac74a87589
+	* Ropsten -> Kovan: ed6b1573208b40f78837edc181129687
+	* Rinkeby -> Ropsten: 221c72c504b049f38ab9f9acf4f03767
+	* Rinkeby -> Kovan: 683dcbab01cd49ec96d6d706f9df2381
+	* Kovan -> Ropsten: 9238483edeaf4a6eab139a4863d7131d
+	* Kovan -> Rinkeby: 9e47053762a04405a27378ea33b5850e
+
+* Arbitrary data (these jobs will allow you to specify a value for your target contract)
+	* Ropsten -> Rinkeby: ff7f37495ead4d3fa615f73a012cdf02
+	* Ropsten -> Kovan: be5978c7c3924a509e0957b13c953b3a
+	* Rinkeby -> Ropsten: b1f1fe311b9240918ea6d4312e2024ea
+	* Rinkeby -> Kovan: bac4bb4c92f04f70a691e00f3737b022
+	* Kovan -> Ropsten: d8b5f169c5aa4e20bad60bff180f813b
+	* Kovan -> Rinkeby: f3f7886ecdba45e4b74e0e687a3da125
+
 ### 4.1 Requester Contract 
 
-It was deployed in Rinkeby at `0x81C8A4BE1bf2491D3c90BdE4615EE4672F13E63b`. Source file is [here](chainlink/contracts/OceanRequester.sol)
+It was deployed in Rinkeby. Source file is [here](chainlink/contracts/OceanRequester.sol)
+
+```solidity
+  // Rinkeby -> Kovan jobId for random.org
+  bytes32 constant JOB_ID = bytes32("683dcbab01cd49ec96d6d706f9df2381");
+  ...
+  /*
+   * Create a request and send it to default Oracle contract
+   */
+  function getRandom(
+    uint256 _min,
+    uint256 _max,
+    string _exAddr,
+    string _funcId
+  )
+    public
+    onlyOwner
+    returns (bytes32 requestId)
+  {
+    // create request instance
+    Chainlink.Request memory req = newRequest(JOB_ID, this, this.fulfill.selector);
+    // fill in the pass-in parameters
+    req.addUint("min", _min);
+    req.addUint("max", _max);
+    req.add("exAddr", _exAddr);
+    req.add("funcId", _funcId);
+    // send request & payment to Chainlink oracle (Requester Contract sends the payment)
+    requestId = chainlinkRequest(req, ORACLE_PAYMENT);
+    // emit event message
+    emit requestCreated(msg.sender, JOB_ID, requestId);
+  }
+
+  /*
+   * callback function to keep the returned value from Oracle contract
+   */
+  function fulfill(bytes32 _requestId, bytes32 _hash)
+    public
+    recordChainlinkFulfillment(_requestId)
+  {
+    data = _hash;
+    emit requestFulfilled(_requestId, _data);
+  }
+```
+
+To get the function selector, web3.js can be used to generate as:
+
+```bash
+$ truffle develop
+
+truffle(develop)> web3.eth.abi.encodeFunctionSignature('receiveData(uint256)')
+'0xde947c85'
+```
+
+This contract can be deployed to Rinkeby:
+```
+$ truffle migrate --network rinkeby
+...
+2_oceanrequester_migration.js
+=============================
+
+   Deploying 'OceanRequester'
+   --------------------------
+   > transaction hash:    0xa8765389bb02df98866c1f7030bb8339eb42e16259ba8a0bb2f3fd863664944c
+   > Blocks: 0            Seconds: 12
+   > contract address:    0x5e7883be4529C6c0cEc27A5Fa5e5D62F81a41ACf
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             19.990124610356518596
+   > gas used:            1387466
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01387466 ETH
+
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.01387466 ETH
+```
+
 
 ### 4.2 Create and Deploy Receiver Contract
 
 The source file of OceanReceiver smart contract is [here](kovan-receiver/contracts/OceanReceiver.sol)
+
+```solidity
+  /*
+   * function to keep the returned value from Chainlink network
+   */
+  function receiveData(uint256 _data)
+    public
+  {
+    data = _data;
+    emit requestFulfilled(_data);
+  }
+```
 
 We deploy it into Kovan testnet at `0x0aBDB2bB26A4A34e16D146639FDE5b530AC86cFf`:
 
@@ -300,23 +406,36 @@ $ truffle migrate --network kovan
 
    Deploying 'OceanReceiver'
    -------------------------
-   > transaction hash:    0x6d9eff7b234c0f5df04cfab96cabae1475bd0402af4e64f925ba9f457c9c2f9d
-   > Blocks: 2            Seconds: 12
-   > contract address:    0x0aBDB2bB26A4A34e16D146639FDE5b530AC86cFf
+   > transaction hash:    0xe3a0f10ccdd83248eea50b2b0a3000af7afcd5dc021c75f9a6ac980d94e65ddc
+   > Blocks: 0            Seconds: 12
+   > contract address:    0xc6E2640a3963365341959508Ac0b62813637d8BD
    > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
-   > balance:             4.123931865853937168
-   > gas used:            264762
+   > balance:             2.113981525853937168
+   > gas used:            262822
    > gas price:           10 gwei
    > value sent:          0 ETH
-   > total cost:          0.00264762 ETH
+   > total cost:          0.00262822 ETH
+
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00262822 ETH
 ```
 
-The signature of fulfill function is `function fulfill(bytes32 _requestId, uint256 _data)`
 
 
 ### 4.3 Request Random Numbers
 
+We create a testing javascript to run the workflow `chainlink/test/RequestRandPOA.Test.js`
 
+It will transfer 1 LINK token to the Ocean requester contract and submit the request to Chainlink network in Rinkeby. 
+
+<img src="img/request_rinkeby.jpg" />
+
+After a while, we can check the receiver contract in Kovan network and see the random number:
+
+<img src="img/receiver_kovan.jpg" width=500 />
+
+It demonstrates that the request is submitted from Rinkeby but the data is returned to Kovan network.
 
 ## License
 

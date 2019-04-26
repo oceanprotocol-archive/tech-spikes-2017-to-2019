@@ -14,7 +14,7 @@ contract OceanReceiver is Ownable {
   /*
    * events
    */
-  event requestFulfilled(bytes32 indexed _requestId, uint256 _data);
+  event requestFulfilled(uint256 _data);
   /*
    * constructor function
    */
@@ -28,10 +28,10 @@ contract OceanReceiver is Ownable {
   /*
    * function to keep the returned value from Chainlink network
    */
-  function fulfill(bytes32 _requestId, uint256 _data)
+  function receiveData(uint256 _data)
     public
   {
     data = _data;
-    emit requestFulfilled(_requestId, _data);
+    emit requestFulfilled(_data);
   }
 }
