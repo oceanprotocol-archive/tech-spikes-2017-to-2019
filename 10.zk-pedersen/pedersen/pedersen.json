@@ -1,0 +1,782 @@
+{
+ "mainCode": "{\n    {\n    }\n    {\n    }\n    {\n    }\n}\n",
+ "signalName2Idx": {
+  "one": 0,
+  "main.in[0]": 3,
+  "main.in[1]": 4,
+  "main.in[2]": 5,
+  "main.out[0]": 1,
+  "main.out[1]": 2,
+  "main.segments[0].in[0]": 3,
+  "main.segments[0].in[1]": 4,
+  "main.segments[0].in[2]": 5,
+  "main.segments[0].in[3]": 48,
+  "main.segments[0].base[0]": 49,
+  "main.segments[0].base[1]": 50,
+  "main.segments[0].out[0]": 1,
+  "main.segments[0].out[1]": 2,
+  "main.segments[0].e2m.in[0]": 49,
+  "main.segments[0].e2m.in[1]": 50,
+  "main.segments[0].e2m.out[0]": 6,
+  "main.segments[0].e2m.out[1]": 7,
+  "main.segments[0].windows[0].in[0]": 3,
+  "main.segments[0].windows[0].in[1]": 4,
+  "main.segments[0].windows[0].in[2]": 5,
+  "main.segments[0].windows[0].in[3]": 48,
+  "main.segments[0].windows[0].base[0]": 6,
+  "main.segments[0].windows[0].base[1]": 7,
+  "main.segments[0].windows[0].out[0]": 8,
+  "main.segments[0].windows[0].out[1]": 9,
+  "main.segments[0].windows[0].out8[0]": 10,
+  "main.segments[0].windows[0].out8[1]": 11,
+  "main.segments[0].windows[0].mux.c[0][0]": 6,
+  "main.segments[0].windows[0].mux.c[0][1]": 12,
+  "main.segments[0].windows[0].mux.c[0][2]": 13,
+  "main.segments[0].windows[0].mux.c[0][3]": 14,
+  "main.segments[0].windows[0].mux.c[0][4]": 15,
+  "main.segments[0].windows[0].mux.c[0][5]": 16,
+  "main.segments[0].windows[0].mux.c[0][6]": 17,
+  "main.segments[0].windows[0].mux.c[0][7]": 10,
+  "main.segments[0].windows[0].mux.c[1][0]": 7,
+  "main.segments[0].windows[0].mux.c[1][1]": 18,
+  "main.segments[0].windows[0].mux.c[1][2]": 19,
+  "main.segments[0].windows[0].mux.c[1][3]": 20,
+  "main.segments[0].windows[0].mux.c[1][4]": 21,
+  "main.segments[0].windows[0].mux.c[1][5]": 22,
+  "main.segments[0].windows[0].mux.c[1][6]": 23,
+  "main.segments[0].windows[0].mux.c[1][7]": 11,
+  "main.segments[0].windows[0].mux.s[0]": 3,
+  "main.segments[0].windows[0].mux.s[1]": 4,
+  "main.segments[0].windows[0].mux.s[2]": 5,
+  "main.segments[0].windows[0].mux.out[0]": 8,
+  "main.segments[0].windows[0].mux.out[1]": 24,
+  "main.segments[0].windows[0].mux.a210[0]": 25,
+  "main.segments[0].windows[0].mux.a210[1]": 26,
+  "main.segments[0].windows[0].mux.a21[0]": 27,
+  "main.segments[0].windows[0].mux.a21[1]": 28,
+  "main.segments[0].windows[0].mux.a20[0]": 29,
+  "main.segments[0].windows[0].mux.a20[1]": 30,
+  "main.segments[0].windows[0].mux.a2[0]": 31,
+  "main.segments[0].windows[0].mux.a2[1]": 32,
+  "main.segments[0].windows[0].mux.a10[0]": 33,
+  "main.segments[0].windows[0].mux.a10[1]": 34,
+  "main.segments[0].windows[0].mux.a1[0]": 35,
+  "main.segments[0].windows[0].mux.a1[1]": 36,
+  "main.segments[0].windows[0].mux.a0[0]": 37,
+  "main.segments[0].windows[0].mux.a0[1]": 38,
+  "main.segments[0].windows[0].mux.a[0]": 6,
+  "main.segments[0].windows[0].mux.a[1]": 7,
+  "main.segments[0].windows[0].mux.s10": 39,
+  "main.segments[0].windows[0].dbl2.in[0]": 6,
+  "main.segments[0].windows[0].dbl2.in[1]": 7,
+  "main.segments[0].windows[0].dbl2.out[0]": 12,
+  "main.segments[0].windows[0].dbl2.out[1]": 18,
+  "main.segments[0].windows[0].dbl2.lamda": 40,
+  "main.segments[0].windows[0].dbl2.x1_2": 41,
+  "main.segments[0].windows[0].adr3.in1[0]": 6,
+  "main.segments[0].windows[0].adr3.in1[1]": 7,
+  "main.segments[0].windows[0].adr3.in2[0]": 12,
+  "main.segments[0].windows[0].adr3.in2[1]": 18,
+  "main.segments[0].windows[0].adr3.out[0]": 13,
+  "main.segments[0].windows[0].adr3.out[1]": 19,
+  "main.segments[0].windows[0].adr3.lamda": 42,
+  "main.segments[0].windows[0].adr4.in1[0]": 6,
+  "main.segments[0].windows[0].adr4.in1[1]": 7,
+  "main.segments[0].windows[0].adr4.in2[0]": 13,
+  "main.segments[0].windows[0].adr4.in2[1]": 19,
+  "main.segments[0].windows[0].adr4.out[0]": 14,
+  "main.segments[0].windows[0].adr4.out[1]": 20,
+  "main.segments[0].windows[0].adr4.lamda": 43,
+  "main.segments[0].windows[0].adr5.in1[0]": 6,
+  "main.segments[0].windows[0].adr5.in1[1]": 7,
+  "main.segments[0].windows[0].adr5.in2[0]": 14,
+  "main.segments[0].windows[0].adr5.in2[1]": 20,
+  "main.segments[0].windows[0].adr5.out[0]": 15,
+  "main.segments[0].windows[0].adr5.out[1]": 21,
+  "main.segments[0].windows[0].adr5.lamda": 44,
+  "main.segments[0].windows[0].adr6.in1[0]": 6,
+  "main.segments[0].windows[0].adr6.in1[1]": 7,
+  "main.segments[0].windows[0].adr6.in2[0]": 15,
+  "main.segments[0].windows[0].adr6.in2[1]": 21,
+  "main.segments[0].windows[0].adr6.out[0]": 16,
+  "main.segments[0].windows[0].adr6.out[1]": 22,
+  "main.segments[0].windows[0].adr6.lamda": 45,
+  "main.segments[0].windows[0].adr7.in1[0]": 6,
+  "main.segments[0].windows[0].adr7.in1[1]": 7,
+  "main.segments[0].windows[0].adr7.in2[0]": 16,
+  "main.segments[0].windows[0].adr7.in2[1]": 22,
+  "main.segments[0].windows[0].adr7.out[0]": 17,
+  "main.segments[0].windows[0].adr7.out[1]": 23,
+  "main.segments[0].windows[0].adr7.lamda": 46,
+  "main.segments[0].windows[0].adr8.in1[0]": 6,
+  "main.segments[0].windows[0].adr8.in1[1]": 7,
+  "main.segments[0].windows[0].adr8.in2[0]": 17,
+  "main.segments[0].windows[0].adr8.in2[1]": 23,
+  "main.segments[0].windows[0].adr8.out[0]": 10,
+  "main.segments[0].windows[0].adr8.out[1]": 11,
+  "main.segments[0].windows[0].adr8.lamda": 47,
+  "main.segments[0].m2e.in[0]": 8,
+  "main.segments[0].m2e.in[1]": 9,
+  "main.segments[0].m2e.out[0]": 1,
+  "main.segments[0].m2e.out[1]": 2
+ },
+ "components": [
+  {
+   "name": "main",
+   "params": {
+    "n": "3"
+   },
+   "template": "Pedersen",
+   "inputSignals": 3
+  },
+  {
+   "name": "main.segments[0]",
+   "params": {
+    "nWindows": "1"
+   },
+   "template": "Segment",
+   "inputSignals": 6
+  },
+  {
+   "name": "main.segments[0].e2m",
+   "params": {},
+   "template": "Edwards2Montgomery",
+   "inputSignals": 2
+  },
+  {
+   "name": "main.segments[0].windows[0]",
+   "params": {},
+   "template": "Window4",
+   "inputSignals": 6
+  },
+  {
+   "name": "main.segments[0].windows[0].mux",
+   "params": {
+    "n": "2"
+   },
+   "template": "MultiMux3",
+   "inputSignals": 19
+  },
+  {
+   "name": "main.segments[0].windows[0].dbl2",
+   "params": {},
+   "template": "MontgomeryDouble",
+   "inputSignals": 2
+  },
+  {
+   "name": "main.segments[0].windows[0].adr3",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].windows[0].adr4",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].windows[0].adr5",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].windows[0].adr6",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].windows[0].adr7",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].windows[0].adr8",
+   "params": {},
+   "template": "MontgomeryAdd",
+   "inputSignals": 4
+  },
+  {
+   "name": "main.segments[0].m2e",
+   "params": {},
+   "template": "Montgomery2Edwards",
+   "inputSignals": 2
+  }
+ ],
+ "componentName2Idx": {
+  "main": 0,
+  "main.segments[0]": 1,
+  "main.segments[0].e2m": 2,
+  "main.segments[0].windows[0]": 3,
+  "main.segments[0].windows[0].mux": 4,
+  "main.segments[0].windows[0].dbl2": 5,
+  "main.segments[0].windows[0].adr3": 6,
+  "main.segments[0].windows[0].adr4": 7,
+  "main.segments[0].windows[0].adr5": 8,
+  "main.segments[0].windows[0].adr6": 9,
+  "main.segments[0].windows[0].adr7": 10,
+  "main.segments[0].windows[0].adr8": 11,
+  "main.segments[0].m2e": 12
+ },
+ "signals": [
+  {
+   "names": [
+    "one"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.out[0]",
+    "main.segments[0].out[0]",
+    "main.segments[0].m2e.out[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.out[1]",
+    "main.segments[0].out[1]",
+    "main.segments[0].m2e.out[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.in[0]",
+    "main.segments[0].in[0]",
+    "main.segments[0].windows[0].in[0]",
+    "main.segments[0].windows[0].mux.s[0]"
+   ],
+   "triggerComponents": [
+    0,
+    1,
+    3,
+    4
+   ]
+  },
+  {
+   "names": [
+    "main.in[1]",
+    "main.segments[0].in[1]",
+    "main.segments[0].windows[0].in[1]",
+    "main.segments[0].windows[0].mux.s[1]"
+   ],
+   "triggerComponents": [
+    0,
+    1,
+    3,
+    4
+   ]
+  },
+  {
+   "names": [
+    "main.in[2]",
+    "main.segments[0].in[2]",
+    "main.segments[0].windows[0].in[2]",
+    "main.segments[0].windows[0].mux.s[2]"
+   ],
+   "triggerComponents": [
+    0,
+    1,
+    3,
+    4
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].e2m.out[0]",
+    "main.segments[0].windows[0].base[0]",
+    "main.segments[0].windows[0].mux.c[0][0]",
+    "main.segments[0].windows[0].mux.a[0]",
+    "main.segments[0].windows[0].dbl2.in[0]",
+    "main.segments[0].windows[0].adr3.in1[0]",
+    "main.segments[0].windows[0].adr4.in1[0]",
+    "main.segments[0].windows[0].adr5.in1[0]",
+    "main.segments[0].windows[0].adr6.in1[0]",
+    "main.segments[0].windows[0].adr7.in1[0]",
+    "main.segments[0].windows[0].adr8.in1[0]"
+   ],
+   "triggerComponents": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].e2m.out[1]",
+    "main.segments[0].windows[0].base[1]",
+    "main.segments[0].windows[0].mux.c[1][0]",
+    "main.segments[0].windows[0].mux.a[1]",
+    "main.segments[0].windows[0].dbl2.in[1]",
+    "main.segments[0].windows[0].adr3.in1[1]",
+    "main.segments[0].windows[0].adr4.in1[1]",
+    "main.segments[0].windows[0].adr5.in1[1]",
+    "main.segments[0].windows[0].adr6.in1[1]",
+    "main.segments[0].windows[0].adr7.in1[1]",
+    "main.segments[0].windows[0].adr8.in1[1]"
+   ],
+   "triggerComponents": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].out[0]",
+    "main.segments[0].windows[0].mux.out[0]",
+    "main.segments[0].m2e.in[0]"
+   ],
+   "triggerComponents": [
+    12
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].out[1]",
+    "main.segments[0].m2e.in[1]"
+   ],
+   "triggerComponents": [
+    12
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].out8[0]",
+    "main.segments[0].windows[0].mux.c[0][7]",
+    "main.segments[0].windows[0].adr8.out[0]"
+   ],
+   "triggerComponents": [
+    4
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].out8[1]",
+    "main.segments[0].windows[0].mux.c[1][7]",
+    "main.segments[0].windows[0].adr8.out[1]"
+   ],
+   "triggerComponents": [
+    4
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][1]",
+    "main.segments[0].windows[0].dbl2.out[0]",
+    "main.segments[0].windows[0].adr3.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    6
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][2]",
+    "main.segments[0].windows[0].adr3.out[0]",
+    "main.segments[0].windows[0].adr4.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    7
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][3]",
+    "main.segments[0].windows[0].adr4.out[0]",
+    "main.segments[0].windows[0].adr5.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    8
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][4]",
+    "main.segments[0].windows[0].adr5.out[0]",
+    "main.segments[0].windows[0].adr6.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    9
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][5]",
+    "main.segments[0].windows[0].adr6.out[0]",
+    "main.segments[0].windows[0].adr7.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    10
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[0][6]",
+    "main.segments[0].windows[0].adr7.out[0]",
+    "main.segments[0].windows[0].adr8.in2[0]"
+   ],
+   "triggerComponents": [
+    4,
+    11
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][1]",
+    "main.segments[0].windows[0].dbl2.out[1]",
+    "main.segments[0].windows[0].adr3.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    6
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][2]",
+    "main.segments[0].windows[0].adr3.out[1]",
+    "main.segments[0].windows[0].adr4.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    7
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][3]",
+    "main.segments[0].windows[0].adr4.out[1]",
+    "main.segments[0].windows[0].adr5.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    8
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][4]",
+    "main.segments[0].windows[0].adr5.out[1]",
+    "main.segments[0].windows[0].adr6.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    9
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][5]",
+    "main.segments[0].windows[0].adr6.out[1]",
+    "main.segments[0].windows[0].adr7.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    10
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.c[1][6]",
+    "main.segments[0].windows[0].adr7.out[1]",
+    "main.segments[0].windows[0].adr8.in2[1]"
+   ],
+   "triggerComponents": [
+    4,
+    11
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.out[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a210[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a210[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a21[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a21[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a20[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a20[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a2[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a2[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a10[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a10[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a1[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a1[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a0[0]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.a0[1]"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].mux.s10"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].dbl2.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].dbl2.x1_2"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr3.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr4.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr5.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr6.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr7.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].windows[0].adr8.lamda"
+   ],
+   "triggerComponents": []
+  },
+  {
+   "names": [
+    "main.segments[0].in[3]",
+    "main.segments[0].windows[0].in[3]"
+   ],
+   "triggerComponents": [
+    1,
+    3
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].base[0]",
+    "main.segments[0].e2m.in[0]"
+   ],
+   "triggerComponents": [
+    1,
+    2
+   ]
+  },
+  {
+   "names": [
+    "main.segments[0].base[1]",
+    "main.segments[0].e2m.in[1]"
+   ],
+   "triggerComponents": [
+    1,
+    2
+   ]
+  }
+ ],
+ "constraints": [
+  [
+   {
+    "4": "21888242871839275222246405745257275088548364400416034343698204186575808495616"
+   },
+   {
+    "3": "1"
+   },
+   {
+    "34": "13375524517238531490986264874137674429505932728828713762097732098563036373107"
+   }
+  ],
+  [
+   {
+    "0": "10110152377307078249629074015645599638501379999221929487419104864320262287456",
+    "3": "18500401439701052690583843791931383519123522517260292873719043963128046177439",
+    "4": "14827700347695324678454235975268103821897862086196145419995817527493194802416",
+    "34": "12216522130380069082310728547650392040032164916543884743821955545805335178563"
+   },
+   {
+    "5": "1"
+   },
+   {
+    "0": "2222895596481192187822725317585512278677338478070452460398878218688982945387",
+    "3": "8466690177553626776418535877210175937925348335367326499619711043768224347471",
+    "4": "19273420803476587787080703413642496645592866371141029408714654939341329234178",
+    "8": "21888242871839275222246405745257275088548364400416034343698204186575808495616",
+    "34": "6581516082044828590690824887644951906205450983500391909381360518581055587660"
+   }
+  ],
+  [
+   {
+    "0": "14635166839437540004382681400618808166171445505875526852831950682606335109404",
+    "3": "3221089351278375902307947568433699045262720271222522002723130324220744870550",
+    "4": "1298250019925453755212866825197522965647867859889808229731613337806959298378",
+    "34": "14807979163461948890237575106782502202011694075928727312484839672844433642770"
+   },
+   {
+    "5": "1"
+   },
+   {
+    "0": "645990683923994438773785240289155268877156315898516408299891108873795692262",
+    "3": "16829935827727829592017788235782617025681325500493010886985365987980739102465",
+    "4": "8232208773629353428719411919885384773745430084037224444747209132828331228057",
+    "9": "21888242871839275222246405745257275088548364400416034343698204186575808495616",
+    "34": "1"
+   }
+  ],
+  [
+   {
+    "1": "1"
+   },
+   {
+    "9": "1"
+   },
+   {
+    "8": "1"
+   }
+  ],
+  [
+   {
+    "2": "1"
+   },
+   {
+    "0": "1",
+    "8": "1"
+   },
+   {
+    "0": "21888242871839275222246405745257275088548364400416034343698204186575808495616",
+    "8": "1"
+   }
+  ]
+ ],
+ "templates": {
+  "Edwards2Montgomery": "function(ctx) {\n    ctx.setSignal(\"out\", [\"0\"], bigInt(bigInt(\"1\").add(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__)).mul( bigInt(bigInt(\"1\").add(__P__).sub(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.setSignal(\"out\", [\"1\"], bigInt(ctx.getSignal(\"out\", [\"0\"])).mul( bigInt(ctx.getSignal(\"in\", [\"0\"])).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(ctx.getSignal(\"out\", [\"0\"])).mul(bigInt(bigInt(\"1\").add(__P__).sub(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__))).mod(__P__), bigInt(\"1\").add(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__));\n    ctx.assert(bigInt(ctx.getSignal(\"out\", [\"1\"])).mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__), ctx.getSignal(\"out\", [\"0\"]));\n}\n",
+  "Montgomery2Edwards": "function(ctx) {\n    ctx.setSignal(\"out\", [\"0\"], bigInt(ctx.getSignal(\"in\", [\"0\"])).mul( bigInt(ctx.getSignal(\"in\", [\"1\"])).inverse(__P__) ).mod(__P__));\n    ctx.setSignal(\"out\", [\"1\"], bigInt(bigInt(ctx.getSignal(\"in\", [\"0\"])).add(__P__).sub(bigInt(\"1\")).mod(__P__)).mul( bigInt(bigInt(ctx.getSignal(\"in\", [\"0\"])).add(bigInt(\"1\")).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(ctx.getSignal(\"out\", [\"0\"])).mul(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__), ctx.getSignal(\"in\", [\"0\"]));\n    ctx.assert(bigInt(ctx.getSignal(\"out\", [\"1\"])).mul(bigInt(bigInt(ctx.getSignal(\"in\", [\"0\"])).add(bigInt(\"1\")).mod(__P__))).mod(__P__), bigInt(ctx.getSignal(\"in\", [\"0\"])).add(__P__).sub(bigInt(\"1\")).mod(__P__));\n}\n",
+  "MontgomeryAdd": "function(ctx) {\n    ctx.setVar(\"a\", [], \"168700\");\n    ctx.setVar(\"d\", [], \"168696\");\n    ctx.setVar(\"A\", [], bigInt(bigInt(\"2\").mul(bigInt(bigInt(ctx.getVar(\"a\",[])).add(bigInt(ctx.getVar(\"d\",[]))).mod(__P__))).mod(__P__)).mul( bigInt(bigInt(ctx.getVar(\"a\",[])).add(__P__).sub(bigInt(ctx.getVar(\"d\",[]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.setVar(\"B\", [], bigInt(\"4\").mul( bigInt(bigInt(ctx.getVar(\"a\",[])).add(__P__).sub(bigInt(ctx.getVar(\"d\",[]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.setSignal(\"lamda\", [], bigInt(bigInt(ctx.getSignal(\"in2\", [\"1\"])).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"1\"]))).mod(__P__)).mul( bigInt(bigInt(ctx.getSignal(\"in2\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"0\"]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(ctx.getSignal(\"in2\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"0\"]))).mod(__P__))).mod(__P__), bigInt(ctx.getSignal(\"in2\", [\"1\"])).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"1\"]))).mod(__P__));\n    ctx.setSignal(\"out\", [\"0\"], bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getVar(\"B\",[])).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).add(__P__).sub(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"0\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in2\", [\"0\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"out\", [\"0\"]), bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getVar(\"B\",[])).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).add(__P__).sub(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"0\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in2\", [\"0\"]))).mod(__P__));\n    ctx.setSignal(\"out\", [\"1\"], bigInt(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(ctx.getSignal(\"in1\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"out\", [\"0\"]))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"1\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"out\", [\"1\"]), bigInt(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(ctx.getSignal(\"in1\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"out\", [\"0\"]))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in1\", [\"1\"]))).mod(__P__));\n}\n",
+  "MontgomeryDouble": "function(ctx) {\n    ctx.setVar(\"a\", [], \"168700\");\n    ctx.setVar(\"d\", [], \"168696\");\n    ctx.setVar(\"A\", [], bigInt(bigInt(\"2\").mul(bigInt(bigInt(ctx.getVar(\"a\",[])).add(bigInt(ctx.getVar(\"d\",[]))).mod(__P__))).mod(__P__)).mul( bigInt(bigInt(ctx.getVar(\"a\",[])).add(__P__).sub(bigInt(ctx.getVar(\"d\",[]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.setVar(\"B\", [], bigInt(\"4\").mul( bigInt(bigInt(ctx.getVar(\"a\",[])).add(__P__).sub(bigInt(ctx.getVar(\"d\",[]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.setSignal(\"x1_2\", [], bigInt(ctx.getSignal(\"in\", [\"0\"])).mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"x1_2\", []), bigInt(ctx.getSignal(\"in\", [\"0\"])).mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__));\n    ctx.setSignal(\"lamda\", [], bigInt(bigInt(bigInt(bigInt(\"3\").mul(bigInt(ctx.getSignal(\"x1_2\", []))).mod(__P__)).add(bigInt(bigInt(bigInt(\"2\").mul(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__))).mod(__P__)).add(bigInt(\"1\")).mod(__P__)).mul( bigInt(bigInt(bigInt(\"2\").mul(bigInt(ctx.getVar(\"B\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(bigInt(\"2\").mul(bigInt(ctx.getVar(\"B\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__))).mod(__P__), bigInt(bigInt(bigInt(\"3\").mul(bigInt(ctx.getSignal(\"x1_2\", []))).mod(__P__)).add(bigInt(bigInt(bigInt(\"2\").mul(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__))).mod(__P__)).add(bigInt(\"1\")).mod(__P__));\n    ctx.setSignal(\"out\", [\"0\"], bigInt(bigInt(bigInt(bigInt(ctx.getVar(\"B\",[])).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).add(__P__).sub(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).add(__P__).sub(bigInt(bigInt(\"2\").mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"out\", [\"0\"]), bigInt(bigInt(bigInt(bigInt(ctx.getVar(\"B\",[])).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).mul(bigInt(ctx.getSignal(\"lamda\", []))).mod(__P__)).add(__P__).sub(bigInt(ctx.getVar(\"A\",[]))).mod(__P__)).add(__P__).sub(bigInt(bigInt(\"2\").mul(bigInt(ctx.getSignal(\"in\", [\"0\"]))).mod(__P__))).mod(__P__));\n    ctx.setSignal(\"out\", [\"1\"], bigInt(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(ctx.getSignal(\"in\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"out\", [\"0\"]))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"out\", [\"1\"]), bigInt(bigInt(ctx.getSignal(\"lamda\", [])).mul(bigInt(bigInt(ctx.getSignal(\"in\", [\"0\"])).add(__P__).sub(bigInt(ctx.getSignal(\"out\", [\"0\"]))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"in\", [\"1\"]))).mod(__P__));\n}\n",
+  "MultiMux3": "function(ctx) {\n    ctx.setSignal(\"s10\", [], bigInt(ctx.getSignal(\"s\", [\"1\"])).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"s10\", []), bigInt(ctx.getSignal(\"s\", [\"1\"])).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(ctx.getVar(\"n\",[]))) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        ctx.setSignal(\"a210\", [ctx.getVar(\"i\",[])], bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"7\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"6\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"5\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"3\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s10\", []))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a210\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"7\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"6\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"5\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"3\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s10\", []))).mod(__P__));\n        ctx.setSignal(\"a21\", [ctx.getVar(\"i\",[])], bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"6\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"1\"]))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a21\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"6\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"1\"]))).mod(__P__));\n        ctx.setSignal(\"a20\", [ctx.getVar(\"i\",[])], bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"5\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a20\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"5\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n        ctx.setSignal(\"a2\", [ctx.getVar(\"i\",[])], bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a2\", [ctx.getVar(\"i\",[])]), bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"4\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__));\n        ctx.setSignal(\"a10\", [ctx.getVar(\"i\",[])], bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"3\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s10\", []))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a10\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"3\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"]))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"]))).mod(__P__)).add(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s10\", []))).mod(__P__));\n        ctx.setSignal(\"a1\", [ctx.getVar(\"i\",[])], bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"1\"]))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a1\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"2\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"1\"]))).mod(__P__));\n        ctx.setSignal(\"a0\", [ctx.getVar(\"i\",[])], bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"a0\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"1\"])).add(__P__).sub(bigInt(ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"0\"]))).mod(__P__));\n        ctx.setSignal(\"a\", [ctx.getVar(\"i\",[])], ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]));\n        ctx.assert(ctx.getSignal(\"a\", [ctx.getVar(\"i\",[])]), ctx.getSignal(\"c\", [ctx.getVar(\"i\",[]),\"0\"]));\n        ctx.setSignal(\"out\", [ctx.getVar(\"i\",[])], bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"a210\", [ctx.getVar(\"i\",[])])).add(bigInt(ctx.getSignal(\"a21\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a20\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a2\", [ctx.getVar(\"i\",[])]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"2\"]))).mod(__P__)).add(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"a10\", [ctx.getVar(\"i\",[])])).add(bigInt(ctx.getSignal(\"a1\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a0\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a\", [ctx.getVar(\"i\",[])]))).mod(__P__))).mod(__P__));\n        ctx.assert(ctx.getSignal(\"out\", [ctx.getVar(\"i\",[])]), bigInt(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"a210\", [ctx.getVar(\"i\",[])])).add(bigInt(ctx.getSignal(\"a21\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a20\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a2\", [ctx.getVar(\"i\",[])]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"s\", [\"2\"]))).mod(__P__)).add(bigInt(bigInt(bigInt(bigInt(ctx.getSignal(\"a10\", [ctx.getVar(\"i\",[])])).add(bigInt(ctx.getSignal(\"a1\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a0\", [ctx.getVar(\"i\",[])]))).mod(__P__)).add(bigInt(ctx.getSignal(\"a\", [ctx.getVar(\"i\",[])]))).mod(__P__))).mod(__P__));\n    }\n\n     }\n}\n",
+  "Mux3": "function(ctx) {\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(\"8\")) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        ctx.setPin(\"mux\", [], \"c\", [\"0\",ctx.getVar(\"i\",[])], ctx.getSignal(\"c\", [ctx.getVar(\"i\",[])]));\n        ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",ctx.getVar(\"i\",[])]), ctx.getSignal(\"c\", [ctx.getVar(\"i\",[])]));\n    }\n\n     }\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(\"3\")) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        ctx.setPin(\"mux\", [], \"s\", [ctx.getVar(\"i\",[])], ctx.getSignal(\"s\", [ctx.getVar(\"i\",[])]));\n        ctx.assert(ctx.getPin(\"mux\", [], \"s\", [ctx.getVar(\"i\",[])]), ctx.getSignal(\"s\", [ctx.getVar(\"i\",[])]));\n    }\n\n     }\n    ctx.setSignal(\"out\", [], ctx.getPin(\"mux\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getSignal(\"out\", []), ctx.getPin(\"mux\", [], \"out\", [\"0\"]));\n}\n",
+  "BabyAdd": "function(ctx) {\n    ctx.setVar(\"a\", [], \"168700\");\n    ctx.setVar(\"d\", [], \"168696\");\n    ctx.setSignal(\"beta\", [], bigInt(ctx.getSignal(\"x1\", [])).mul(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"beta\", []), bigInt(ctx.getSignal(\"x1\", [])).mul(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__));\n    ctx.setSignal(\"gamma\", [], bigInt(ctx.getSignal(\"y1\", [])).mul(bigInt(ctx.getSignal(\"x2\", []))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"gamma\", []), bigInt(ctx.getSignal(\"y1\", [])).mul(bigInt(ctx.getSignal(\"x2\", []))).mod(__P__));\n    ctx.setSignal(\"delta\", [], bigInt(bigInt(bigInt(__P__.sub(bigInt(ctx.getVar(\"a\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"x1\", []))).mod(__P__)).add(bigInt(ctx.getSignal(\"y1\", []))).mod(__P__)).mul(bigInt(bigInt(ctx.getSignal(\"x2\", [])).add(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"delta\", []), bigInt(bigInt(bigInt(__P__.sub(bigInt(ctx.getVar(\"a\",[]))).mod(__P__)).mul(bigInt(ctx.getSignal(\"x1\", []))).mod(__P__)).add(bigInt(ctx.getSignal(\"y1\", []))).mod(__P__)).mul(bigInt(bigInt(ctx.getSignal(\"x2\", [])).add(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__))).mod(__P__));\n    ctx.setSignal(\"tau\", [], bigInt(ctx.getSignal(\"beta\", [])).mul(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"tau\", []), bigInt(ctx.getSignal(\"beta\", [])).mul(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__));\n    ctx.setSignal(\"xout\", [], bigInt(bigInt(ctx.getSignal(\"beta\", [])).add(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__)).mul( bigInt(bigInt(\"1\").add(bigInt(bigInt(ctx.getVar(\"d\",[])).mul(bigInt(ctx.getSignal(\"tau\", []))).mod(__P__))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(bigInt(\"1\").add(bigInt(bigInt(ctx.getVar(\"d\",[])).mul(bigInt(ctx.getSignal(\"tau\", []))).mod(__P__))).mod(__P__)).mul(bigInt(ctx.getSignal(\"xout\", []))).mod(__P__), bigInt(ctx.getSignal(\"beta\", [])).add(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__));\n    ctx.setSignal(\"yout\", [], bigInt(bigInt(bigInt(ctx.getSignal(\"delta\", [])).add(bigInt(bigInt(ctx.getVar(\"a\",[])).mul(bigInt(ctx.getSignal(\"beta\", []))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__)).mul( bigInt(bigInt(\"1\").add(__P__).sub(bigInt(bigInt(ctx.getVar(\"d\",[])).mul(bigInt(ctx.getSignal(\"tau\", []))).mod(__P__))).mod(__P__)).inverse(__P__) ).mod(__P__));\n    ctx.assert(bigInt(bigInt(\"1\").add(__P__).sub(bigInt(bigInt(ctx.getVar(\"d\",[])).mul(bigInt(ctx.getSignal(\"tau\", []))).mod(__P__))).mod(__P__)).mul(bigInt(ctx.getSignal(\"yout\", []))).mod(__P__), bigInt(bigInt(ctx.getSignal(\"delta\", [])).add(bigInt(bigInt(ctx.getVar(\"a\",[])).mul(bigInt(ctx.getSignal(\"beta\", []))).mod(__P__))).mod(__P__)).add(__P__).sub(bigInt(ctx.getSignal(\"gamma\", []))).mod(__P__));\n}\n",
+  "BabyDbl": "function(ctx) {\n    ctx.setPin(\"adder\", [], \"x1\", [], ctx.getSignal(\"x\", []));\n    ctx.assert(ctx.getPin(\"adder\", [], \"x1\", []), ctx.getSignal(\"x\", []));\n    ctx.setPin(\"adder\", [], \"y1\", [], ctx.getSignal(\"y\", []));\n    ctx.assert(ctx.getPin(\"adder\", [], \"y1\", []), ctx.getSignal(\"y\", []));\n    ctx.setPin(\"adder\", [], \"x2\", [], ctx.getSignal(\"x\", []));\n    ctx.assert(ctx.getPin(\"adder\", [], \"x2\", []), ctx.getSignal(\"x\", []));\n    ctx.setPin(\"adder\", [], \"y2\", [], ctx.getSignal(\"y\", []));\n    ctx.assert(ctx.getPin(\"adder\", [], \"y2\", []), ctx.getSignal(\"y\", []));\n    ctx.setSignal(\"xout\", [], ctx.getPin(\"adder\", [], \"xout\", []));\n    ctx.assert(ctx.getSignal(\"xout\", []), ctx.getPin(\"adder\", [], \"xout\", []));\n    ctx.setSignal(\"yout\", [], ctx.getPin(\"adder\", [], \"yout\", []));\n    ctx.assert(ctx.getSignal(\"yout\", []), ctx.getPin(\"adder\", [], \"yout\", []));\n}\n",
+  "BabyCheck": "function(ctx) {\n    ctx.setVar(\"a\", [], \"168700\");\n    ctx.setVar(\"d\", [], \"168696\");\n    ctx.setSignal(\"x2\", [], bigInt(ctx.getSignal(\"x\", [])).mul(bigInt(ctx.getSignal(\"x\", []))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"x2\", []), bigInt(ctx.getSignal(\"x\", [])).mul(bigInt(ctx.getSignal(\"x\", []))).mod(__P__));\n    ctx.setSignal(\"y2\", [], bigInt(ctx.getSignal(\"y\", [])).mul(bigInt(ctx.getSignal(\"y\", []))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"y2\", []), bigInt(ctx.getSignal(\"y\", [])).mul(bigInt(ctx.getSignal(\"y\", []))).mod(__P__));\n    ctx.assert(bigInt(bigInt(ctx.getVar(\"a\",[])).mul(bigInt(ctx.getSignal(\"x2\", []))).mod(__P__)).add(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__), bigInt(\"1\").add(bigInt(bigInt(bigInt(ctx.getVar(\"d\",[])).mul(bigInt(ctx.getSignal(\"x2\", []))).mod(__P__)).mul(bigInt(ctx.getSignal(\"y2\", []))).mod(__P__))).mod(__P__));\n}\n",
+  "Window4": "function(ctx) {\n    ctx.setPin(\"mux\", [], \"s\", [\"0\"], ctx.getSignal(\"in\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"s\", [\"0\"]), ctx.getSignal(\"in\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"s\", [\"1\"], ctx.getSignal(\"in\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"s\", [\"1\"]), ctx.getSignal(\"in\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"s\", [\"2\"], ctx.getSignal(\"in\", [\"2\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"s\", [\"2\"]), ctx.getSignal(\"in\", [\"2\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"0\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"0\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"dbl2\", [], \"in\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"dbl2\", [], \"in\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"dbl2\", [], \"in\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"dbl2\", [], \"in\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"1\"], ctx.getPin(\"dbl2\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"1\"]), ctx.getPin(\"dbl2\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"1\"], ctx.getPin(\"dbl2\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"1\"]), ctx.getPin(\"dbl2\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr3\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr3\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr3\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr3\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr3\", [], \"in2\", [\"0\"], ctx.getPin(\"dbl2\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr3\", [], \"in2\", [\"0\"]), ctx.getPin(\"dbl2\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr3\", [], \"in2\", [\"1\"], ctx.getPin(\"dbl2\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr3\", [], \"in2\", [\"1\"]), ctx.getPin(\"dbl2\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"2\"], ctx.getPin(\"adr3\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"2\"]), ctx.getPin(\"adr3\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"2\"], ctx.getPin(\"adr3\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"2\"]), ctx.getPin(\"adr3\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr4\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr4\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr4\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr4\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr4\", [], \"in2\", [\"0\"], ctx.getPin(\"adr3\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr4\", [], \"in2\", [\"0\"]), ctx.getPin(\"adr3\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr4\", [], \"in2\", [\"1\"], ctx.getPin(\"adr3\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr4\", [], \"in2\", [\"1\"]), ctx.getPin(\"adr3\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"3\"], ctx.getPin(\"adr4\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"3\"]), ctx.getPin(\"adr4\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"3\"], ctx.getPin(\"adr4\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"3\"]), ctx.getPin(\"adr4\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr5\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr5\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr5\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr5\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr5\", [], \"in2\", [\"0\"], ctx.getPin(\"adr4\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr5\", [], \"in2\", [\"0\"]), ctx.getPin(\"adr4\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr5\", [], \"in2\", [\"1\"], ctx.getPin(\"adr4\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr5\", [], \"in2\", [\"1\"]), ctx.getPin(\"adr4\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"4\"], ctx.getPin(\"adr5\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"4\"]), ctx.getPin(\"adr5\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"4\"], ctx.getPin(\"adr5\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"4\"]), ctx.getPin(\"adr5\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr6\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr6\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr6\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr6\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr6\", [], \"in2\", [\"0\"], ctx.getPin(\"adr5\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr6\", [], \"in2\", [\"0\"]), ctx.getPin(\"adr5\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr6\", [], \"in2\", [\"1\"], ctx.getPin(\"adr5\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr6\", [], \"in2\", [\"1\"]), ctx.getPin(\"adr5\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"5\"], ctx.getPin(\"adr6\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"5\"]), ctx.getPin(\"adr6\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"5\"], ctx.getPin(\"adr6\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"5\"]), ctx.getPin(\"adr6\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr7\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr7\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr7\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr7\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr7\", [], \"in2\", [\"0\"], ctx.getPin(\"adr6\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr7\", [], \"in2\", [\"0\"]), ctx.getPin(\"adr6\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr7\", [], \"in2\", [\"1\"], ctx.getPin(\"adr6\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr7\", [], \"in2\", [\"1\"]), ctx.getPin(\"adr6\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"6\"], ctx.getPin(\"adr7\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"6\"]), ctx.getPin(\"adr7\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"6\"], ctx.getPin(\"adr7\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"6\"]), ctx.getPin(\"adr7\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"adr8\", [], \"in1\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr8\", [], \"in1\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"adr8\", [], \"in1\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr8\", [], \"in1\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    ctx.setPin(\"adr8\", [], \"in2\", [\"0\"], ctx.getPin(\"adr7\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"adr8\", [], \"in2\", [\"0\"]), ctx.getPin(\"adr7\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"adr8\", [], \"in2\", [\"1\"], ctx.getPin(\"adr7\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"adr8\", [], \"in2\", [\"1\"]), ctx.getPin(\"adr7\", [], \"out\", [\"1\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"0\",\"7\"], ctx.getPin(\"adr8\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"0\",\"7\"]), ctx.getPin(\"adr8\", [], \"out\", [\"0\"]));\n    ctx.setPin(\"mux\", [], \"c\", [\"1\",\"7\"], ctx.getPin(\"adr8\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"mux\", [], \"c\", [\"1\",\"7\"]), ctx.getPin(\"adr8\", [], \"out\", [\"1\"]));\n    ctx.setSignal(\"out8\", [\"0\"], ctx.getPin(\"adr8\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getSignal(\"out8\", [\"0\"]), ctx.getPin(\"adr8\", [], \"out\", [\"0\"]));\n    ctx.setSignal(\"out8\", [\"1\"], ctx.getPin(\"adr8\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getSignal(\"out8\", [\"1\"]), ctx.getPin(\"adr8\", [], \"out\", [\"1\"]));\n    ctx.setSignal(\"out\", [\"0\"], ctx.getPin(\"mux\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getSignal(\"out\", [\"0\"]), ctx.getPin(\"mux\", [], \"out\", [\"0\"]));\n    ctx.setSignal(\"out\", [\"1\"], bigInt(bigInt(bigInt(__P__.sub(bigInt(ctx.getPin(\"mux\", [], \"out\", [\"1\"]))).mod(__P__)).mul(bigInt(\"2\")).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"3\"]))).mod(__P__)).add(bigInt(ctx.getPin(\"mux\", [], \"out\", [\"1\"]))).mod(__P__));\n    ctx.assert(ctx.getSignal(\"out\", [\"1\"]), bigInt(bigInt(bigInt(__P__.sub(bigInt(ctx.getPin(\"mux\", [], \"out\", [\"1\"]))).mod(__P__)).mul(bigInt(\"2\")).mod(__P__)).mul(bigInt(ctx.getSignal(\"in\", [\"3\"]))).mod(__P__)).add(bigInt(ctx.getPin(\"mux\", [], \"out\", [\"1\"]))).mod(__P__));\n}\n",
+  "Segment": "function(ctx) {\n    ctx.setPin(\"e2m\", [], \"in\", [\"0\"], ctx.getSignal(\"base\", [\"0\"]));\n    ctx.assert(ctx.getPin(\"e2m\", [], \"in\", [\"0\"]), ctx.getSignal(\"base\", [\"0\"]));\n    ctx.setPin(\"e2m\", [], \"in\", [\"1\"], ctx.getSignal(\"base\", [\"1\"]));\n    ctx.assert(ctx.getPin(\"e2m\", [], \"in\", [\"1\"]), ctx.getSignal(\"base\", [\"1\"]));\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(ctx.getVar(\"nWindows\",[]))) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        if ((bigInt(ctx.getVar(\"i\",[])).eq(bigInt(\"0\")) ? 1 : 0)) {\n        {\n            ctx.setPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"], ctx.getPin(\"e2m\", [], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"]), ctx.getPin(\"e2m\", [], \"out\", [\"0\"]));\n            ctx.setPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"], ctx.getPin(\"e2m\", [], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"]), ctx.getPin(\"e2m\", [], \"out\", [\"1\"]));\n        }\n\n        } else {\n        {\n            ctx.setPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"0\"], ctx.getPin(\"windows\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out8\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"0\"]), ctx.getPin(\"windows\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out8\", [\"0\"]));\n            ctx.setPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"1\"], ctx.getPin(\"windows\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out8\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"1\"]), ctx.getPin(\"windows\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out8\", [\"1\"]));\n            ctx.setPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"0\"], ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"0\"]), ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.setPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"1\"], ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in\", [\"1\"]), ctx.getPin(\"doublers1\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n            ctx.setPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"], ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"]), ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.setPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"], ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"]), ctx.getPin(\"doublers2\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n            if ((bigInt(ctx.getVar(\"i\",[])).eq(bigInt(\"1\")) ? 1 : 0)) {\n            {\n                ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"0\"], ctx.getPin(\"windows\", [\"0\"], \"out\", [\"0\"]));\n                ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"0\"]), ctx.getPin(\"windows\", [\"0\"], \"out\", [\"0\"]));\n                ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"1\"], ctx.getPin(\"windows\", [\"0\"], \"out\", [\"1\"]));\n                ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"1\"]), ctx.getPin(\"windows\", [\"0\"], \"out\", [\"1\"]));\n            }\n\n            } else {\n            {\n                ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"0\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"0\"]));\n                ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"0\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"0\"]));\n                ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"1\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"1\"]));\n                ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in1\", [\"1\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"1\"]));\n            }\n\n            }\n            ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in2\", [\"0\"], ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in2\", [\"0\"]), ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"out\", [\"0\"]));\n            ctx.setPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in2\", [\"1\"], ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"in2\", [\"1\"]), ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"out\", [\"1\"]));\n        }\n\n        }\n        for (ctx.setVar(\"j\", [], \"0\");bigInt(ctx.getVar(\"j\",[])).lt(bigInt(\"4\")) ? 1 : 0;(ctx.setVar(\"j\", [], bigInt(ctx.getVar(\"j\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n        {\n            ctx.setPin(\"windows\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])], ctx.getSignal(\"in\", [bigInt(bigInt(\"4\").mul(bigInt(ctx.getVar(\"i\",[]))).mod(__P__)).add(bigInt(ctx.getVar(\"j\",[]))).mod(__P__)]));\n            ctx.assert(ctx.getPin(\"windows\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])]), ctx.getSignal(\"in\", [bigInt(bigInt(\"4\").mul(bigInt(ctx.getVar(\"i\",[]))).mod(__P__)).add(bigInt(ctx.getVar(\"j\",[]))).mod(__P__)]));\n        }\n\n         }\n    }\n\n     }\n    if (bigInt(ctx.getVar(\"nWindows\",[])).gt(bigInt(\"1\")) ? 1 : 0) {\n    {\n        ctx.setPin(\"m2e\", [], \"in\", [\"0\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nWindows\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"0\"]));\n        ctx.assert(ctx.getPin(\"m2e\", [], \"in\", [\"0\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nWindows\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"0\"]));\n        ctx.setPin(\"m2e\", [], \"in\", [\"1\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nWindows\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"1\"]));\n        ctx.assert(ctx.getPin(\"m2e\", [], \"in\", [\"1\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nWindows\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"out\", [\"1\"]));\n    }\n\n    } else {\n    {\n        ctx.setPin(\"m2e\", [], \"in\", [\"0\"], ctx.getPin(\"windows\", [\"0\"], \"out\", [\"0\"]));\n        ctx.assert(ctx.getPin(\"m2e\", [], \"in\", [\"0\"]), ctx.getPin(\"windows\", [\"0\"], \"out\", [\"0\"]));\n        ctx.setPin(\"m2e\", [], \"in\", [\"1\"], ctx.getPin(\"windows\", [\"0\"], \"out\", [\"1\"]));\n        ctx.assert(ctx.getPin(\"m2e\", [], \"in\", [\"1\"]), ctx.getPin(\"windows\", [\"0\"], \"out\", [\"1\"]));\n    }\n\n    }\n    ctx.setSignal(\"out\", [\"0\"], ctx.getPin(\"m2e\", [], \"out\", [\"0\"]));\n    ctx.assert(ctx.getSignal(\"out\", [\"0\"]), ctx.getPin(\"m2e\", [], \"out\", [\"0\"]));\n    ctx.setSignal(\"out\", [\"1\"], ctx.getPin(\"m2e\", [], \"out\", [\"1\"]));\n    ctx.assert(ctx.getSignal(\"out\", [\"1\"]), ctx.getPin(\"m2e\", [], \"out\", [\"1\"]));\n}\n",
+  "Pedersen": "function(ctx) {\n    ctx.setVar(\"BASE\", [], [[\"10457101036533406547632367118273992217979173478358440826365724437999023779287\",\"19824078218392094440610104313265183977899662750282163392862422243483260492317\"],[\"2671756056509184035029146175565761955751135805354291559563293617232983272177\",\"2663205510731142763556352975002641716101654201788071096152948830924149045094\"],[\"5802099305472655231388284418920769829666717045250560929368476121199858275951\",\"5980429700218124965372158798884772646841287887664001482443826541541529227896\"],[\"7107336197374528537877327281242680114152313102022415488494307685842428166594\",\"2857869773864086953506483169737724679646433914307247183624878062391496185654\"],[\"20265828622013100949498132415626198973119240347465898028410217039057588424236\",\"1160461593266035632937973507065134938065359936056410650153315956301179689506\"],[\"1487999857809287756929114517587739322941449154962237464737694709326309567994\",\"14017256862867289575056460215526364897734808720610101650676790868051368668003\"],[\"14618644331049802168996997831720384953259095788558646464435263343433563860015\",\"13115243279999696210147231297848654998887864576952244320558158620692603342236\"],[\"6814338563135591367010655964669793483652536871717891893032616415581401894627\",\"13660303521961041205824633772157003587453809761793065294055279768121314853695\"],[\"3571615583211663069428808372184817973703476260057504149923239576077102575715\",\"11981351099832644138306422070127357074117642951423551606012551622164230222506\"],[\"18597552580465440374022635246985743886550544261632147935254624835147509493269\",\"6753322320275422086923032033899357299485124665258735666995435957890214041481\"]]);\n    ctx.setVar(\"nSegments\", [], bigInt(bigInt(bigInt(ctx.getVar(\"n\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)).div( bigInt(\"200\"))).add(bigInt(\"1\")).mod(__P__));\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(ctx.getVar(\"nSegments\",[]))) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        ctx.setVar(\"nBits\", [], bigInt((bigInt(ctx.getVar(\"i\",[])).eq(bigInt(bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__))) ? 1 : 0)).neq(bigInt(0)) ? (bigInt(ctx.getVar(\"n\",[])).add(__P__).sub(bigInt(bigInt(bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)).mul(bigInt(\"200\")).mod(__P__))).mod(__P__)) : (\"200\"));\n        ctx.setVar(\"nWindows\", [], bigInt(bigInt(bigInt(ctx.getVar(\"nBits\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)).div( bigInt(\"4\"))).add(bigInt(\"1\")).mod(__P__));\n        ctx.setPin(\"segments\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"], ctx.getVar(\"BASE\",[ctx.getVar(\"i\",[]),\"0\"]));\n        ctx.assert(ctx.getPin(\"segments\", [ctx.getVar(\"i\",[])], \"base\", [\"0\"]), ctx.getVar(\"BASE\",[ctx.getVar(\"i\",[]),\"0\"]));\n        ctx.setPin(\"segments\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"], ctx.getVar(\"BASE\",[ctx.getVar(\"i\",[]),\"1\"]));\n        ctx.assert(ctx.getPin(\"segments\", [ctx.getVar(\"i\",[])], \"base\", [\"1\"]), ctx.getVar(\"BASE\",[ctx.getVar(\"i\",[]),\"1\"]));\n        for (ctx.setVar(\"j\", [], \"0\");bigInt(ctx.getVar(\"j\",[])).lt(bigInt(ctx.getVar(\"nBits\",[]))) ? 1 : 0;(ctx.setVar(\"j\", [], bigInt(ctx.getVar(\"j\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n        {\n            ctx.setPin(\"segments\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])], ctx.getSignal(\"in\", [bigInt(bigInt(ctx.getVar(\"i\",[])).mul(bigInt(\"200\")).mod(__P__)).add(bigInt(ctx.getVar(\"j\",[]))).mod(__P__)]));\n            ctx.assert(ctx.getPin(\"segments\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])]), ctx.getSignal(\"in\", [bigInt(bigInt(ctx.getVar(\"i\",[])).mul(bigInt(\"200\")).mod(__P__)).add(bigInt(ctx.getVar(\"j\",[]))).mod(__P__)]));\n        }\n\n         }\n        for (ctx.setVar(\"j\", [], ctx.getVar(\"nBits\",[]));bigInt(ctx.getVar(\"j\",[])).lt(bigInt(bigInt(ctx.getVar(\"nWindows\",[])).mul(bigInt(\"4\")).mod(__P__))) ? 1 : 0;(ctx.setVar(\"j\", [], bigInt(ctx.getVar(\"j\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n        {\n            ctx.setPin(\"segments\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])], \"0\");\n            ctx.assert(ctx.getPin(\"segments\", [ctx.getVar(\"i\",[])], \"in\", [ctx.getVar(\"j\",[])]), \"0\");\n        }\n\n         }\n    }\n\n     }\n    for (ctx.setVar(\"i\", [], \"0\");bigInt(ctx.getVar(\"i\",[])).lt(bigInt(bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__))) ? 1 : 0;(ctx.setVar(\"i\", [], bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__))).add(__P__).sub(bigInt(1)).mod(__P__)) { \n    {\n        if ((bigInt(ctx.getVar(\"i\",[])).eq(bigInt(\"0\")) ? 1 : 0)) {\n        {\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"x1\", [], ctx.getPin(\"segments\", [\"0\"], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"x1\", []), ctx.getPin(\"segments\", [\"0\"], \"out\", [\"0\"]));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"y1\", [], ctx.getPin(\"segments\", [\"0\"], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"y1\", []), ctx.getPin(\"segments\", [\"0\"], \"out\", [\"1\"]));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"x2\", [], ctx.getPin(\"segments\", [\"1\"], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"x2\", []), ctx.getPin(\"segments\", [\"1\"], \"out\", [\"0\"]));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"y2\", [], ctx.getPin(\"segments\", [\"1\"], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"y2\", []), ctx.getPin(\"segments\", [\"1\"], \"out\", [\"1\"]));\n        }\n\n        } else {\n        {\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"x1\", [], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"xout\", []));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"x1\", []), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"xout\", []));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"y1\", [], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"yout\", []));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"y1\", []), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"i\",[])).add(__P__).sub(bigInt(\"1\")).mod(__P__)], \"yout\", []));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"x2\", [], ctx.getPin(\"segments\", [bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"x2\", []), ctx.getPin(\"segments\", [bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__)], \"out\", [\"0\"]));\n            ctx.setPin(\"adders\", [ctx.getVar(\"i\",[])], \"y2\", [], ctx.getPin(\"segments\", [bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n            ctx.assert(ctx.getPin(\"adders\", [ctx.getVar(\"i\",[])], \"y2\", []), ctx.getPin(\"segments\", [bigInt(ctx.getVar(\"i\",[])).add(bigInt(\"1\")).mod(__P__)], \"out\", [\"1\"]));\n        }\n\n        }\n    }\n\n     }\n    if (bigInt(ctx.getVar(\"nSegments\",[])).gt(bigInt(\"1\")) ? 1 : 0) {\n    {\n        ctx.setSignal(\"out\", [\"0\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"xout\", []));\n        ctx.assert(ctx.getSignal(\"out\", [\"0\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"xout\", []));\n        ctx.setSignal(\"out\", [\"1\"], ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"yout\", []));\n        ctx.assert(ctx.getSignal(\"out\", [\"1\"]), ctx.getPin(\"adders\", [bigInt(ctx.getVar(\"nSegments\",[])).add(__P__).sub(bigInt(\"2\")).mod(__P__)], \"yout\", []));\n    }\n\n    } else {\n    {\n        ctx.setSignal(\"out\", [\"0\"], ctx.getPin(\"segments\", [\"0\"], \"out\", [\"0\"]));\n        ctx.assert(ctx.getSignal(\"out\", [\"0\"]), ctx.getPin(\"segments\", [\"0\"], \"out\", [\"0\"]));\n        ctx.setSignal(\"out\", [\"1\"], ctx.getPin(\"segments\", [\"0\"], \"out\", [\"1\"]));\n        ctx.assert(ctx.getSignal(\"out\", [\"1\"]), ctx.getPin(\"segments\", [\"0\"], \"out\", [\"1\"]));\n    }\n\n    }\n}\n"
+ },
+ "functions": {},
+ "nPrvInputs": 0,
+ "nPubInputs": 3,
+ "nInputs": 3,
+ "nOutputs": 2,
+ "nVars": 48,
+ "nConstants": 3,
+ "nSignals": 51
+}
