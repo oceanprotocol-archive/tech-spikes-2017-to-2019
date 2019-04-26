@@ -31,9 +31,12 @@ Folder Name   |  Description | Issue |
 7-arbitrage-bot | build an arbitrage bot between Uniswap and Exchange | 
 8-pricing | research and development of a data pricing framework | |
 9-arweave | investigate ARWeave for data availability proof | [305](https://github.com/oceanprotocol/ocean/issues/305) |
+10-zk-pedersen | Investigating zero-knowledge Pedersen scheme for whitelisting condition|[306](https://github.com/oceanprotocol/ocean/issues/306)|
 
 
 ## Updates
+
+* [04/26/2019] ZK based Pederson Scheme [306](https://github.com/oceanprotocol/ocean/issues/306)
 
 * [04/25/2019] arweave investigation ([305](https://github.com/oceanprotocol/ocean/issues/305))
 

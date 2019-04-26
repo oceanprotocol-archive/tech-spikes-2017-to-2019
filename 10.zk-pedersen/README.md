@@ -1,4 +1,15 @@
+[![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
+
 # On-chain ZK based Pedersen shared secret
+
+```
+name: whitelisting condition using shared token
+type: research
+status: initial draft
+editor: Ahmed Ali <ahmed@oceanprotocol.com>
+date: 04/26/2019
+```
+
 
 The main target of this tutorial is to show how to build an on-chain ocean condition in which 
 uses the zero-knowledge proofs (mainly ZKSNARKS) to verify a particular user is authorized to 
