@@ -12,8 +12,8 @@ contract OceanRequester is Chainlinked, Ownable {
   /*
    * global variables
    */
-   // Rinkeby -> Kovan jobId for random.org
-  bytes32 constant JOB_ID = bytes32("683dcbab01cd49ec96d6d706f9df2381");
+   // Rinkeby -> Kovan jobId for random.org: 683dcbab01cd49ec96d6d706f9df2381
+  bytes32 constant JOB_ID = bytes32("f1282af8d71d4049aae0d44d8a750c11");
   uint256 constant private ORACLE_PAYMENT = 1 * LINK; // default price for each request
   bytes32 public data;
 

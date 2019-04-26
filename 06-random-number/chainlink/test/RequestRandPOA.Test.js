@@ -18,7 +18,7 @@ contract("OceanRequester", (accounts) => {
 
   beforeEach(async () => {
     link = await LinkToken.at("0x01BE23585060835E02B77ef475b0Cc51aA1e0709");
-    ocean = await OceanRequester.at("0x5e7883be4529C6c0cEc27A5Fa5e5D62F81a41ACf");
+    ocean = await OceanRequester.at("0xCD2d163F2a2F48d3aF604F746983c54111CCBda5");
   });
 
   describe("should request data and receive callback", () => {
@@ -38,7 +38,7 @@ contract("OceanRequester", (accounts) => {
     });
 
     it("create a request and send to Chainlink", async () => {
-      let tx = await ocean.getRandom(LB, UB, '0xc6E2640a3963365341959508Ac0b62813637d8BD', '0xde947c85');
+      let tx = await ocean.getRandom(LB, UB, '0x46e81953D09Ba4D670cF73304DAD8808E8cd03a7', '0xde947c85');
       request = h.decodeRunRequest(tx.receipt.rawLogs[3]);
       console.log("request has been sent. request id :=" + request.id)
     });

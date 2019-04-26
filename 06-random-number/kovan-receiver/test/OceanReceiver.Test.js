@@ -2,7 +2,8 @@
 
 const Web3 = require('web3')
 
-const web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/7ffbee98713e4856877d879508d242a0'))
+// const web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/7ffbee98713e4856877d879508d242a0'))
+const web3 = new Web3(new Web3.providers.HttpProvider('https://nile.dev-ocean.com'))
 
 const h = require("chainlink-test-helpers");
 const scale = 1e18;
@@ -21,7 +22,7 @@ contract("OceanReceiver", (accounts) => {
   let ocean;
 
   beforeEach(async () => {
-    ocean = await OceanReceiver.at("0xc6E2640a3963365341959508Ac0b62813637d8BD");
+    ocean = await OceanReceiver.at("0x46e81953D09Ba4D670cF73304DAD8808E8cd03a7");
   });
 
   describe("should receive data from Chainlink callback", () => {

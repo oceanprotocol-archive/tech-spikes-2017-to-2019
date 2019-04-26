@@ -266,7 +266,7 @@ The integration testing on Rinkeby takes 1s to fulfill the random number request
 
 <img src="img/testing.jpg" width=1000 />
 
-## 4. Transfer Data into Ocean POA network
+## 4. Transfer Data into Kovan testnet network
 
 In Ocean's scenario, we deploy Keeper contract in our own POA network, therefore, it is needed to port the result of Chainlink requests into the POA network. In the meantime, we need to leverage the existing Chainlink network and pay real LINK tokens for the service. 
 
@@ -436,6 +436,100 @@ After a while, we can check the receiver contract in Kovan network and see the r
 <img src="img/receiver_kovan.jpg" width=500 />
 
 It demonstrates that the request is submitted from Rinkeby but the data is returned to Kovan network.
+
+## 5. Transfer Data into Ocean Nile POA network
+
+Now, we can test between Rinkeby testnet and Ocean POA testnet (https://nile.dev-ocean.com)
+
+Chainlink team builds new Jobs as:
+
+* With Random.org
+	* Ropsten -> Ocean Testnet: af4f80269e354c88823b862e359824d2
+	* Rinkeby -> Ocean Testnet: f1282af8d71d4049aae0d44d8a750c11
+	* Kovan -> Ocean Testnet: 907b1f07345448f18be63745d93ded64
+
+* Arbitrary data
+	* Ropsten -> Ocean Testnet: 09d689645cfc4a2ca932e5f14d212603
+	* Rinkeby -> Ocean Testnet: 802d8d2385c347788547d81d1a19d8b9
+	* Kovan -> Ocean Testnet: 7d84e447252d4f52bb3b0db072b2a469
+
+	
+We only need to modify the job ID in the OceanRequester.sol and redeploy it to Rinkeby network. In addition, we need to deploy OceanReceiver contract to Ocean testnet.
+
+### 5.1 Requester Contract in Rinkeby testnet
+
+```bash
+$ truffle migrate --network rinkeby
+...
+2_oceanrequester_migration.js
+=============================
+
+   Replacing 'OceanRequester'
+   --------------------------
+   > transaction hash:    0x1eec97db90ae95b4837273370ce360067a5bb5fb0117a02352e4b3daf5c455c6
+   > Blocks: 0            Seconds: 8
+   > contract address:    0xCD2d163F2a2F48d3aF604F746983c54111CCBda5
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             19.793494650356518596
+   > gas used:            1387466
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01387466 ETH
+```
+
+### 5.2 Receiver Contract in Ocean POA network
+
+We need to deploy the receiver contract to Ocean tesetnet `nile`. Add the network information as:
+
+```
+nile: {
+            provider: function() {
+              return new HDWalletProvider(process.env.NMEMORIC, "https://nile.dev-ocean.com")
+            },
+            network_id: 0x2323, // 8995
+            gas: 6000000,
+            gasPrice: 10000000000,
+            from: '0x0e364eb0ad6eb5a4fc30fc3d2c2ae8ebe75f245c'
+        },
+```
+
+The deployment is successful:
+
+```bash
+$ truffle migrate --network nile
+Starting migrations...
+======================
+> Network name:    'nile'
+> Network id:      8995
+> Block gas limit: 6666666
+...
+2_oceanreceiver_migration.js
+============================
+
+   Deploying 'OceanReceiver'
+   -------------------------
+   > transaction hash:    0x8014cc5c98e11a40d9e8180719b4def5b4c7b1b457970bba513194c45b7cfc6d
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x46e81953D09Ba4D670cF73304DAD8808E8cd03a7
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             9799.93602774500680106
+   > gas used:            262822
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00262822 ETH
+```
+
+### 5.3 Request Random Number
+
+First, we submit an request to Chainlink network from Rinkeby testnet, which pays LINK token as  well:
+
+<img src="img/rinkeby_request2.jpg" />
+
+Then, we can check the data result in the Ocean's Nile tesetnet:
+
+<img src="img/nile.jpg" />
+
+It successfully be fulfilled by the Chainlink network, because the off-chain random number 562 is passed into Ocean smart contract.
 
 ## License
 
