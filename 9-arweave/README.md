@@ -14,14 +14,22 @@ date: 04/25/2019
 
 [Arweave](https://www.arweave.org/) is a new blockchain network that provides scalable on-chain storage in a cost-efficient way. We investigate Arweave in this research to explore whether it can be leveraged to store dataset and provide data availability proof. 
 
-**I found following issues in my investigation**:
+**Observation Highlights about Arweave**:
 
 * Arweave mines raw data into a new block to provide on-chain storage, which takes **~5 minutes** or longer;
 * Arweave has a **2MB limit** on the size of data that can be stored in a single block;
 * Deploying data into Arweave blocks needs to pay AR tokens as the fee;
 
-In general, Arweave is designed to host web apps & pages permanently (i.e., ["permaweb"](https://www.arweave.org/)) and accomplish serverless web hosting. It works better with small-size data that needs to be stored on-chain for permanent access. It may not be suitable for Ocean, since the dataset for AI tends to have a sizes of several GB or TB.
+In general, Arweave is designed to host web apps & pages permanently (i.e., ["permaweb"](https://www.arweave.org/)) and accomplish serverless web hosting. It works better with small-size data that needs to be stored on-chain for permanent access. 
 
+Therefore, Arweave is suitable for **data commons marketplace with small-size dataset** (i.e., web pages, numerical data, metadata, small AI problem that is smaller than the limit set by Arweave). Since Arweave stores data effectively on-chain, it solves the data availability immediately and allows us to build a small but useful product. 
+
+The initial Ocean product would be:
+
+* super trustworthy data availability, but less scale (arweave)
+* less trustworthy data availability, but better scale (azure, aws)
+
+The research on web2 cloud provider is complementary to the solution using Arweave.
 
 # 2. Deploy Data File to Arweave
 
@@ -124,15 +132,41 @@ paris,berlin,sf
 
 Here, the strings `paris,berlin,sf` is the data in the file `data.csv`.
 
-# 4. Conclusion
+# 4. Workflow Design
+
+## 4.1 Publish Dataset 
+
+* **Step 1: (Submit Data)** When user publishes new open dataset, he can send data to the off-chain component of Ocean network, which will ensure the size of dataset is smaller than the limit. 
+
+* **Step 2: (Pay for Storage)** User may need to pay Ocean tokens to Keeper contract so that the Ocean off-chain component can pay AR tokens to Arweave blockchain for the storage. Note that AR token is the native tokens to Arweave blockchain and is not compatible with Ethereum. Ocean off-chain component will hold the AR token wallet and pay for the Arweave transactions. 
+
+* **Step 3: (Store Data to Arweave)** The off-chain component initiates the deploy transaction to store the dataset into a new block of Arweave blockchain. When the tx is successfully finished, it returns the transaction Id, which can uniquely identify the data in that transaction. 
+
+* **Step 4: (Log Tx Id in Ocean Keeper)** The unique transaction Id will be logged in smart contract inside Ocean keeper contract for future data access.
+
+<img src="img/arch_deploy.jpg" />
+
+
+## 4.2 Request Dataset
+
+* **Step 1: (Request Tx Id)** When user requests the dataset, he can send a request to Ocean smart contract to retrieve the Arweave transaction Id that stores the dataset to Arweave. 
+
+* **Step 2: (Download Dataset from Arweave)** Ocean smart contract will lookup the dataset record and return the tx Id. As such, the raw dataset can be downloaded through HTTP (i.e., https://arweave.net/{tx_id}).
+
+Since the dataset is stored on-chain in Arweave blockchain, its availability is guaranteed and can be independently verified, which helps Ocean network distribute token rewards to data providers properly and reduces the chance of fraudulence.
+
+<img src="img/arch_request.jpg" />
+
+# 5. Conclusion
 
 Arweave provides an on-chain storage solution for permanent web hosting, which aims to accomplish serverless web. The raw data is encoded with base64 method and mined into the blocks. It has 2MB limit on data size per transaction. So it is more suitable to deploy small-size web pages or apps into the Arweave blockchain network.
 
-In the case of Ocean, large size datasets need to be stored and accessed, which have a size of GB or TB. It is not practical to store them into the blocks in Arweave network. Therefore, Arweave may not be a good solution to Ocean.
+Ocean can store small-size dataset into blocks of Arweave blockchain, which guarantees the data availability and provides permanent storage. In particular, this solution works for data commons marketplace with small-size datasets. 
+
+Moreover,  we can extend the solution to more scalable scenarios: publisher can upload larger size dataset to Ocean, where Ocean splits it into small pieces (each piece has size < 2MB). As such, Ocean can deploy these pieces to Arweave blocks in different transactions. When user request the data, they download all these piece from different blocks in ARweave and recover the original raw dataset. 
 
 
-
-# 5. Reference
+# 6. Reference
 
 * [arweave website](https://www.arweave.org/)
 * [arweave deploy user guide](https://docs.arweave.org/developers/tools/arweave-deploy)
