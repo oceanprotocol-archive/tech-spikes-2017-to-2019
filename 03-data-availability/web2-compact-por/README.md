@@ -13,7 +13,7 @@ date: 05/01/2019
 
 The solution to a key question remains unclear to us: how to verify data retrievability? That means the storage provider must provide the continued availability of user's data and be able to prove to a verifier that the data is stored and available for access. 
 
-The essential challenge is to build an efficient, provably secure, and publicly verifiable Poof-of-Retrievability scheme, which implies:
+The essential challenge is to build an efficient, provably secure, and publicly verifiable Poof-of-Retrievability scheme, which implies [1]:
 
 * **efficient**: both computational cost, storage overhead and communication complexity should be as small as possible;
 * **unbounded**: verifiers should be able to request the proof from the storage provider as many times as needed. A priori bound on the number of verifications should not exist;
@@ -97,7 +97,7 @@ func main() {
 
 ### 2.3 Experiment
 
-The code can be found in [por github](https://github.com/CapacitorSet/por), whcih can be successfully tested with dataset file:
+The Go implementation of this scheme can be found in [por github](https://github.com/CapacitorSet/por), whcih can be successfully tested with data file:
 
 <img src="img/exp.jpg" width=250 />
 
