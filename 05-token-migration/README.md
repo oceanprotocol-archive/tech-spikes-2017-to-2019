@@ -295,19 +295,19 @@ A `hard spoon` occurs when a new cryptocurrency is minted by replicating the acc
 
 ## 4. Token Contract Changes
 
-To enable Mirror Copy, existing Ocean token contract need some extra functions:
+To enable Mirror Copy, the token contract has been modified to add following features in [https://github.com/oceanprotocol/ocean-token](https://github.com/oceanprotocol/ocean-token):
 
-* **list all token holder addresses to build a snapshot** - (need to add)
+* **list all token holder addresses to build a snapshot**
 	* it can loop through all holders and return the list of all token holders;
 
-* **pause the token transfer in the contract** - (need to add)
+* **pause the token transfer in the contract**
 	* inherit the 'ERC20Pausable.sol' contract to enable the `whenNotPaused` modifier;
 
-* **kill the contract to destroy all old tokens** - (already exists)
+* **kill the contract to destroy all old tokens** 
 	* it should be invoked by the owner (e.g., multisig wallet) only.
 
 
-An example of the modified token contract including new functions is shown in the below. The [source file](token-contract/contracts/OceanToken.sol) locates in `token-contract/contracts` directory. More unit/integrated testing are needed to verify the functionality and contract behavior.
+The modified token contract deployed to Mainnet can be found in [source file](https://github.com/oceanprotocol/ocean-token/blob/master/contracts/OceanToken.sol):
 
 ```solidity
 pragma solidity 0.5.3;
@@ -317,100 +317,185 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol';
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
-
 /**
  * @title Ocean Protocol ERC20 Token Contract
  * @author Ocean Protocol Team
- *
  * @dev Implementation of the Ocean Token.
  */
 contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
 
-	using SafeMath for uint256;
+    using SafeMath for uint256;
 
-	uint256 CAP = 1410000000;
-	uint256 TOTALSUPPLY = CAP.mul(10 ** 18);
+    uint8 constant DECIMALS = 18;
+    uint256 constant CAP = 1410000000;
+    uint256 TOTALSUPPLY = CAP.mul(uint256(10) ** DECIMALS);
 
-  	// maintain the list of token holders
-  	mapping (address => bool) public accountExist;
-  	address[] public accountList;
+    // keep track token holders
+    address[] private accounts = new address[](0);
+    mapping(address => bool) private tokenHolders;
 
-	/**
-	* @dev OceanToken constructor
-	*      Runs only on initial contract creation.
-	* @param _owner refers to the owner of the contract
-	*/
-	constructor(
-		address _owner
-	)
-		public
-		ERC20Detailed('OceanToken', 'OCEAN', 18)
-		ERC20Capped(TOTALSUPPLY)
-		Ownable()
-	{
-		// add owner as minter
-		addMinter(_owner);
-		// renounce msg.sender as minter
-		renounceMinter();
-		// transfer the ownership to the owner
-		transferOwnership(_owner);
-    		// add owner to the account list
-    		accountList.push(_owner);
-    		accountExist[_owner] = true;
-	}
+    /**
+     * @dev OceanToken constructor
+     * @param contractOwner refers to the owner of the contract
+     */
+    constructor(
+        address contractOwner
+    )
+        public
+        ERC20Detailed('OceanToken', 'OCEAN', DECIMALS)
+        ERC20Capped(TOTALSUPPLY)
+        Ownable()
+    {
+        addPauser(contractOwner);
+        renouncePauser();
+        addMinter(contractOwner);
+        renounceMinter();
+        transferOwnership(contractOwner);
+    }
 
-    	// Pausable Transfer Functions
-    	/**
-     	* @dev Transfer tokens when not paused
-     	**/
-    	function transfer(address _to, uint256 _value) public whenNotPaused returns (bool) {
-        	// add receiver into the account list if he/she is not in the list
-        	if( accountExist[_to] == false ){
-          		accountList.push(_to);
-          		accountExist[_to] = true;
-        	}
-        	return super.transfer(_to, _value);
-    	}
+    /**
+     * @dev transfer tokens when not paused (pausable transfer function)
+     * @param _to receiver address
+     * @param _value amount of tokens
+     * @return true if receiver is illegible to receive tokens
+     */
+    function transfer(
+        address _to,
+        uint256 _value
+    )
+        public
+        returns (bool)
+    {
+        bool success = super.transfer(_to, _value);
+        if (success) {
+            updateTokenHolders(msg.sender, _to);
+        }
+        return success;
+    }
 
-    	/**
-     	* @dev transferFrom function to tansfer tokens when token is not paused
-     	**/
-    	function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused returns (bool) {
-        	// add receiver into the account list if he/she is not in the list
-        	if( accountExist[_to] == false ){
-         	 accountList.push(_to);
-          	accountExist[_to] = true;
-       		}
-        	return super.transferFrom(_from, _to, _value);
-    	}
+    /**
+     * @dev transferFrom transfers tokens only when token is not paused
+     * @param _from sender address
+     * @param _to receiver address
+     * @param _value amount of tokens
+     * @return true if receiver is illegible to receive tokens
+     */
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    )
+        public
+        returns (bool)
+    {
+        bool success = super.transferFrom(_from, _to, _value);
+        if (success) {
+            updateTokenHolders(_from, _to);
+        }
+        return success;
+    }
 
-    	// retrieve the list of token holders (each time retrieve partial from the list)
-    	function getAccountList(uint256 begin, uint256 end) public view onlyOwner returns (address[] memory) {
-        	// check input parameters are in the range
-        	require( (begin >= 0 && end < accountList.length), 'input parameter is not valide');
-        	address[] memory v = new address[](end.sub(begin).add(1));
-        	for (uint256 i = begin; i < end; i++) {
-            		// skip accounts whose balance is zero
-            		if(super.balanceOf(accountList[i]) > 0){
-              			v[i] = accountList[i];
-            		}
-        	}
-        	return v;
-    	}
+    /**
+     * @dev retrieve the address & token balance of token holders (each time retrieve partial from the list)
+     * @param _start index
+     * @param _end index
+     * @return array of accounts and array of balances
+     */
+    function getAccounts(
+        uint256 _start,
+        uint256 _end
+    )
+        external
+        view
+        onlyOwner
+        returns (address[] memory, uint256[] memory)
+    {
+        require(
+            _start <= _end && _end < accounts.length,
+            'Array index out of bounds'
+        );
 
-    	// kill the contract and destroy all tokens
-  	function kill()
-  		public
-  		onlyOwner
-  	{
-  		selfdestruct(address(uint160(owner())));
-  	}
+        uint256 length = _end.sub(_start).add(1);
 
-  	function()
-  		external payable
-  	{
-  		revert();
-  	}
+        address[] memory _tokenHolders = new address[](length);
+        uint256[] memory _tokenBalances = new uint256[](length);
+
+        for (uint256 i = _start; i <= _end; i++)
+        {
+            address account = accounts[i];
+            uint256 accountBalance = super.balanceOf(account);
+            if (accountBalance > 0)
+            {
+                _tokenBalances[i] = accountBalance;
+                _tokenHolders[i] = account;
+            }
+        }
+
+        return (_tokenHolders, _tokenBalances);
+    }
+
+    /**
+     * @dev get length of account list
+     */
+    function getAccountsLength()
+        external
+        view
+        onlyOwner
+        returns (uint256)
+    {
+        return accounts.length;
+    }
+
+    /**
+     * @dev kill the contract and destroy all tokens
+     */
+    function kill()
+        external
+        onlyOwner
+    {
+        selfdestruct(address(uint160(owner())));
+    }
+
+    /**
+     * @dev fallback function prevents ether transfer to this contract
+     */
+    function()
+        external
+        payable
+    {
+        revert('Invalid ether transfer');
+    }
+
+    /*
+     * @dev tryToAddTokenHolder try to add the account to the token holders structure
+     * @param account address
+     */
+    function tryToAddTokenHolder(
+        address account
+    )
+        private
+    {
+        if (!tokenHolders[account] && super.balanceOf(account) > 0)
+        {
+            accounts.push(account);
+            tokenHolders[account] = true;
+        }
+    }
+
+    /*
+     * @dev updateTokenHolders maintains the accounts array and set the address as a promising token holder
+     * @param sender address
+     * @param receiver address.
+     */
+    function updateTokenHolders(
+        address sender,
+        address receiver
+    )
+        private
+    {
+        tryToAddTokenHolder(sender);
+        tryToAddTokenHolder(receiver);
+    }
 }
 ```
 
