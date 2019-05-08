@@ -247,10 +247,10 @@ Here is the profiling of the algorithm runtime using a 700KB data file:
 
 Operation | Runtime | Percentage |
 ---|---|---|
-1. Sign file | 2m 51s | 99.7% |
-2. Generate challenge | 87.9us | < 0.1% |
-3. Issue proof | 269.76 ms | 0.156% |
-4. Verify proof | 721.2 us | < 0.1% |
+Sign file | 2m 51s | 99.7% |
+Generate challenge | 87.9us | < 0.1% |
+Issue proof | 269.76 ms | 0.156% |
+Verify proof | 721.2 us | < 0.1% |
 Total: | 2m 51.5s |
 
 Clearly, the **signing** step is the most time-consuming part due to the expensive `for-loop` operation (shown in the below) that computes the authentication value for each block.
@@ -299,10 +299,10 @@ parameters | Case 1  | Case 2 | Case 3 |
 ---|---|---|---|
 block-size | s=1 | s=5 | s=10 |
 number-of-block | n=214138 | n=42827 | n=21413 |
-1. Sign file | 1m 9.85s | 53.50s | 1m16.60s | 
-2. Generate challenge | 113.35µs | 106.64µs | 107.71µs |
-3. Issue proof | 369.83ms | 74.11ms | 35.00ms |
-4. Verify proof | 297.58µs | 669.98µs | 1.19ms |
+Sign file | 1m 9.85s | 53.50s | 1m16.60s | 
+Generate challenge | 113.35µs | 106.64µs | 107.71µs |
+Issue proof | 369.83ms | 74.11ms | 35.00ms |
+Verify proof | 297.58µs | 669.98µs | 1.19ms |
 Total: | 1m 10.22s | 53.57s | 1m16.64s | 
 Speedup: | 1X (**baseline**) | 31% faster | 9% slower |
 
@@ -351,11 +351,11 @@ Here is the experiment of different approaches running on the same 2MB data file
 parameters | Case 1 (original) | Case 2 (random) | Case 3 (random) |
 ---|---|---|---|
 block-size | s=5 | s=5 | s=1000 |
-number-of-block | n=393370 | n=393370 | n=1966 |
-1. Sign file | 11m 21s | 3m 11.55s | 542.29ms | 
-2. Generate challenge | 131.57µs | 106.64µs | 1.25ms |
-3. Issue proof | 855.73ms | 1.07s | 8.18ms |
-4. Verify proof | 630.40µs | 312.56µs | 501.15µs |
+number-of-block | n=393370 | n=393370 | n=1966 | 
+Sign file | 11m 21s | 3m 11.55s | 542.29ms | 
+Generate challenge | 131.57µs | 106.64µs | 1.25ms |
+Issue proof | 855.73ms | 1.07s | 8.18ms |
+Verify proof | 630.40µs | 312.56µs | 501.15µs |
 Total: | 11m 22.65s | 3m 12s | 552.23ms | 
 Speedup: | 1X (**baseline**) | 3.55X faster | 1236X faster |
 
