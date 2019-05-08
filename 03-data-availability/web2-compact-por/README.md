@@ -235,8 +235,143 @@ In fact, Ocean can build a verifier network and any node can join and register a
 <img src="img/verify.jpg" />
 
 
+## 4. Performance Enhancement
 
-## 4. Reference
+### 4.1  Performance Tuning
+
+#### 4.1.1 Runtime Breakdown
+
+As we pointed in the experiment (Section 2.4), the bottleneck of runtime performance is the **signing** step, because it computes exponential values over the entire data file and demands a large amount of computing resource.
+
+Here is the profiling of the algorithm runtime using a 700KB data file:
+
+Operation | Runtime | Percentage |
+---|---|---|
+1. Sign file | 2m 51s | 99.7% |
+2. Generate challenge | 87.9us | < 0.1% |
+3. Issue proof | 269.76 ms | 0.156% |
+4. Verify proof | 721.2 us | < 0.1% |
+Total: | 2m 51.5s |
+
+Clearly, the **signing** step is the most time-consuming part due to the expensive `for-loop` operation (shown in the below) that computes the authentication value for each block.
+
+In details, it calculates the exponential &alpha;<sub>j</sub><sup>B<sub>j</sub></sup> where &alpha;<sub>j</sub> is the random number chosen by data provider and B<sub>j</sub> is the byte in this data block. In the process, all exponentials are multiplied together to be a product: &Pi;&alpha;<sub>j</sub><sup>B<sub>j</sub></sup> ( j = 0, ..., `s-1`)
+
+```go
+func GenerateAuthenticator(i int64, s int64, tau_zero Tau_zero, piece []byte, ssk *rsa.PrivateKey) *big.Int {
+	hash_bigint := hashNameI(tau_zero.name, i + 1)
+
+	productory := big.NewInt(1)
+	for j := int64 (0); j < s; j++ {
+		piece_bigint := new(big.Int).SetBytes([]byte{piece[j]})
+		productory.Mul(productory, new(big.Int).Exp(&tau_zero.U[j], piece_bigint, nil))
+	}
+
+	innerProduct := new(big.Int).Mul(hash_bigint, productory)
+	return new(big.Int).Exp(innerProduct, ssk.D, ssk.PublicKey.N)
+}
+```
+
+#### 4.1.2 Parameter Optimization
+
+One factor that has a critical impact on the performance is **block-size** `s`: remember the data file is divided into `n` blocks as m<sub>1</sub>, m<sub>2</sub>, ..., m<sub>n</sub> so that each block has `s` bytes. 
+
+To determie the optimal block-size, we need to tradeoff between two scenarios:
+
+* **if block-size `s` is small**, the data file is splitted into a large number of blocks, which causes many issues:
+	* the size of authentication values becomes large because each block has its own authentication value. Therefore, the cost of communication is increased significantly.
+	* each block will be processed by a thread. As such, a small `s` results in a large number of threads and further requires frequent resource allocation/release, which slows down the runtime performance.
+	<img src="img/tradeoff2.jpg" />
+* **if block-size `s` is large**, there are less number of block but each block has very large size:
+	* for each block, the algorithm calculates the product of exponential values over all data inside the block: &Pi;&alpha;<sub>j</sub><sup>B<sub>j</sub></sup> ( j = 0, ..., `s-1`);
+	* the calculation becomes very slow with a large number of bytes in the same block, since the exponential value grows exponentially;
+	*  moreover, the calculation may cause overflow issue due to exponential growth.
+	<img src="img/tradeoff1.jpg" />
+	
+
+Let us compare the impact of `s` on the performance using a small data file (file size := 214,138 bytes):
+
+* Case 1: each block has 1 byte 
+* Case 2: each block has 5 bytes
+* Case 3: each block has 10 bytes
+
+parameters | Case 1  | Case 2 | Case 3 |
+---|---|---|---|
+block-size | s=1 | s=5 | s=10 |
+number-of-block | n=214138 | n=42827 | n=21413 |
+1. Sign file | 1m 9.85s | 53.50s | 1m16.60s | 
+2. Generate challenge | 113.35µs | 106.64µs | 107.71µs |
+3. Issue proof | 369.83ms | 74.11ms | 35.00ms |
+4. Verify proof | 297.58µs | 669.98µs | 1.19ms |
+Total: | 1m 10.22s | 53.57s | 1m16.64s | 
+Speedup: | 1X (**baseline**) | 31% faster | 9% slower |
+
+Clearly, there exists **an optimal block-size** that delivers the best performance runtime. It is not possible to reach the best performance with either very small or very large block-sizse. 
+
+Using **blocksize = 5 bytes**, we run an experiment on a **2MB data file**, which finished with **11.5 mins**. In practice, it enables a lot of use cases in Ocean framework.
+
+<img src="img/2MBexp.jpg" width=400 />
+
+### 4.2 Parallel Computing
+
+To further improve the runtime, one low hanging fruit is **parallel computing**. In theory, the algorithm breaks the data file into small blocks and each block can be independently processed. It is a great fit to most of parallel computing frameworks.
+
+#### 4.2.1 Multi-threading 
+
+The Go implementation enables the multi-threading using Go routines, therefore, it can utilize all processing cores and threads in the same time. 
+
+ In below experiment, the algorithm spawns four threads (one thread for one block) which are running in the same time. The parallelization cuts the total runtime by 4 times, since the runtime of each thread approximates the total runtime.
+ 
+ <img src="img/concurrency.jpg" width=400 />
+ 
+#### 4.2.2 Hardware Acceleration
+ 
+ When combined with more powerful hardware such as GPU, the performance can be significantly improved by hundreds of times or even more, since each block can be processed in one GPU core and all GPU cores perform the same operations on different blocks.
+ 
+ <img src="img/gpu.jpg" />
+
+### 4.3 Random Sampling Approach
+
+Let us consider a larger case with 1GB data file: remember 2MB data file needs 11.5 mins to finish using blocksize=5, which is our best result. A simple extrapolation can tell us that 1GB data file needs 1000 MB / 2 MB * 11.5 mins = 4 days! Obviously, it is not acceptable in practice.
+
+To improve the performance, we can relax our trustworthy requirement for the proof of retrievability but achieve better scalability. The key idea is to **randomly sample the block** rather than looping through the entire block. It saves us a huge amount of time. 
+
+<img src="img/random.jpg" />
+
+It literally removes the for-loop in the authentication calculation and randomly pick one or a few bytes instead looping through every single byte, which eliminates the performance bottleneck for us. 
+
+Moreover, we can further change the block-size to improve the performance, because we only pick a few bytes from a block no matter how many bytes in one block. As such, less number of blocks is better for performance, althrough it is bad for trustworthy of proofs.
+
+Here is the experiment of different approaches running on the same 2MB data file (file size := 1,966,854 bytes):
+
+* Case 1: original algorithm + each block has 5 bytes
+* Case 2: random-sampling algorithm + each block has 5 bytes
+* Case 3: random-sampling alogrithm + each block has 1000 bytes (**extreme case for demo purpose**)
+
+parameters | Case 1 (original) | Case 2 (random) | Case 3 (random) |
+---|---|---|---|
+block-size | s=5 | s=5 | s=1000 |
+number-of-block | n=393370 | n=393370 | n=1966 |
+1. Sign file | 11m 21s | 3m 11.55s | 542.29ms | 
+2. Generate challenge | 131.57µs | 106.64µs | 1.25ms |
+3. Issue proof | 855.73ms | 1.07s | 8.18ms |
+4. Verify proof | 630.40µs | 312.56µs | 501.15µs |
+Total: | 11m 22.65s | 3m 12s | 552.23ms | 
+Speedup: | 1X (**baseline**) | 3.55X faster | 1236X faster |
+
+It shows the random-sampling algorithm is much faster than the original approach. Moreover, the performance can be significantly improved with large blocksize. 
+
+It is worth mentioning that the performance gain is accomplished at the cost of **trustworthy loss**, since we only check a few bytes rather every one byte in one block. 
+
+Lastly, let us try it on a larger file 111MB (size := 111,709,995 bytes) with super aggressive setting :) 
+
+Block size is set to be 1 MB, therefore, we only has 111 blocks and 111 authenticationn values. The total runtime can be reduced to 7s.
+
+Of course, this is an extreme settings for demo purpose, but you get the idea :) We can definitely set the block-size to be a more reasonable value for higher trustworthy level and achieve affordable runtime in the same time.
+
+<img src="img/111MB.jpg" width=400 />
+
+## 5. Reference
 
 * [1] "[Compact Proofs of Retrievability](./paper.pdf)", Hovav Shacham, Brent Waters, July 2013, Volume 26, Issue 3, pp 442–483.
 * [2] An implementation of publicly verifiable proofs of retrievability: [github](https://github.com/CapacitorSet/por) 
