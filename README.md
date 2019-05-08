@@ -24,7 +24,7 @@ Folder Name   |  Description | Issue |
 0-enigma-mpc |  investigation of Enigma MPC to identify issues of integration with Ocean. | 
 1-fitchain-analysis | 	analysis of Ocean/Fitchain integration; identify "gaps" of integration. | [257](https://github.com/oceanprotocol/ocean/issues/257) |
 2-signaling-mechanism  | research on token mechanism for signaling | [258](https://github.com/oceanprotocol/ocean/issues/258)|
-3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) |
+3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) [294](https://github.com/oceanprotocol/ocean/issues/294) |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
 5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287)
 6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
@@ -35,6 +35,8 @@ Folder Name   |  Description | Issue |
 
 
 ## Updates
+
+* [05/01/2019] proof of data retrievability (PoR) [294](https://github.com/oceanprotocol/ocean/issues/294)
 
 * [04/26/2019] ZK based Pederson Scheme [306](https://github.com/oceanprotocol/ocean/issues/306)
 
