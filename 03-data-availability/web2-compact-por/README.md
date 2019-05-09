@@ -306,7 +306,7 @@ Verify proof | 297.58µs | 669.98µs | 1.19ms |
 Total: | 1m 10.22s | 53.57s | 1m16.64s | 
 Speedup: | 1X (**baseline**) | 31% faster | 9% slower |
 
-Clearly, there exists **an optimal block-size** that delivers the best performance runtime. It is not possible to reach the best performance with either very small or very large block-sizse. 
+Clearly, there exists **an optimal block-size** that delivers the best performance runtime. It is not possible to reach the best performance with either very small or very large block-size. 
 
 Using **blocksize = 5 bytes**, we run an experiment on a **2MB data file**, which finished with **11.5 mins**. In practice, it enables a lot of use cases in Ocean framework.
 
@@ -314,11 +314,11 @@ Using **blocksize = 5 bytes**, we run an experiment on a **2MB data file**, whic
 
 ### 4.2 Parallel Computing
 
-To further improve the runtime, one low hanging fruit is **parallel computing**. In theory, the algorithm breaks the data file into small blocks and each block can be independently processed. It is a great fit to most of parallel computing frameworks.
+Another low hanging fruit to improve the performance is **parallel computing**. In theory, the algorithm breaks the data file into small blocks and each block can be independently processed. It is a great fit to most of parallel computing frameworks.
 
 #### 4.2.1 Multi-threading 
 
-The Go implementation enables the multi-threading using Go routines, therefore, it can utilize all processing cores and threads in the same time. 
+The Go implementation enables the multi-threading using Go routines, therefore, it can utilize all processing cores and threads in the same time.
 
  In below experiment, the algorithm spawns four threads (one thread for one block) which are running in the same time. The parallelization cuts the total runtime by 4 times, since the runtime of each thread approximates the total runtime.
  
@@ -332,7 +332,7 @@ The Go implementation enables the multi-threading using Go routines, therefore, 
 
 ### 4.3 Random Sampling Approach
 
-Let us consider a larger case with 1GB data file: remember 2MB data file needs 11.5 mins to finish using blocksize=5, which is our best result. A simple extrapolation can tell us that 1GB data file needs 1000 MB / 2 MB * 11.5 mins = 4 days! Obviously, it is not acceptable in practice.
+Let us consider a larger case with 1GB data file: remember 2MB data file needs 11.5 mins to finish using blocksize=5. A simple extrapolation can tell us that 1GB data file needs 1000 MB / 2 MB * 11.5 mins = 4 days! Obviously, it is not acceptable in practice.
 
 To improve the performance, we can relax our trustworthy requirement for the proof of retrievability but achieve better scalability. The key idea is to **randomly sample the block** rather than looping through the entire block. It saves us a huge amount of time. 
 
