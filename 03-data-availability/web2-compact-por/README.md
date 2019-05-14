@@ -247,10 +247,10 @@ Here is the profiling of the algorithm runtime using a 700KB data file:
 
 Operation | Runtime | Percentage |
 ---|---|---|
-1. Sign file | 2m 51s | 99.7% |
-2. Generate challenge | 87.9us | < 0.1% |
-3. Issue proof | 269.76 ms | 0.156% |
-4. Verify proof | 721.2 us | < 0.1% |
+Sign file | 2m 51s | 99.7% |
+Generate challenge | 87.9us | < 0.1% |
+Issue proof | 269.76 ms | 0.156% |
+Verify proof | 721.2 us | < 0.1% |
 Total: | 2m 51.5s |
 
 Clearly, the **signing** step is the most time-consuming part due to the expensive `for-loop` operation (shown in the below) that computes the authentication value for each block.
@@ -299,14 +299,14 @@ parameters | Case 1  | Case 2 | Case 3 |
 ---|---|---|---|
 block-size | s=1 | s=5 | s=10 |
 number-of-block | n=214138 | n=42827 | n=21413 |
-1. Sign file | 1m 9.85s | 53.50s | 1m16.60s | 
-2. Generate challenge | 113.35µs | 106.64µs | 107.71µs |
-3. Issue proof | 369.83ms | 74.11ms | 35.00ms |
-4. Verify proof | 297.58µs | 669.98µs | 1.19ms |
+Sign file | 1m 9.85s | 53.50s | 1m16.60s | 
+Generate challenge | 113.35µs | 106.64µs | 107.71µs |
+Issue proof | 369.83ms | 74.11ms | 35.00ms |
+Verify proof | 297.58µs | 669.98µs | 1.19ms |
 Total: | 1m 10.22s | 53.57s | 1m16.64s | 
 Speedup: | 1X (**baseline**) | 31% faster | 9% slower |
 
-Clearly, there exists **an optimal block-size** that delivers the best performance runtime. It is not possible to reach the best performance with either very small or very large block-sizse. 
+Clearly, there exists **an optimal block-size** that delivers the best performance runtime. It is not possible to reach the best performance with either very small or very large block-size. 
 
 Using **blocksize = 5 bytes**, we run an experiment on a **2MB data file**, which finished with **11.5 mins**. In practice, it enables a lot of use cases in Ocean framework.
 
@@ -314,11 +314,11 @@ Using **blocksize = 5 bytes**, we run an experiment on a **2MB data file**, whic
 
 ### 4.2 Parallel Computing
 
-To further improve the runtime, one low hanging fruit is **parallel computing**. In theory, the algorithm breaks the data file into small blocks and each block can be independently processed. It is a great fit to most of parallel computing frameworks.
+Another low hanging fruit to improve the performance is **parallel computing**. In theory, the algorithm breaks the data file into small blocks and each block can be independently processed. It is a great fit to most of parallel computing frameworks.
 
 #### 4.2.1 Multi-threading 
 
-The Go implementation enables the multi-threading using Go routines, therefore, it can utilize all processing cores and threads in the same time. 
+The Go implementation enables the multi-threading using Go routines, therefore, it can utilize all processing cores and threads in the same time.
 
  In below experiment, the algorithm spawns four threads (one thread for one block) which are running in the same time. The parallelization cuts the total runtime by 4 times, since the runtime of each thread approximates the total runtime.
  
@@ -332,7 +332,7 @@ The Go implementation enables the multi-threading using Go routines, therefore, 
 
 ### 4.3 Random Sampling Approach
 
-Let us consider a larger case with 1GB data file: remember 2MB data file needs 11.5 mins to finish using blocksize=5, which is our best result. A simple extrapolation can tell us that 1GB data file needs 1000 MB / 2 MB * 11.5 mins = 4 days! Obviously, it is not acceptable in practice.
+Let us consider a larger case with 1GB data file: remember 2MB data file needs 11.5 mins to finish using blocksize=5. A simple extrapolation can tell us that 1GB data file needs 1000 MB / 2 MB * 11.5 mins = 4 days! Obviously, it is not acceptable in practice.
 
 To improve the performance, we can relax our trustworthy requirement for the proof of retrievability but achieve better scalability. The key idea is to **randomly sample the block** rather than looping through the entire block. It saves us a huge amount of time. 
 
@@ -351,11 +351,11 @@ Here is the experiment of different approaches running on the same 2MB data file
 parameters | Case 1 (original) | Case 2 (random) | Case 3 (random) |
 ---|---|---|---|
 block-size | s=5 | s=5 | s=1000 |
-number-of-block | n=393370 | n=393370 | n=1966 |
-1. Sign file | 11m 21s | 3m 11.55s | 542.29ms | 
-2. Generate challenge | 131.57µs | 106.64µs | 1.25ms |
-3. Issue proof | 855.73ms | 1.07s | 8.18ms |
-4. Verify proof | 630.40µs | 312.56µs | 501.15µs |
+number-of-block | n=393370 | n=393370 | n=1966 | 
+Sign file | 11m 21s | 3m 11.55s | 542.29ms | 
+Generate challenge | 131.57µs | 106.64µs | 1.25ms |
+Issue proof | 855.73ms | 1.07s | 8.18ms |
+Verify proof | 630.40µs | 312.56µs | 501.15µs |
 Total: | 11m 22.65s | 3m 12s | 552.23ms | 
 Speedup: | 1X (**baseline**) | 3.55X faster | 1236X faster |
 
