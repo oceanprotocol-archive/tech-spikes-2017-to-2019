@@ -32,9 +32,13 @@ Folder Name   |  Description | Issue |
 8-pricing | research and development of a data pricing framework | |
 9-arweave | investigate ARWeave for data availability proof | [305](https://github.com/oceanprotocol/ocean/issues/305) |
 10-zk-pedersen | Investigating zero-knowledge Pedersen scheme for whitelisting condition|[306](https://github.com/oceanprotocol/ocean/issues/306)|
+11-meta-tx | research meta transaction for better UX experience | [308](https://github.com/oceanprotocol/ocean/issues/308)
+12-azure-computing | research confidential computing in Azure | [309](https://github.com/oceanprotocol/ocean/issues/309)
 
 
 ## Updates
+
+* [05/14/2019] meta transaction [308](https://github.com/oceanprotocol/ocean/issues/308)
 
 * [05/01/2019] proof of data retrievability (PoR) [294](https://github.com/oceanprotocol/ocean/issues/294)
 
@@ -61,10 +65,6 @@ Folder Name   |  Description | Issue |
 * [01/26/2019] ocean/fitchain analysis
 
 * [01/16/2019] setup framework of repository
-
-
-
-
 
 
 ## License
