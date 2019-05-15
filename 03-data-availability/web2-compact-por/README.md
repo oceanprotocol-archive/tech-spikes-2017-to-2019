@@ -408,7 +408,6 @@ In this section, we analyze the potential attack vectors for random sampling alg
 * **inaccessible data files:** storage provider fails to make the data files available due to various reasons (e.g., network off-line, power outage, earthquake, or deliberately remove files to free more space)
 	* none of the bytes in blocks can be verified;
 	* our scheme can efficiently detect this storage failure and alert verifiers;
-	* we have very high security in this scenario.
 
 * **tampered bytes in blocks:** storage provider may unintentionally or intentionally modify the bytes in blocks of data files (e.g., bit flipping, hardware error, hacker attack, or modify bytes on purpose)
 	* **Case 1: modify the bytes that under checking**
