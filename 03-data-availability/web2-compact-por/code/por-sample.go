@@ -120,7 +120,7 @@ func St(ssk *rsa.PrivateKey, file *os.File) (_idx Rand_bytes, _tau Tau, _sigma [
 	tau := Tau{Tau_zero: tau_zero, signature: t_0_signature}
 
 	// generate random index of bytes in block
-	num := int64(100)
+	num := int64(1)
 	rand_bytes := Rand_bytes{num: num}
 	rand_bytes.Idx = make([]int64, num)
 	for i := int64 (0); i < num; i++ {

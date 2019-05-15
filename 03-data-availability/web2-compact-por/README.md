@@ -476,12 +476,18 @@ Let us plot runtime vs. security level in the diagram. It shows the growth of ru
 
 All the codes can be found in the same directory under `code` folder:
 
-* `por.go`:  the original algorithm
-* `por-sample.go`: the random sampling algorithm; it has two critical parameters to tune the performance and security:
+* [`por.go`](./code/por.go):  the original algorithm
+* [`por-sample.go`](./code/por-sample.go): the random sampling algorithm; it has two critical parameters to tune the performance and security:
 	* line 45: `s := int64 (1000)` is the block-size
 	* line 123: `num := int64(100)` is the number bytes randomly chosen from one block
 
-In both program, the input file is set in the `main` function as `fileName := "data2.txt"`. Simply change it to be your testing data file. 
+In both program, the input file is set in the `main` function inside the program:
+
+```go
+fileName := "data2.txt"
+file, err := os.Open(fileName)
+```
+Simply change it to be your testing data file. 
 
 To run the code, use the command in the terminal:
 
