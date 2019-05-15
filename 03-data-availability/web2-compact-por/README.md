@@ -9,6 +9,33 @@ editor: Fang Gong <fang@oceanprotocol.com>
 date: 05/06/2019
 ```
 
+* [1. Introduction](#1-introduction)
+* [2. Compact Proof of Data Retrievability](#2-compact-proof-of-data-retrievability)
+	+ [2.1 Workflow](#21-workflow)
+	+ [2.2 Operation Structure](#22-operation-structure)
+	+ [2.3 Algorithm Details](#23-algorithm-details)
+	  - [2.3.1 Authentication values calculation](#231-authentication-values-calculation)
+	  - [2.3.2 Challenges generation](#232-challenges-generation)
+	  - [2.3.3 Proof generation](#233-proof-generation)
+	  - [2.3.4 Proof verification](#234-proof-verification)
+	+ [2.4 Experiment](#24-experiment)
+* [3. Integration with Ocean](#3-integration-with-ocean)
+* [4. Performance Enhancement](#4-performance-enhancement)
+  - [4.1  Performance Tuning](#41--performance-tuning)
+	  - [4.1.1 Runtime Breakdown](#411-runtime-breakdown)
+	  - [4.1.2 Parameter Optimization](#412-parameter-optimization)
+  - [4.2 Parallel Computing](#42-parallel-computing)
+	  - [4.2.1 Multi-threading](#421-multi-threading)
+	  - [4.2.2 Hardware Acceleration](#422-hardware-acceleration)
+  - [4.3 Random Sampling Approach](#43-random-sampling-approach)
+* [5. Security vs. Performance](#5-security-vs-performance)
+	+ [5.1 Attack Vectors](#51-attack-vectors)
+	+ [5.2 Security Level](#52-security-level)
+	+ [5.3 Tradeoff](#53-tradeoff)
+* [6. Implementation](#6-implementation)
+* [7. Reference](#7-reference)
+* [6. License](#6-license)
+
 ## 1. Introduction
 
 The solution to a key question remains unclear to us: how to verify data retrievability? That means the storage provider must provide the continued availability of user's data and be able to prove to a verifier that the data is stored and available for access. 
@@ -371,7 +398,100 @@ Of course, this is an extreme settings for demo purpose, but you get the idea :)
 
 <img src="img/111MB.jpg" width=400 />
 
-## 5. Reference
+
+## 5. Security vs. Performance
+
+In this section, we analyze the potential attack vectors for random sampling algorithm and analyze the tradeoff between security and performance. 
+
+### 5.1 Attack Vectors
+
+* **inaccessible data files:** storage provider fails to make the data files available due to various reasons (e.g., network off-line, power outage, earthquake, or deliberately remove files to free more space)
+	* none of the bytes in blocks can be verified;
+	* our scheme can efficiently detect this storage failure and alert verifiers;
+	* we have very high security in this scenario.
+
+* **tampered bytes in blocks:** storage provider may unintentionally or intentionally modify the bytes in blocks of data files (e.g., bit flipping, hardware error, hacker attack, or modify bytes on purpose)
+	* **Case 1: modify the bytes that under checking**
+		* the good scenario is the tampered bytes are checked by verfiers, therefore, the change of data file will be found and storage provider will be penalized.
+		* our scheme can effectively detect this data file changes. 
+		
+		<img src="img/case1.jpg" />
+	
+	* **Case 2: modify the bytes that are not checked**
+		* the bad scenario is the tampered bytes are not checked by verifiers, therefore, the change of data file will not be found by our scheme;
+		* however, storage provider has no incentive to do so, because the data file occupies the same amount of storage space and provider cannot get extra storage space in this way. 
+		* on the contrary, providers can receive network rewards by being honest;
+		* moreover, providers cannot delete any bytes in blocks to release storage space, as it changes the way of splitting data files and our scheme will capture this change. 
+		
+		<img src="img/case2.jpg" />
+
+
+### 5.2 Security Level
+
+Obviously, more bytes verifiers can check, more security the scheme can have. The most important parameter is the **number of bytes** that the scheme randomly chooses from each block to check.
+
+To measure the security impact from the parameter, we can define `Security Level` &gamma; for this purpose:
+
+
+&gamma; =  &alpha; / &beta;
+
+* &alpha; - number of bytes randomly chosen from the block;
+* &beta; - total number of bytes in the same block
+
+Higher percentage of bytes randomly chosen from the block indicates higher security level, as the scheme has higher probability to catch any change to the data file. 
+
+As such, the original algorithm that checks every byte in blocks has the highest 
+security level, however, its performance is not acceptable for production.
+
+Note that &gamma; is the **security level for one-time checking**, and the overall security level can be significantly improved when verifiers repeat the checking for many times over the time.
+
+
+### 5.3 Tradeoff 
+
+Our random sampling algorithm sacrifices certain security level for better performance and scalability. Now, let us take a look at the tradeoff between them.
+
+We use the **2 MB** data file for the experiment and **block-size = 1000 bytes**. 
+
+Note that smaller blocksize works better for original algorithm that checks each byte due to the overflow issue, while larger blocksize is better for ramdom sampling algorithm. However, when more bytes need to be checked in the random sampling algorithm, its performance may become even worse than the original with smaller blocksize due to the computing of exponential values.
+
+Here is the performance vs. security comparision for **one-time checking** using random sampling algorithm:
+
+* &gamma; - security level
+* &alpha; - number of bytes randomly chosen from the block;
+* &beta; - total number of bytes in the same block
+ 
+&gamma; | 0.1% | 0.5% | 1% | 2% | 3% | 4% | 5% | 10% |
+---|---|---|---|---|---| ---| ---| ---|
+&alpha; (unit: bytes) |  1 | 5 | 10 |  20 | 30 | 40 | 50 | 100 |
+&beta; (unit: bytes )| 1000 | 1000 | 1000 | 1000 | 1000 | 1000 | 1000 | 1000 |
+Runtime | 568.45ms | 2.33s | 6.97s | 27.45s | 1m |  1m 47s | 2m 38s | 10m 44s |
+Slowdown | 1X (base) | 4X | 12X | 48X | 105X | 188X | 278X | 1133X |
+
+Let us plot runtime vs. security level in the diagram. It shows the growth of runtime is **super-linear** w.r.t. the increase of security level. 
+
+<img src="img/plot.jpg" />
+ 
+
+## 6. Implementation
+
+All the codes can be found in the same directory under `code` folder:
+
+* `por.go`:  the original algorithm
+* `por-sample.go`: the random sampling algorithm; it has two critical parameters to tune the performance and security:
+	* line 45: `s := int64 (1000)` is the block-size
+	* line 123: `num := int64(100)` is the number bytes randomly chosen from one block
+
+In both program, the input file is set in the `main` function as `fileName := "data2.txt"`. Simply change it to be your testing data file. 
+
+To run the code, use the command in the terminal:
+
+```
+$ go run por-sample.go
+```
+
+Have fun! :)
+
+## 7. Reference
 
 * [1] "[Compact Proofs of Retrievability](./paper.pdf)", Hovav Shacham, Brent Waters, July 2013, Volume 26, Issue 3, pp 442–483.
 * [2] An implementation of publicly verifiable proofs of retrievability: [github](https://github.com/CapacitorSet/por) 

@@ -35,9 +35,14 @@ type Tau struct {
 	signature []byte
 }
 
+type Rand_bytes struct {
+	num   int64				// number of bytes
+	Idx   []int64   // index of randomly selected bytes
+}
+
 func Split(file *os.File) (M [][]byte, S int64, N int64) {
 	file.Seek(0, 0)
-	s := int64 (5)
+	s := int64 (1000)
 
 	fileInfo, err := file.Stat()
 	if err != nil {
@@ -45,6 +50,7 @@ func Split(file *os.File) (M [][]byte, S int64, N int64) {
 	}
 	size := fileInfo.Size()
 	n := int64 (math.Ceil(float64 (size / s)))
+
 	// matrix is indexed as m_ij, so the first dimension has n items and the second has s.
 	matrix := make([][]byte, n)
 	for i := int64 (0); i < n; i++ {
@@ -66,20 +72,21 @@ func hashNameI(name []byte, i int64) *big.Int {
 	return new(big.Int).SetBytes(hash_array[:])
 }
 
-func GenerateAuthenticator(i int64, s int64, tau_zero Tau_zero, piece []byte, ssk *rsa.PrivateKey) *big.Int {
+func GenerateAuthenticator(idx Rand_bytes, i int64, s int64, tau_zero Tau_zero, piece []byte, ssk *rsa.PrivateKey) *big.Int {
 	hash_bigint := hashNameI(tau_zero.name, i + 1)
 
 	productory := big.NewInt(1)
-	for j := int64 (0); j < s; j++ {
-		piece_bigint := new(big.Int).SetBytes([]byte{piece[j]})
-		productory.Mul(productory, new(big.Int).Exp(&tau_zero.U[j], piece_bigint, nil))
+	for j := int64 (0); j < idx.num; j++ {
+		k := idx.Idx[j]
+		piece_bigint := new(big.Int).SetBytes([]byte{piece[k]})
+		productory.Mul(productory, new(big.Int).Exp(&tau_zero.U[k], piece_bigint, nil))
 	}
 
 	innerProduct := new(big.Int).Mul(hash_bigint, productory)
 	return new(big.Int).Exp(innerProduct, ssk.D, ssk.PublicKey.N)
 }
 
-func St(ssk *rsa.PrivateKey, file *os.File) (_tau Tau, _sigma []*big.Int) {
+func St(ssk *rsa.PrivateKey, file *os.File) (_idx Rand_bytes, _tau Tau, _sigma []*big.Int) {
 	matrix, s, n := Split(file)
 	tau_zero := Tau_zero{n: n}
 
@@ -112,19 +119,31 @@ func St(ssk *rsa.PrivateKey, file *os.File) (_tau Tau, _sigma []*big.Int) {
 	}
 	tau := Tau{Tau_zero: tau_zero, signature: t_0_signature}
 
+	// generate random index of bytes in block
+	num := int64(100)
+	rand_bytes := Rand_bytes{num: num}
+	rand_bytes.Idx = make([]int64, num)
+	for i := int64 (0); i < num; i++ {
+		idx, err := rand.Int(rand.Reader, big.NewInt(s))
+		if err != nil {
+			panic(err)
+		}
+		rand_bytes.Idx[i] = idx.Int64()
+	}
+
+
 	sigmas := make([]*big.Int, n)
-	// http://www.golangpatterns.info/concurrency/parallel-for-loop
 	sem := make(chan byte, n);
 	for i := int64 (0); i < n; i++ {
 		go func(i int64) {
-			sigmas[i] = GenerateAuthenticator(i, s, tau_zero, matrix[i], ssk)
+			sigmas[i] = GenerateAuthenticator(rand_bytes, i, s, tau_zero, matrix[i], ssk)
 			sem <- 0;
 		} (i)
 	}
 	for i := int64 (0); i < n; i++ {
 		<- sem
 	}
-	return tau, sigmas
+	return rand_bytes, tau, sigmas
 }
 
 type QElement struct {
@@ -181,18 +200,19 @@ func Verify_one(tau Tau, spk *rsa.PublicKey) []QElement {
 	return ret
 }
 
-func Prove(q []QElement, authenticators []*big.Int, spk *rsa.PublicKey, file *os.File) (_Mu []*big.Int, _Sigma *big.Int) {
+func Prove(idx Rand_bytes, q []QElement, authenticators []*big.Int, spk *rsa.PublicKey, file *os.File) (_Mu []*big.Int, _Sigma *big.Int) {
 	matrix, s, _ := Split(file)
 
 	mu := make([]*big.Int, s)
-	for j := int64 (0); j < s; j++ {
-		mu_j := big.NewInt(0)
+	for j := int64 (0); j < idx.num; j++ {
+		k := idx.Idx[j]
+		mu_k := big.NewInt(0)
 		for _, qelem := range q {
-			char := new(big.Int).SetBytes([]byte{matrix[qelem.I - 1][j]})
+			char := new(big.Int).SetBytes([]byte{matrix[qelem.I - 1][k]})
 			product := new(big.Int).Mul(new(big.Int).SetInt64(qelem.V), char)
-			mu_j.Add(mu_j, product)
+			mu_k.Add(mu_k, product)
 		}
-		mu[j] = mu_j
+		mu[k] = mu_k
 	}
 
 	sigma := new(big.Int).SetInt64(1)
@@ -203,8 +223,7 @@ func Prove(q []QElement, authenticators []*big.Int, spk *rsa.PublicKey, file *os
 	return mu, sigma
 }
 
-func Verify_two(tau Tau, q []QElement, mus []*big.Int, sigma *big.Int, spk *rsa.PublicKey) bool {
-	// Todo: check that the values are in range
+func Verify_two(idx Rand_bytes, tau Tau, q []QElement, mus []*big.Int, sigma *big.Int, spk *rsa.PublicKey) bool {
 	first := new(big.Int).SetInt64(1)
 	for _, qelem := range q {
 		hash := hashNameI(tau.Tau_zero.name, qelem.I)
@@ -214,9 +233,9 @@ func Verify_two(tau Tau, q []QElement, mus []*big.Int, sigma *big.Int, spk *rsa.
 	first.Mod(first, spk.N)
 
 	second := new(big.Int).SetInt64(1)
-	s := int64 (5)
-	for j := int64 (0); j < s; j++ {
-		second.Mul(second, new(big.Int).Exp(&tau.Tau_zero.U[j], mus[j], spk.N))
+	for j := int64 (0); j < idx.num; j++ {
+		k := idx.Idx[j]
+		second.Mul(second, new(big.Int).Exp(&tau.Tau_zero.U[k], mus[k], spk.N))
 	}
 	second.Mod(second, spk.N)
 
@@ -233,7 +252,7 @@ func main() {
 	now := time.Now()
   p(now)
 
-	fileName := "data.txt"
+	fileName := "data2.txt"
 	fmt.Printf("Signing file ")
 	fmt.Printf(fileName)
 	fmt.Printf("\n")
@@ -241,7 +260,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	tau, authenticators := St(ssk, file)
+	idx, tau, authenticators := St(ssk, file)
 	fmt.Printf("\nSigned!\n")
 
 	signEnd := time.Now()
@@ -257,7 +276,7 @@ func main() {
 	p(challenge)
 
 	fmt.Printf("Issuing proof...\n")
-	mu, sigma := Prove(q, authenticators, spk, file)
+	mu, sigma := Prove(idx, q, authenticators, spk, file)
 	fmt.Printf("Issued!\n")
 
 	proofEnd := time.Now()
@@ -265,7 +284,7 @@ func main() {
 	p(proof)
 
 	fmt.Printf("Verifying proof...\n")
-	yes := Verify_two(tau, q, mu, sigma, spk)
+	yes := Verify_two(idx, tau, q, mu, sigma, spk)
 	fmt.Printf("Result: %t!\n", yes)
 
 	verify := "Verifying proof time is: "+time.Now().Sub(proofEnd).String()
