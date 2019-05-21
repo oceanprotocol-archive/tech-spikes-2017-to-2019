@@ -5,10 +5,37 @@
 ```
 name: research on token migration.
 type: research
-status: initial draft
+status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
-date: 03/19/2019
+date: 05/20/2019
 ```
+
+- [1. Introduction](#1-introduction)
+- [2. Available Options](#2-available-options)
+  * [2.1 Exchanges](#21-exchanges)
+	  * [Swap Partner](#swap-partner)
+  * [2.2 Uniswap](#22-uniswap)
+  * [2.3 Token Bridge](#23-token-bridge)
+  * [2.4 Mirror Copy](#24-mirror-copy)
+- [3. Case Study](#3-case-study)
+  * [3.1 Aeternity - using Token Bridge](#31-aeternity---using-token-bridge)
+  * [3.2 EOS - using Mirror Copy](#32-eos---using-mirror-copy)
+  * [3.3 Melonport - using Uniswap-type Exchange](#33-melonport---using-uniswap-type-exchange)
+  * [3.4 Cosmos - using Mirror-Copy type method](#34-cosmos---using-mirror-copy-type-method)
+- [3. Recommended Solution](#3-recommended-solution)
+- [4. Token Contract Changes](#4-token-contract-changes)
+- [5. Governance](#5-governance)
+  * [5.1 Component 1: Token Contract](#51-component-1--token-contract)
+	    + [Functionality](#functionality)
+	    + [Roles & Actions](#roles---actions)
+  * [5.2 Component 2: Token Bridge](#52-component-2--token-bridge)
+	    + [Functionality](#functionality-1)
+	    + [Roles & Actions](#roles---actions-1)
+  * [5.3 Token Migration](#53-token-migration)
+	    + [Step 1: Retire Ceremony](#step-1--retire-ceremony)
+	    + [Step 2: MIGRATION CEREMONY](#step-2--migration-ceremony)
+	    + [Step 3: NETWORK REWARD CEREMONY](#step-3--network-reward-ceremony)
+	    + [Step 4: BRIDGE CEREMONY](#step-4--bridge-ceremony)
 
 ## 1. Introduction
 
@@ -498,6 +525,162 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
     }
 }
 ```
+
+## 5. Governance
+
+In this section, we investigate the governance of token contract and token migration which includes different roles and actions.
+
+### 5.1 Component 1: Token Contract
+
+#### Functionality
+
+* mint, burn, transfer tokens (basic functions in ERC20 token contract)
+* distribute tokens (i.e., genesis distribution, reward distribution)
+* govern policy of token distribution (e.g., recipient accounts & token amount, vesting schedule, etc.)
+* govern the token contract (e.g., pause the transfer, destroy contract, etc.)
+
+#### Roles & Actions
+
+* **Deployer**: the actor who deploys the token contract to blockchain network
+	* deploy token contract to blockchain
+	* transfer ownership of token contract to the Owner
+	<img src="img/deployer.jpg" />
+* **Owner**: the actor who owns the ownership of token contract
+	* pause the token transfer
+	* take snapshot of the current token balance
+	* destroy the token contract
+	<img src="img/owner.jpg" />
+* **Minter**: the actor who mint the ERC20 tokens
+	* mint new tokens from the token contract up to the total supply
+	* transfer minted tokens to distributors
+		* initial token supply is transferred to genesis distributor
+		* afterwards, mint new tokens periodically and transfer to reward distributor
+	<img src="img/minter.jpg" />
+* **Genesis distributor**: the actor who distribute the initial token supply
+	* distribute initial supply of tokens to recipients
+	* release tokens to recipients according to vesting schedule if there is any
+	<img src="img/genesis_distributor.jpg" />
+* **Genesis governor**: the actor who govern the policy of genesis distribution
+	* govern the recipient accounts and their token amount
+	* govern the vesting schedule of tokens to team, OPF and etc.
+	<img src="img/genesis_governor.jpg" />
+* **Reward distributor**: the actor who determines the recipient of reward tokens
+	* create a candidate list every epoch
+	* randomly pick a recipient from the candidate list
+	* distribute network rewards to the chosen recipient
+	<img src="img/reward_distributor.jpg" />
+* **Reward governor**: the actor who govern the policy of token rewards
+	* govern the amount of network reward and other parameters
+	* govern the method to choose the recipient from the candidate list
+	<img src="img/reward_governor.jpg" />
+
+
+### 5.2 Component 2: Token Bridge  
+
+#### Functionality
+
+* Lock/unlock Ocean tokens in Mainnet
+* Mint/Burn/Transfer ERC20 tokens in POA network
+* relay transactions through off-chain validators
+
+
+#### Roles & Actions
+
+* **Token Bridge Deployer**: the actor who deploys token bridge contract
+	* deploy token bridge contract to both networks (mainnet & POA)
+	* transfer ownership of bridge contract to its Owner 
+	
+	<img src="img/bridge_deployer.jpg" />
+* **Foriegn Bridge Owner**: the actor who owns the ownership of foriegn bridge contract
+	* modify the token contract linked to token bridge
+	* govern the required number of signatures to confirm a transaction
+	* add or remove validators in the registry
+	
+	<img src="img/foreign_bridge_owner.jpg" />
+* **Validator**: the actors who relay tx from one blockchain network to the other; it is **off-chain** component.
+	
+* **Home Bridge Owner**: the actor who owns the ownership of home bridge contract
+	* govern the required number of signatures to confirm a transaction
+	* add or remove validators in the registry
+	
+	<img src="img/home_bridge_owner.jpg" />
+	
+### 5.3 Token Migration
+
+#### Step 1: Retire Ceremony
+
+* the old token contract freezes
+	* **role**: token contract owner 
+	* **action**: pauses the token transfer 
+	* **result**: Ocean token contract is freezed
+
+* a snapshot of the balances is made
+	* **role**: token contract owner 
+	* **action**: call function `getAccounts` to retrieve all tokenholder account and balance
+	* **result**: a snapshot (i.e., account & balance) is generated
+
+<img src="img/retire_ceremony.jpg" />
+
+
+#### Step 2: MIGRATION CEREMONY
+
+* the new token contract gets deployed
+	* **role**: deployer of new token contract
+	* **action**: deploy token contract into mainnet and transfer ownership to owner (e.g., multi-sig wallet)
+	* **result**: new Ocean token contract is deployed
+* the genesis minter will mint 49% of the tokens
+	* **role**: genesis minter
+	* **action**: mint initial supply (i.e., 49% of total supply) and transfer to genesis distributor
+	* **result**: the initial token supply is deposited in genesis distributor account
+* the genesis distributor migrate 49% of the tokens to the snapshot
+	* **role**: genesis distributor
+	* **action**: 
+		* transfer genesis tokens to existing tokenholders to the snapshot 
+		* enforce vesting schedule for team and OPF if there is any
+	* **result**: tokenholders receive the same amount of new Ocean tokens
+
+<img src="img/migration_ceremony.jpg" />
+
+
+
+#### Step 3: NETWORK REWARD CEREMONY
+
+* minter will not mint reward tokens until reward governor activates
+	* **role**: reward governor
+	* **action**: activate or deactivate the reward token minting 
+	* **result**: minter remains inactive until reward governor activates minting of reward tokens
+* minter will mints reward tokens per reward epoch after being activated
+	* **role**: minter
+	* **action**: 
+		* mint reward tokens every reward epoch 
+		* transfer reward tokens to reward distributor in POA network over the bridge
+	* **result**: reward distributor in POA network receives reward tokens every epoch
+* reward distributor choose recipient and transfer tokens to them in POA
+	* **role**: reward distributor
+	* **action**: 
+		* choose a reward recipient from the candidates in each reward epoch
+		* transfer available reward tokens to the recipient
+	* **result**: recipient receives the reward tokens for current epoch
+
+<img src="img/reward_ceremony.jpg" />
+
+
+#### Step 4: BRIDGE CEREMONY
+
+* the token bridge gets deployed on ETH mainnet and OCEAN POA
+	* **role**: bridge deployer
+	* **action**: deploy bridge contract to mainnet and POA 
+	* **result**: bridge contract get deployed in both networks
+* bridge owners activate validators and config settings for token transfer over the bridge
+	* **role**: bridge owners
+	* **action**: 
+		* add or remove validators in the registry
+		* update required number of signatures to confirm the relayed transactions
+	* **result**: validators start to relay token transfer transactions when activated
+
+<img src="img/bridge_ceremony.jpg"/>
+
+
 
 ## License
 

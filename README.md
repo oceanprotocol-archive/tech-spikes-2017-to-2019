@@ -26,7 +26,7 @@ Folder Name   |  Description | Issue |
 2-signaling-mechanism  | research on token mechanism for signaling | [258](https://github.com/oceanprotocol/ocean/issues/258)|
 3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) [294](https://github.com/oceanprotocol/ocean/issues/294) |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
-5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287)
+5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287) [310](https://github.com/oceanprotocol/ocean/issues/310)
 6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
 7-arbitrage-bot | build an arbitrage bot between Uniswap and Exchange | 
 8-pricing | research and development of a data pricing framework | |
@@ -37,6 +37,8 @@ Folder Name   |  Description | Issue |
 
 
 ## Updates
+
+* [05/20/2019] governance of token migration ([310](https://github.com/oceanprotocol/ocean/issues/310))
 
 * [05/14/2019] meta transaction [308](https://github.com/oceanprotocol/ocean/issues/308)
 
