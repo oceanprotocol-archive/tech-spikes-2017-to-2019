@@ -83,7 +83,7 @@ Total runtime is: 14.097049579s
 * `provider.go`: Read blocks from data file concurrently to save time and space (rather than load entire file at one time)
 
 ```go
-// setup buffer chucks for reading file
+	// setup buffer chucks for reading file
 	chunksizes := make([]chunk, n)
 
 	// All buffer sizes are the same in the normal case. Offsets depend on the
@@ -98,13 +98,13 @@ Total runtime is: 14.097049579s
 	sem := make(chan byte, n);
 	for i := int64 (0); i < n; i++ {
 		go func(chunksizes []chunk, i int64) {
-			// read data block into local buffer
-			chunk := chunksizes[i]
+		// read data block into local buffer
+		chunk := chunksizes[i]
 	    	buffer := make([]byte, s)
 	    	file.ReadAt(buffer, chunk.offset)
-			// calculate authenticator
-			sigmas[i] = GenerateAuthenticator(sample, tau, i, s, tau_zero, buffer, ssk)
-			sem <- 0;
+		// calculate authenticator
+		sigmas[i] = GenerateAuthenticator(sample, tau, i, s, tau_zero, buffer, ssk)
+		sem <- 0;
 		} (chunksizes, i)
 	}
 ```
@@ -117,7 +117,7 @@ tau_zero.U = make([]big.Int, s)
 		k := sample.Idx[i]
 		result, err := rand.Int(rand.Reader, ssk.PublicKey.N)
 		if err != nil {
-			panic(err)
+		panic(err)
 		}
 		tau_zero.U[k] = *result
 	}
@@ -129,11 +129,11 @@ tau_zero.U = make([]big.Int, s)
 for j := int64 (0); j < sample.NumBytes; j++ {
 	k := sample.Idx[j]
 	mu_k := big.NewInt(0)
-    for _, qelem := range q {
-      	// read data block into buffer
-	   buffer := make([]byte, s)
-	   file.ReadAt(buffer, int64(s * (qelem.I - 1)))
-      	// calculate proof
+    	for _, qelem := range q {
+      		// read data block into buffer
+	   	buffer := make([]byte, s)
+	   	file.ReadAt(buffer, int64(s * (qelem.I - 1)))
+      		// calculate proof
 		char := new(big.Int).SetBytes([]byte{buffer[k]})
 		product := new(big.Int).Mul(new(big.Int).SetInt64(qelem.V), char)
 		mu_k.Add(mu_k, product)
