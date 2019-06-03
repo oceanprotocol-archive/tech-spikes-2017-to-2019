@@ -24,7 +24,7 @@ Folder Name   |  Description | Issue |
 0-enigma-mpc |  investigation of Enigma MPC to identify issues of integration with Ocean. | 
 1-fitchain-analysis | 	analysis of Ocean/Fitchain integration; identify "gaps" of integration. | [257](https://github.com/oceanprotocol/ocean/issues/257) |
 2-signaling-mechanism  | research on token mechanism for signaling | [258](https://github.com/oceanprotocol/ocean/issues/258)|
-3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) [294](https://github.com/oceanprotocol/ocean/issues/294) |
+3-data-availability | investigate how to retreive proof of data availability | [244](https://github.com/oceanprotocol/ocean/issues/244) [281](https://github.com/oceanprotocol/ocean/issues/281) [294](https://github.com/oceanprotocol/ocean/issues/294) [334](https://github.com/oceanprotocol/ocean/issues/334) |
 4-uniswap | research of adding Ocean to Uniswap | [286](https://github.com/oceanprotocol/ocean/issues/286) |
 5-token-migration | research of migrating tokens | [287](https://github.com/oceanprotocol/ocean/issues/287) [310](https://github.com/oceanprotocol/ocean/issues/310)
 6-random-number | integration of Uniswap + Chainlink to import off-chain random numbers | [288](https://github.com/oceanprotocol/ocean/issues/288)
@@ -37,6 +37,8 @@ Folder Name   |  Description | Issue |
 
 
 ## Updates
+
+* [06/03/2019] refactoring por and [POC](03-data-availability/web2-compact-por/por-refactoring) ([334](https://github.com/oceanprotocol/ocean/issues/334))
 
 * [05/20/2019] governance of token migration ([310](https://github.com/oceanprotocol/ocean/issues/310))
 
