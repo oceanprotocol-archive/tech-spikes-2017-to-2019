@@ -30,10 +30,11 @@ type ProofData struct {
   Mu    []big.Int 	`json:"mu"`
   Sigma *big.Int     `json:"sigma"`
 }
+
 // split file into blocks
 // input: "s": blocksize
 // output: "M": data blocks, "S": blocksize, "N": number of blocks
-func Split(file *os.File, s int64) (M [][]byte, S int64, N int64) {
+func Split(file *os.File, s int64) (S int64, N int64) {
 	file.Seek(0, 0)
 
 	fileInfo, err := file.Stat()
@@ -42,28 +43,7 @@ func Split(file *os.File, s int64) (M [][]byte, S int64, N int64) {
 	}
 	size := fileInfo.Size()
 	n := int64 (math.Ceil(float64 (size / s)))
-
-  fmt.Print("\n")
-	fmt.Print(">>filesize (bytes) :=")
-	fmt.Print(size)
-	fmt.Print("\n")
-	fmt.Print(">>splitted blocks :=")
-	fmt.Print(n)
-	fmt.Print("\n")
-	fmt.Print(">>each block size (bytes) :=")
-	fmt.Print(s)
-	fmt.Print("\n")
-	// matrix is indexed as m_ij, so the first dimension has n items and the second has s.
-	matrix := make([][]byte, n)
-	for i := int64 (0); i < n; i++ {
-		piece := make([]byte, s)
-		_, err := file.Read(piece)
-		if err != nil {
-			panic(err)
-		}
-		matrix[i] = piece
-	}
-	return matrix, s, n
+	return s, n
 }
 
 // load provider's public key from PEM file to generate proofs
@@ -109,7 +89,7 @@ func Prove(sample_file string, challenge_file string, auth_file string, spk_file
 	if err != nil {
 		panic(err)
 	}
-  matrix, s, n := Split(file, sample.Szblock)
+  s, n := Split(file, sample.Szblock)
 
   // load authenticators from file
   authFile, _ := ioutil.ReadFile(auth_file)
@@ -124,7 +104,11 @@ func Prove(sample_file string, challenge_file string, auth_file string, spk_file
 		k := sample.Idx[j]
 		mu_k := big.NewInt(0)
     for _, qelem := range q {
-			char := new(big.Int).SetBytes([]byte{matrix[qelem.I - 1][k]})
+      // read data block into buffer
+	    buffer := make([]byte, s)
+	    file.ReadAt(buffer, int64(s * (qelem.I - 1)))
+      // calculate proof
+			char := new(big.Int).SetBytes([]byte{buffer[k]})
 			product := new(big.Int).Mul(new(big.Int).SetInt64(qelem.V), char)
 			mu_k.Add(mu_k, product)
 		}

@@ -10,7 +10,7 @@ import (
 	"encoding/binary"
 	"encoding/gob"
 	"encoding/json"
-	"fmt"
+	//"fmt"
 	"math"
 	"math/big"
 	"os"
@@ -33,10 +33,15 @@ type Sample struct {
 	Idx    []int64			`json:"bytesindex"`
 }
 
+type chunk struct {
+	bufsize int64
+	offset  int64
+}
+
 // split file into blocks
 // input: "s": blocksize
 // output: "M": data blocks, "S": blocksize, "N": number of blocks
-func Split(file *os.File, s int64) (M [][]byte, S int64, N int64) {
+func Split(file *os.File, s int64) (S int64, N int64) {
 	file.Seek(0, 0)
 
 	fileInfo, err := file.Stat()
@@ -46,27 +51,8 @@ func Split(file *os.File, s int64) (M [][]byte, S int64, N int64) {
 	size := fileInfo.Size()
 	n := int64 (math.Ceil(float64 (size / s)))
 
-	fmt.Print("\n")
-	fmt.Print(">>filesize (bytes) :=")
-	fmt.Print(size)
-	fmt.Print("\n")
-	fmt.Print(">>splitted blocks :=")
-	fmt.Print(n)
-	fmt.Print("\n")
-	fmt.Print(">>each block size (bytes) :=")
-	fmt.Print(s)
-	fmt.Print("\n")
-	// matrix is indexed as m_ij, so the first dimension has n items and the second has s.
-	matrix := make([][]byte, n)
-	for i := int64 (0); i < n; i++ {
-		piece := make([]byte, s)
-		_, err := file.Read(piece)
-		if err != nil {
-			panic(err)
-		}
-		matrix[i] = piece
-	}
-	return matrix, s, n
+	//fmt.Printf("split into %v blocks with size := %v\n", n, s)
+	return s, n
 }
 
 // generate a string as the name
@@ -96,7 +82,19 @@ func GenerateAuthenticator(sample Sample, tau Tau, i int64, s int64, tau_zero Ta
 
 // provider sign the data and generate authenticators
 func St(ssk *rsa.PrivateKey, file *os.File, S int64, N int64, tau_file string, auth_file string, sample_file string) (_tau Tau, _sigma []*big.Int) {
-	matrix, s, n := Split(file, S)
+	s, n := Split(file, S)
+
+	// generate random index of bytes inside data block to be checked
+	sample := Sample{Szblock: s, NumBytes: N}
+	sample.Idx = make([]int64, N)
+	for i := int64 (0); i < N; i++ {
+		idx, err := rand.Int(rand.Reader, big.NewInt(s))
+		if err != nil {
+			panic(err)
+		}
+		sample.Idx[i] = idx.Int64()
+	}
+
 	tau_zero := Tau_zero{N: n}
 
 	tau_zero.Name = make([]byte, 512)
@@ -105,7 +103,17 @@ func St(ssk *rsa.PrivateKey, file *os.File, S int64, N int64, tau_file string, a
 		panic(err)
 	}
 
+	// only generate random numbers for selected bytes as samples!! performance saving!!!
 	tau_zero.U = make([]big.Int, s)
+	for i := int64 (0); i < sample.NumBytes; i++ {
+		k := sample.Idx[i]
+		result, err := rand.Int(rand.Reader, ssk.PublicKey.N)
+		if err != nil {
+			panic(err)
+		}
+		tau_zero.U[k] = *result
+	}
+	/*
 	for i := int64 (0); i < s; i++ {
 		result, err := rand.Int(rand.Reader, ssk.PublicKey.N)
 		if err != nil {
@@ -113,6 +121,7 @@ func St(ssk *rsa.PrivateKey, file *os.File, S int64, N int64, tau_file string, a
 		}
 		tau_zero.U[i] = *result
 	}
+	*/
 
 	var tau_zero_bytes bytes.Buffer
 	enc := gob.NewEncoder(&tau_zero_bytes)
@@ -128,25 +137,29 @@ func St(ssk *rsa.PrivateKey, file *os.File, S int64, N int64, tau_file string, a
 	}
 	tau := Tau{Tau_zero: tau_zero, Signature: t_0_signature}
 
+	// setup buffer chucks for reading file
+	chunksizes := make([]chunk, n)
 
-	// generate random index of bytes inside data block to be checked
-	sample := Sample{Szblock: s, NumBytes: N}
-	sample.Idx = make([]int64, N)
-	for i := int64 (0); i < N; i++ {
-		idx, err := rand.Int(rand.Reader, big.NewInt(s))
-		if err != nil {
-			panic(err)
-		}
-		sample.Idx[i] = idx.Int64()
+	// All buffer sizes are the same in the normal case. Offsets depend on the
+	// index. Second go routine should start at 100, for example, given our
+	// buffer size of 100.
+	for i := int64 (0); i < n; i++ {
+		chunksizes[i].bufsize = s
+		chunksizes[i].offset = int64(s * i)
 	}
 
 	sigmas := make([]*big.Int, n)
 	sem := make(chan byte, n);
 	for i := int64 (0); i < n; i++ {
-		go func(i int64) {
-			sigmas[i] = GenerateAuthenticator(sample,tau, i, s, tau_zero, matrix[i], ssk)
+		go func(chunksizes []chunk, i int64) {
+			// read data block into local buffer
+			chunk := chunksizes[i]
+	    buffer := make([]byte, s)
+	    file.ReadAt(buffer, chunk.offset)
+			// calculate authenticator
+			sigmas[i] = GenerateAuthenticator(sample, tau, i, s, tau_zero, buffer, ssk)
 			sem <- 0;
-		} (i)
+		} (chunksizes, i)
 	}
 	for i := int64 (0); i < n; i++ {
 		<- sem

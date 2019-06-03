@@ -13,10 +13,13 @@ import (
 	"fmt"
 	"bufio"
 	"os"
+	"time"
+	"math"
   provider "provider"
 	verifier "verifier"
 	storage  "storage"
 )
+
 
 // load private key from the PEM file
 // input: private key PEM file
@@ -97,6 +100,7 @@ func Keygen(ssk_file string, spk_file string) {
 // verifier: (1) generate challenge; (2) verify the proof
 // storage: generate proof using the received challenge
 func main() {
+	now := time.Now()
 	// set file names
 	fileName := "data3.txt"
 	tau_file := "tau.json"
@@ -112,22 +116,26 @@ func main() {
 	fmt.Printf("Generated!\n")
 
 	fmt.Printf(fileName)
-	fmt.Printf("\n")
+
 	file, err := os.Open(fileName)
 	if err != nil {
 		panic(err)
 	}
+	fileInfo, err := file.Stat()
+	size := fileInfo.Size()
+	fmt.Printf(" size = %v MB", size / 1e6)
 
 	// step 1: provider sign and generate authenticators
 	// Parameters: "s": block-size, "n": number-bytes-to-check
-	s := int64 (100)
+	s := int64 (1000000)
 	n := int64(1)
-	fmt.Printf("Signing file ")
+	fmt.Printf(" and will be split into %v blocks (blocksize := %v bytes)\n", int64 (math.Ceil(float64 (size / s))), s)
+	fmt.Printf("Step 1: (provider) Signing file...")
 	provider.St(ssk, file, s, n, tau_file, auth_file, sample_file)
 	fmt.Printf("Signed!\n")
 
 	// step 2: verifier generate the challenge
-	fmt.Printf("Generating challenge...\n")
+	fmt.Printf("Step 2: (verifier) Generating challenge...")
 	challenge_file := "challenge.json"
 	// number of blocks to check in one challenge (l < num_of_blocks)
 	l := int64(2)
@@ -135,17 +143,21 @@ func main() {
 	fmt.Printf("Generated!\n")
 
 	// Step 3: storage generates the proof
-	fmt.Printf("Issuing proof...\n")
+	fmt.Printf("Step 3: (storage) Issuing proof...")
 	proof_file := "proof.json"
 	storage.Prove(sample_file, challenge_file, auth_file, spk_file, proof_file, fileName)
 	fmt.Printf("Issued!\n")
 
 	// Step 4: verifier needs to verify the proof
-	fmt.Printf("Verifying proof...\n")
+	fmt.Printf("Step 4: (verifier) Verifying proof...")
 	yes := verifier.Verify(sample_file, tau_file, challenge_file, proof_file, spk_file)
+	fmt.Printf("Verified!\n")
 
 	// output the por verification result
 	fmt.Printf("Result: %t!\n", yes)
+	diff := "Total runtime is: "+time.Now().Sub(now).String()
+  fmt.Printf(diff)
+	fmt.Printf("\n")
 	if yes {
 		os.Exit(0)
 	} else {
