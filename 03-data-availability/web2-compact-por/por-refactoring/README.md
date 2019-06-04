@@ -143,6 +143,22 @@ for j := int64 (0); j < sample.NumBytes; j++ {
 ```
 
 
+## 4. Performance Benchmark
+
+We test the performance of this refactoring work on different dataset files:
+
+* **Case 1**: 2MB data file 
+* **Case 2**: 52MB data file 
+* **Case 3**: 104MB data file 
+* **Case 4**: 536MB data file 
+* **Case 5**: 1GB data file 
+
+parameters | Case 1  | Case 2 | Case 3 | Case 4 | Case 5 |
+---|---|---|---| ---| ---|
+filesize (bytes) | 1,966,854 | 52,428,800 | 104,857,600 | 536,870,912 | 1,073,741,824 |
+block-size (bytes) | 100,000 | 1,000,000 | 1,000,000 | 10,000,000 | 10,000,000 | 
+number-of-block | 19 | 52 | 104 | 53 | 107 |
+Total: | 159.84ms | 1.50s |  1.59s | 14.66s | 16.15s |
 
 
 
