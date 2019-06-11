@@ -274,9 +274,9 @@ dot.write_png('article-prov.png')
 <img src="img/plot.jpg" />
 
 
-# 4. Resourec: Open Provenance 
+# 4. Resource: Open Provenance Model (OPM)
 
-The Open Provenance Model OPM defines a data model that is open from an inter-operability viewpoint but also with respect to the community of its contributors, reviewers and users.
+The Open Provenance Model ([OPM](https://openprovenance.org/)) defines a data model that is open from an inter-operability viewpoint but also with respect to the community of its contributors, reviewers and users.
 
 <img src="img/opm.jpg" />
 
