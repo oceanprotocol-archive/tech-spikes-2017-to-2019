@@ -1,0 +1,96 @@
+{
+    "entity": {
+        "ex:report2": {
+            "prov:type": "report",
+            "ex:version": 2
+        },
+        "ex:report1": {
+            "prov:type": "report",
+            "ex:version": 1
+        },
+        "alice:bundle2": {
+            "prov:type": {
+                "$": "prov:Bundle",
+                "type": "xsd:QName"
+            }
+        },
+        "bob:bundle1": {
+            "prov:type": {
+                "$": "prov:Bundle",
+                "type": "xsd:QName"
+            }
+        }
+    },
+    "wasDerivedFrom": {
+        "_:wDF1": {
+            "prov:generatedEntity": "ex:report2",
+            "prov:usedEntity": "ex:report1"
+        }
+    },
+    "wasGeneratedBy": {
+        "_:wGB1": {
+            "prov:time": "2012-05-24T10:00:01",
+            "prov:entity": "ex:report1"
+        },
+        "_:wGB2": {
+            "prov:time": "2012-05-25T11:00:01",
+            "prov:entity": "ex:report2"
+        },
+        "_:wGB3": {
+            "prov:time": "2012-05-24T10:30:00",
+            "prov:entity": "bob:bundle1"
+        },
+        "_:wGB4": {
+            "prov:time": "2012-05-25T11:15:00",
+            "prov:entity": "alice:bundle2"
+        }
+    },
+    "wasAttributedTo": {
+        "_:wAT1": {
+            "prov:agent": "ex:Alice",
+            "prov:entity": "alice:bundle2"
+        },
+        "_:wAT2": {
+            "prov:agent": "ex:Bob",
+            "prov:entity": "bob:bundle1"
+        }
+    },
+    "bundle": {
+        "alice:bundle2": {
+            "wasGeneratedBy": {
+                "_:wGB29": {
+                    "prov:time": "2012-05-25T11:00:01",
+                    "prov:entity": "ex:report2"
+                }
+            },
+            "entity": {
+                "ex:report2": {
+                    "prov:type": "report",
+                    "ex:version": 2
+                },
+                "ex:report1": {
+                }
+            },
+            "wasDerivedFrom": {
+                "_:wDF25": {
+                    "prov:generatedEntity": "ex:report2",
+                    "prov:usedEntity": "ex:report1"
+                }
+            }
+        },
+        "bob:bundle1": {
+            "wasGeneratedBy": {
+                "_:wGB28": {
+                    "prov:time": "2012-05-24T10:00:01",
+                    "prov:entity": "ex:report1"
+                }
+            },
+            "entity": {
+                "ex:report1": {
+                    "prov:type": "report",
+                    "ex:version": 1
+                }
+            }
+        }
+    }
+}

@@ -33,14 +33,18 @@ Folder Name   |  Description | Issue |
 9-arweave | investigate ARWeave for data availability proof | [305](https://github.com/oceanprotocol/ocean/issues/305) |
 10-zk-pedersen | Investigating zero-knowledge Pedersen scheme for whitelisting condition|[306](https://github.com/oceanprotocol/ocean/issues/306)|
 11-meta-tx | research meta transaction for better UX experience | [308](https://github.com/oceanprotocol/ocean/issues/308)
-12-azure-computing | research confidential computing in Azure | [309](https://github.com/oceanprotocol/ocean/issues/309)
-
+12-tf-encrypted | investigate tf-encrypted for private ML computing | [333](https://github.com/oceanprotocol/ocean/issues/333)
+13-data-provenance | research data provenance | [245](https://github.com/oceanprotocol/ocean/issues/245) |
 
 ## Updates
 
+* [06/05/2019] data provenance ([245](https://github.com/oceanprotocol/ocean/issues/245))
+
 * [06/03/2019] refactoring por and [POC](03-data-availability/web2-compact-por/por-refactoring) ([334](https://github.com/oceanprotocol/ocean/issues/334))
 
-* [05/20/2019] governance of token migration ([310](https://github.com/oceanprotocol/ocean/issues/310))
+* [05/25/2019] investigate tf-encrypted for private ML computing  ([333](https://github.com/oceanprotocol/ocean/issues/333))
+
+* [05/20/2019] governance of token migration ([310](https://github.com/oceanprotocol/ocean/issues/310)) 
 
 * [05/14/2019] meta transaction [308](https://github.com/oceanprotocol/ocean/issues/308)
 
@@ -74,7 +78,7 @@ Folder Name   |  Description | Issue |
 ## License
 
 ```
-Copyright 2018 Ocean Protocol Foundation
+Copyright 2019 Ocean Protocol Foundation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
