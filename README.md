@@ -35,8 +35,11 @@ Folder Name   |  Description | Issue |
 11-meta-tx | research meta transaction for better UX experience | [308](https://github.com/oceanprotocol/ocean/issues/308)
 12-tf-encrypted | investigate tf-encrypted for private ML computing | [333](https://github.com/oceanprotocol/ocean/issues/333)
 13-data-provenance | research data provenance | [245](https://github.com/oceanprotocol/ocean/issues/245) |
+14-proof-of-execution | research PoE | [265](https://github.com/oceanprotocol/ocean/issues/265) |
 
 ## Updates
+
+* [06/13/2019] proof of execution ([265](https://github.com/oceanprotocol/ocean/issues/265))
 
 * [06/05/2019] data provenance ([245](https://github.com/oceanprotocol/ocean/issues/245))
 
