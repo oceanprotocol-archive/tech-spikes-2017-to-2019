@@ -159,3 +159,85 @@ In this diagram, we compare all different technologies in two perspectives:
 In this chart, the cloudTrail and Activity log is the most straightforward and ready to be used, while ZKP/MPC/HE needs the most efforts to develop. 
 
 <img src="img/map.jpg" width=500 />
+
+
+# 6. POE with Cloud Provider
+
+## 6.1 CloudTrail in AWS
+
+To enable the tracking of activities in AWS, we need to create `trail` for a specific bucket or all S3 buckets across all regions.
+
+In the `Data Event` section, we can add the bucket that should be monitored or tracked.
+
+**Note**:
+
+* `Management Events` can be disabled (i.e., set to be `None`) to reduce amount of event logs;
+* `Data Events` must add the bucket name that should be tracked;
+* `Storage location` should choose a different bucket to keep the event logs (otherwise, writting logs will generate new event logs and add extra amount of log files). 
+
+<img src="img/cloudtrail-2.jpg" />
+
+It is also possible to create trail for a specific S3 object such as a file, image and etc. The detailed instruction is [here](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html)
+
+AWS will store the log events in a bucket (i.e., fangtrail) with path: `Location: /AWSLogs/647548619895/CloudTrail/us-east-1`. 
+
+The path to event log file has the below format:
+
+```
+<bucket_name>/<prefix_name>/AWSLogs/<Account ID>/CloudTrail/<region>/<YYYY>/<MM>/<DD>/<file_name>.json.gz
+```
+
+The storage location can be changed in following settings:
+
+<img src="img/location.jpg" />
+
+### 6.1.1 GetObject
+
+Assuming user access the dataset `data.csv` as follows:
+
+<img src="img/data.jpg" />
+
+The `getObject` API is used to access the dataset:
+
+```
+$ aws s3api get-object --bucket oceanfang --key data.csv data.csv
+{
+    "AcceptRanges": "bytes", 
+    "ContentType": "text/csv", 
+    "LastModified": "Thu, 20 Jun 2019 03:38:23 GMT", 
+    "ContentLength": 41, 
+    "ETag": "\"3966951c417ed470c2eeaa3a5fc9c390\"", 
+    "Metadata": {}
+}
+```
+
+This transaction cause an event log file generated in the path: `fangtrail/AWSLogs/647548619895/CloudTrail/us-east-1/2019/06/20/647548619895_CloudTrail_us-east-1_20190620T0345Z_bH47qE9U25f69VXX.json.gz`
+
+<img src="img/logfile.jpg" />
+
+This [log file](647548619895_CloudTrail_us-east-1_20190620T0345Z_bH47qE9U25f69VXX.json) can be downloaded and opened as JSON file:
+
+<img src="img/json.jpg" />
+
+### 6.1.2 PutObject
+
+Let us test `putObject` API to add a new dataset file `city` to the bucket `oceanfang` in this scenario:
+
+```
+$ aws s3api put-object --bucket oceanfang --key city 
+{
+    "ETag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+}
+```
+
+A new event log file is generated:
+
+<img src="img/putEvent.jpg" />
+
+The [log file](647548619895_CloudTrail_us-east-1_20190620T0410Z_iPYad5CeutQr7FlK.json) shows the putObject event as follows:
+
+<img src="img/putObject.jpg" />
+
+
+
+
