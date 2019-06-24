@@ -163,7 +163,7 @@ In this chart, the cloudTrail and Activity log is the most straightforward and r
 
 # 6. POE with Cloud Provider
 
-## 6.1 CloudTrail in AWS
+## 6.1 CloudTrail in S3
 
 To enable the tracking of activities in AWS, we need to create `trail` for a specific bucket or all S3 buckets across all regions.
 
@@ -239,5 +239,106 @@ The [log file](647548619895_CloudTrail_us-east-1_20190620T0410Z_iPYad5CeutQr7FlK
 <img src="img/putObject.jpg" />
 
 
+## 6.2 Export Log in ECS(EC2 Container Service)
 
+CloudTrail can only track AWS S3 API activities, for example, user accessed a specific dataset with `getObject` or added a new dataset with `putObject`. However, it cannot track the activities inside the AWS container, such as training process on a particular dataset.
+
+To do so, we need to export the log file of AI computing as proof of execution ([OEP-12 Execution of Computing Services](https://github.com/oceanprotocol/OEPs/tree/feature/oep12-compute/12)). 
+
+The workflow can be described as follows:
+
+* Brizo creates a [Deep Learning container](https://aws.amazon.com/machine-learning/containers/) on EC2 and generate key pairs inside;
+* Container access the dataset in S3 as set in the Service Agreement;
+* Container run the AI algorithms and generate a encrypted log file as proof of execution;
+* Container stores the encrypted log file into S3 and update the Keeper contract with hash signature;
+* Validator can register to validate the compute service and access the encrypted log file:
+	* the encrypted log file can be re-encrypted using validator's public key (i.e., proxy re-encryption) so it can be validated;
+	* Or the encrypted log file can be validated inside TEE such as Intel SGX to generate a boolean result. 
+
+<img src="img/workflow-2.jpg" />
+
+
+### 6.2.1 POC in AWS ECS
+
+#### 1. Create EC2 Instance 
+First, we create an EC2 instance and connect to it using SSH:
+
+<img src="img/instance.jpg" />
+
+#### 2. Setup AWS Credentials
+
+Credentials must be setup in order to login Amazon Elastic Container Registry (ECR), a fully-managed Docker container registry:
+
+```
+$ aws configure
+AWS Access Key ID [None]: AKIA....JCJ4
+AWS Secret Access Key [None]: P6HX35....aLI91c
+```
+
+#### 3. Login Amazon Elastic Container Registry (ECR)
+
+<img src="img/ECR.jpg" />
+
+#### 4. Run AWS Deep Learning Container
+
+```
+~$ docker run -it 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-training:1.13-cpu-py36-ubuntu16.04
+Unable to find image '763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-training:1.13-cpu-py36-ubuntu16.04' locally
+1.13-cpu-py36-ubuntu16.04: Pulling from tensorflow-training
+34667c7e4631: Pull complete 
+d18d76a881a4: Pull complete 
+119c7358fbfc: Pull complete 
+2aaf13f3eff0: Pull complete 
+079fb48766f5: Pull complete 
+fb6f24611e94: Pull complete 
+5f4ea8f36692: Pull complete 
+60098707f66b: Pull complete 
+Digest: sha256:f40fd1ef4088dabdfc9fddd15bdc7e3bdba2c1144b57f945a7e751ef76c9b95e
+Status: Downloaded newer image for 763104351884.dkr.ecr.us-east-1.amazonaws.com/tensorflow-training:1.13-cpu-py36-ubuntu16.04
+root@f871a37ec3dd:/# 
+```
+
+#### 5. Run AI Training and Save Log
+
+The [log file](logfile.txt) is saved during the training process. 
+
+
+```
+# python keras/examples/mnist_cnn.py > logfile.txt
+x_train shape: (60000, 28, 28, 1)
+60000 train samples
+10000 test samples
+Train on 60000 samples, validate on 10000 samples
+Epoch 1/12
+
+  128/60000 [..............................] - ETA: 10:36 - loss: 2.3061 - acc: 0.0859
+  256/60000 [..............................] - ETA: 5:57 - loss: 2.2747 - acc: 0.1211 
+  384/60000 [..............................] - ETA: 4:19 - loss: 2.2512 - acc: 0.1432
+  512/60000 [..............................] - ETA: 3:30 - loss: 2.2082 - acc: 0.1973
+  ....
+  59136/60000 [============================>.] - ETA: 0s - loss: 0.0259 - acc: 0.9920
+59264/60000 [============================>.] - ETA: 0s - loss: 0.0259 - acc: 0.9920
+59392/60000 [============================>.] - ETA: 0s - loss: 0.0258 - acc: 0.9920
+59520/60000 [============================>.] - ETA: 0s - loss: 0.0258 - acc: 0.9920
+59648/60000 [============================>.] - ETA: 0s - loss: 0.0258 - acc: 0.9920
+59776/60000 [============================>.] - ETA: 0s - loss: 0.0257 - acc: 0.9920
+59904/60000 [============================>.] - ETA: 0s - loss: 0.0258 - acc: 0.9920
+60000/60000 [==============================] - 71s 1ms/step - loss: 0.0257 - acc: 0.9920 - val_loss: 0.0259 - val_acc: 0.9930
+Test loss: 0.025881229943022117
+Test accuracy: 0.993
+```
+
+#### 6. Upload Log into S3 Bucket
+
+```
+root@f871a37ec3dd:/home# aws s3 sync logfile.txt s3://oceanfang/logfile
+upload: ./logfile.txt to s3://oceanfang/logfile/logfile.txt       
+root@f871a37ec3dd:/home# Connection to ec2-52-90-235-114.compute-1.amazonaws.com closed by remote host.
+```
+
+Now the logfile is available in the bucket of S3:
+
+<img src="img/log-2.jpg" />
+
+Similarly, the trained model can be saved and uploaded to S3 as well.
 
