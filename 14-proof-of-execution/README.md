@@ -338,7 +338,32 @@ root@f871a37ec3dd:/home# Connection to ec2-52-90-235-114.compute-1.amazonaws.com
 
 Now the logfile is available in the bucket of S3:
 
-<img src="img/log-2.jpg" />
+<img src="img/log-2.jpg" width=400/>
 
 Similarly, the trained model can be saved and uploaded to S3 as well.
 
+
+# 7. Security of Model 
+
+It is critical to prove that the model in the execution is the same as requested in service agreement. 
+
+## 7.1 Hash Signature (non-interactive approach)
+
+The most straightforward approach is to verify the hash signature of model file at the beginning of execution.
+
+As shown in the diagram below, the model owner can publish the hash of model file to smart contract in Keeper. As such, the AWS EC2 container can calculates the hash of model file and verify it against the on-chain record. 
+
+If different, the execution will be aborted. Otherwise, the execution can continue to generate the log file as the proof.
+
+<img src="img/model.jpg" width=600/>
+
+
+## 7.2 Proof of Retrieveability (interactive approach)
+
+The PoR approach can be applied to prove the model file matches the original from the model owner.
+
+The brizo behaves as the verifier who generates and verify the challenges, while AWS container needs to generate proof to prove the model file remains the same as original.
+
+Note that the model file (e.g., python script) is usually small such as 10KB, therefore, computing complexity is affordable to check every single byte in the file. The original PoR algorithm can be directly applied in order to guarantee its integrity.
+
+<img src="img/brizo.jpg" width=1000/>
