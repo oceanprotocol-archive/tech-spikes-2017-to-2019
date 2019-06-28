@@ -357,6 +357,301 @@ If different, the execution will be aborted. Otherwise, the execution can contin
 
 <img src="img/model.jpg" width=600/>
 
+### POC of Hash Signature
+
+To experiment this approach, we develop a POC with smart contract and verification script. 
+
+* **Deploy Smart Contract**
+
+The [smart contract](hash_sig/contracts/HashSig.sol) is a simplified contract mapping filename to its hash signature of model file.
+
+```Solidity
+pragma solidity 0.5.3;
+
+contract HashSig {
+
+  mapping (bytes32 => bytes32) signatures;
+
+  constructor() public {
+  }
+
+  function addSig(bytes32 _name, bytes32 _hash) public returns (bool) {
+    if(signatures[_name] != 0x0) return false;
+    signatures[_name] = _hash;
+    return true;
+  }
+
+  function getSig(bytes32 _name) public view returns (bytes32) {
+    return signatures[_name];
+  }
+
+}
+```
+
+In the testing script, we use function to calculate hash of the model file:
+
+```javascript
+function fileHash(filename, algorithm = 'sha1') {
+  return new Promise((resolve, reject) => {
+    // Algorithm depends on availability of OpenSSL on platform
+    // Another algorithms: 'sha1', 'md5', 'sha256', 'sha512' ...
+    let shasum = crypto.createHash(algorithm);
+    try {
+      let s = fs.ReadStream(filename)
+      s.on('data', function (data) {
+        shasum.update(data)
+      })
+      // making digest
+      s.on('end', function () {
+        const hash = shasum.digest('hex')
+        return resolve(hash);
+      })
+    } catch (error) {
+      return reject('calc fail');
+    }
+  });
+}
+...
+contract("HashSig", (accounts) => {
+  let sig
+  let filename = web3.utils.keccak256('mnist_cnn.py')
+
+
+  describe("should add signature", () => {
+    it("add and query", async () => {
+      sig = await HashSig.deployed()
+      let hash = await fileHash('mnist_cnn.py')
+      let bytes32Hash = web3.utils.keccak256(hash)
+      console.log(bytes32Hash)
+      // add hash signature to on-chain 
+      await sig.addSig(filename, bytes32Hash, { from: accounts[0]})
+      // query the hash signature from smart contract
+      let res = await sig.getSig(filename, { from: accounts[0]})
+      console.log("hash :=" + res)
+    });
+  });
+
+});
+```
+
+As a test, we deploy the contract to Kovan network as：
+
+```
+Starting migrations...
+======================
+> Network name:    'kovan'
+> Network id:      42
+> Block gas limit: 8000000
+...
+2_deploy_hashsig.js
+===================
+
+   Deploying 'HashSig'
+   -------------------
+   > transaction hash:    0xe7fd8becdcb762c12c13b363cbf51461728f5ee9641abeb3a8cf2d9760f8504f
+   > Blocks: 1            Seconds: 4
+   > contract address:    0x0f2c3e140F8EC039785b3631F3C7c282ceb9c12e
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             2.100196295853937168
+   > gas used:            131327
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00131327 ETH
+
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00131327 ETH
+
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.00404489 ETH
+```
+
+
+We add the hash value of the model file to the deployed contract in Kovan. For example, [`mnist_cnn.py`](hash_sig/mnist_cnn.py) has hash value: `0xbadd11443db8a4074339c73a77141eded30b41422b6d4afa9d20e5389b1978af`
+
+<img src="img/hashTest.jpg" />
+
+* **Verify Hash Singnature**
+
+Next, we can verify the hash of model file against the smart contract record in Kovan network.
+
+First, we add the hash value of model file to smart contract using [script](hash_sig/addHash.js)
+
+```Javascript
+const Web3 = require('web3')
+const Tx = require('ethereumjs-tx')
+
+var abi = '[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor","signature":"constructor"},{"constant":false,"inputs":[{"name":"_name","type":"bytes32"},{"name":"_hash","type":"bytes32"}],"name":"addSig","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function","signature":"0xfa3d1325"},{"constant":true,"inputs":[{"name":"_name","type":"bytes32"}],"name":"getSig","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function","signature":"0x893182ff"}]';
+
+let web3 = new Web3(new Web3.providers.HttpProvider("https://kovan.infura.io/"));
+const addressFrom = '0x0e364eb0ad6eb5a4fc30fc3d2c2ae8ebe75f245c'
+const privKey = process.env.privateKey
+const addressTo = '0x0f2c3e140F8EC039785b3631F3C7c282ceb9c12e'
+const contract = new web3.eth.Contract(
+  JSON.parse(abi),
+  addressTo
+);
+
+// change this to whatever contract method you are trying to call, E.G. SimpleStore("Hello World")
+let filename = web3.utils.keccak256('mnist_cnn.py')
+let filehash = '0xbadd11443db8a4074339c73a77141eded30b41422b6d4afa9d20e5389b1978af'
+const tx = contract.methods.addSig(filename, filehash);
+const encodedABI = tx.encodeABI();
+
+function sendSigned(txData, cb) {
+  const privateKey = new Buffer(privKey, 'hex')
+  const transaction = new Tx(txData)
+  transaction.sign(privateKey)
+  const serializedTx = transaction.serialize().toString('hex')
+  web3.eth.sendSignedTransaction('0x' + serializedTx, cb)
+}
+
+// get the number of transactions sent so far so we can create a fresh nonce
+web3.eth.getTransactionCount(addressFrom).then(txCount => {
+
+  // construct the transaction data
+  const txData = {
+    nonce: web3.utils.toHex(txCount),
+    gasLimit: web3.utils.toHex(6000000),
+    gasPrice: web3.utils.toHex(10000000000), // 10 Gwei
+    to: addressTo,
+    from: addressFrom,
+    data: encodedABI
+  }
+
+  // fire away!
+  sendSigned(txData, function(err, result) {
+    if (err) return console.log('error', err)
+    console.log('sent', result)
+  })
+
+})
+```
+
+The transaction is sucessful as:
+
+<img src="img/tx1.jpg" />
+
+We can verify the hash value with [query script](hash_sig/verifyHash.js)
+
+```Javascript
+let fs = require("fs");
+let crypto = require('crypto')
+const Web3 = require('web3')
+
+let web3 = new Web3(new Web3.providers.HttpProvider("https://kovan.infura.io/Kuo1lxDBsFtMnaw6GiN2"));
+
+const account = '0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c';
+
+var abi = '[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor","signature":"constructor"},{"constant":false,"inputs":[{"name":"_name","type":"bytes32"},{"name":"_hash","type":"bytes32"}],"name":"addSig","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function","signature":"0xfa3d1325"},{"constant":true,"inputs":[{"name":"_name","type":"bytes32"}],"name":"getSig","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function","signature":"0x893182ff"}]';
+const addressTo = '0x0f2c3e140F8EC039785b3631F3C7c282ceb9c12e'
+const contract = new web3.eth.Contract(
+  JSON.parse(abi),
+  addressTo
+);
+
+async function call(transaction) {
+    return await transaction.call({from: account});
+}
+
+async function checkHash(name) {
+    let val = await call(contract.methods.getSig(name));
+    console.log("the hash of model file :=" + val)
+    return val;
+}
+
+async function fileHash(filename, algorithm = 'sha1') {
+  return new Promise((resolve, reject) => {
+    // Algorithm depends on availability of OpenSSL on platform
+    // Another algorithms: 'sha1', 'md5', 'sha256', 'sha512' ...
+    let shasum = crypto.createHash(algorithm);
+    try {
+      let s = fs.ReadStream(filename)
+      s.on('data', function (data) {
+        shasum.update(data)
+      })
+      // making digest
+      s.on('end', function () {
+        const hash = shasum.digest('hex')
+        return resolve(hash);
+      })
+    } catch (error) {
+      return reject('calc fail');
+    }
+  });
+}
+
+// check hash of file and compare with local calculation
+async function verify() {
+  let localHash = await fileHash("mnist_cnn.py")
+  let bytes32Hash = web3.utils.keccak256(localHash)
+  console.log("local hash of model file :=" + bytes32Hash)
+
+  let filehash = web3.utils.keccak256('mnist_cnn.py')
+  let res = await checkHash(filehash)
+  if(bytes32Hash === res)
+    console.log("matched")
+  else {
+    console.log("unmatched")
+  }
+}
+
+verify()
+```
+
+
+<img src="img/matchHash.jpg" />
+
+* **Test in AWS EC2 Instance**
+
+First, we put the model file [`mnist_cnn.py`](hash_sig/mnist_cnn.py) and [query script](hash_sig/verifyHash.js) in AWS S3 bucket.
+
+<img src="img/s3file.jpg" />
+ 
+Create an EC2 instance and access both files with `getObject` API:
+
+```
+root@e13c73608257:/home# aws s3 cp s3://oceanfang/mnist_cnn.py .
+download: s3://oceanfang/mnist_cnn.py to ./mnist_cnn.py       
+root@e13c73608257:/home# aws s3 cp s3://oceanfang/verifyHash.js .
+download: s3://oceanfang/verifyHash.js to ./verifyHash.js 
+```
+
+Install  `Node.js` in EC2:
+
+```
+// 1. install nvm
+root@e13c73608257:/home# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+// 2. activate nvm
+root@e13c73608257:/home# . ~/.nvm/nvm.sh
+
+// 3. install node.js v8.11.1
+root@e13c73608257:/home# nvm install 8.11.1
+Downloading and installing node v8.11.1...
+Downloading https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz...
+######################################################################## 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v8.11.1 (npm v5.6.0)
+Creating default alias: default -> 8.11.1 (-> v8.11.1)
+
+// 4. install packages
+root@e13c73608257:/home# npm install fs crypto web3
++ web3@1.0.0-beta.55
++ fs@0.0.1-security
++ crypto@1.0.1
+added 132 packages in 7.931s
+```
+
+Now, it is time to access the on-chain record from EC2. Use command `node verifyHash.js` to calculate the hash value of model file inside EC2, and compare with the on-chain hash value in Kovan network. 
+
+The both hash values are matched in the experiment:
+
+<img src="img/ec2.jpg" />
 
 ## 7.2 Proof of Retrieveability (interactive approach)
 
