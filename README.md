@@ -36,8 +36,11 @@ Folder Name   |  Description | Issue |
 12-tf-encrypted | investigate tf-encrypted for private ML computing | [333](https://github.com/oceanprotocol/ocean/issues/333)
 13-data-provenance | research data provenance | [245](https://github.com/oceanprotocol/ocean/issues/245) |
 14-proof-of-execution | research PoE | [265](https://github.com/oceanprotocol/ocean/issues/265) |
+15-por-verifier-network | design and prototype verifier network in POR | [345](https://github.com/oceanprotocol/ocean/issues/345) |
 
 ## Updates
+
+* [07/02/2019] por verifier network ([345](https://github.com/oceanprotocol/ocean/issues/345))
 
 * [06/13/2019] proof of execution ([265](https://github.com/oceanprotocol/ocean/issues/265))
 
