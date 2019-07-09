@@ -10,6 +10,7 @@ editor: Fang Gong <fang@oceanprotocol.com>
 date: 07/02/2019
 ```
 
+# 1. Introduction
 
 More information about PoR can be found in [report](../03-data-availability/web2-compact-por/README.md). In this research, we investigate the design of verifier network, which generates challenges and verifies the proofs from the storage in a decentralized way.
 
@@ -21,8 +22,9 @@ In each design of the verifier network, there are some critical modules in the b
 
 We will investigate different designs from these three perspectives and compare their pros & cons in the below. They are sorted by the implementation difficulty from low to high.
 
+# 2. Design 
 
-# 1. All-hands POA Authorities
+## 2.1 All-hands POA Authorities
 
 The most straightforward design is to have POA authority nodes in Ocean network to be verifiers. The identity of node operator is known to us. 
 
@@ -30,7 +32,9 @@ The most straightforward design is to have POA authority nodes in Ocean network 
 
 * **Consensus**:
 	* since the number of authority nodes is limited, it is possible to *request all of them to agree* on the verification result; it fails to conclude if there is any single verifier cannot verify the challenge. 
-	* alternatively, a *M-out-of-N signature* can be used to reach an agreement. For example, more than 3 signatures from POA authority nodes can verify the data availability.
+	* alternatively, a *M-out-of-N signature* can be used to reach an agreement: 
+		* *fixed number of required signature*: it may require fixed number of signatures from the selected verifiers no matter the total number of participated verifiers;
+		* *fixed percentage of requried signature*: it may require a certain percentage of selected verifiers to submit signatures in order to verify data availability. For example, >50% signature is a typical scenario.
 
 * **Incentive**: it is not needed to give rewards to POA authority nodes since they are known and trustworthy entities.
 
@@ -40,7 +44,7 @@ The most straightforward design is to have POA authority nodes in Ocean network 
 * **Con**:
 	* limited scalability as each verifier needs to be a POA node;
 
-# 1.1. Variant: Randomly Selected POA Authorities
+## 2.2 Variant: Randomly Selected POA Authorities
 
 Based on above design, we can further introduce randomness to the verification game. 
 
@@ -58,7 +62,7 @@ Other apsects includinng Consensus, Incentive are the same as previous design.
 
 
 
-# 3. Open Verifier Network
+## 2.3 Open Verifier Network
 
 To achieve a better decentralization, an open verifier network is demanded, where any node can participate in the verifier pool and receive reward for its own contribution.
 
@@ -84,3 +88,21 @@ To achieve a better decentralization, an open verifier network is demanded, wher
 	* In particular, "fixed number of required signature" approach is easier to be gamed as only limited number of singatures are required.  
 	* "fixed percentage of required signature" can have the risk of sybil attack but the cost of such attack is high due to staking requirement.
 
+## 2.4 Challenge-Response Approach
+
+A much more lightweight approach is challenge respose design:
+
+* **Selection**: any node can register itself with on-chain smart contract and put in tokens as a stake to join the verifier pool. Each verifier in the pool can generate challenge and verify the proof on its own.
+
+* **Consensus**:
+	* verifiers in the pool continuously challenge the storage for data availability, where the target storage and dataset is randomly chosen;
+	* when the verifier cannot prove the data availability, it will raise a challenge against the storage for a specific dataset. The challenge will initiate a verification task that more verifiers are involved;
+	* depends on the verification result, the challenger will receive reward or get their stake slashed;
+	* if there is no challenge, Ocean assumes the availability of dataset is proved.
+
+* **Incentive**: 
+	* challenger who successfully challenge the faulty storage will be given rewards as the incentive; otherwise, their stake will be slashed.		
+
+# 3. POC
+
+After research meeting, we agree to move forward to implement a POC, which is a simplest and working solution. In particular, we will prototype the all-hands POA node approach with majority-win consensus. To make it more fun, we try to use Rust to interact with smart contract.
