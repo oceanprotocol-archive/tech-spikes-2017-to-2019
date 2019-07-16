@@ -106,3 +106,238 @@ A much more lightweight approach is challenge respose design:
 # 3. POC
 
 After research meeting, we agree to move forward to implement a POC, which is a simplest and working solution. In particular, we will prototype the all-hands POA node approach with majority-win consensus. To make it more fun, we try to use Rust to interact with smart contract.
+
+## 3.1 Architecture
+
+* **Keeper Contract**: 
+	* register POA node and manage permission;
+	* register dataset and maintain DID registry;
+	* dispatch por verification task (i.e., emit event message to POA nodes);
+	* submit signature to resolve challenge for a specific dataset;
+	* query the status of dataset and their challenges;
+* **Verifier Node**:
+	* use Rust code to interact with Keeper contract;
+	* listen to the event message from Keeper contract and accept task;
+	* generate proof for requested dataset;
+	* verify the proof from the storage;
+	* submit own signature to Keeper contract to confirm the data availability;
+* **Storage**:
+	* use Rust code to gennerate proof according to challenges;
+
+<img src="img/arch.jpg" width=500 />
+
+## 3.2 Smart Contract using Solidity
+
+First, the smart contract is built to maintain the registry of verifier and challenge:
+
+```Solidity
+pragma solidity 0.5.3;
+
+contract Verifier {
+    struct Challenge{
+        uint256 nPos;
+        uint256 nNeg;
+        uint256 quorum;
+        bool    result;
+        bool    finish;
+        mapping(address => bool) votes;
+    }
+
+    uint256 nVoters;
+    mapping(address => bool) public registry;
+    mapping(uint256 => Challenge) public challenges;
+
+    // events
+    event verifierAdded(address _verifier, bool _state);
+    event verifierRemoved(address _verifier, bool _state);
+    event verificationRequested(uint256 _did);
+    event verificationFinished(uint256 _did, bool _state);
+    
+    ...
+    
+    // manage verifier registration
+    function addVerifier(address user) public {
+        require(user != address(0), 'address is invalid');
+        if(registry[user] == true) return;
+        // if not registered yet
+        registry[user] = true;
+         nVoters = nVoters + 1;
+        emit verifierAdded(user, true);
+    }
+    
+    ...
+    // quest por verification
+    function requestPOR(uint256 did) public {
+        // // if challenge of the same did exists AND it is not finished yet, do not allow new challenge
+        if(challenges[did].quorum != 0 && challenges[did].finish != true) return;
+        // create new challenge for the did
+        challenges[did] = Challenge({
+            nPos: 0,
+            nNeg: 0,
+            quorum: 50,
+            result: false,
+            finish: false
+        });
+        emit verificationRequested(did);
+    }
+    ...
+    function resolveChallenge(uint256 did) public {
+        if(challenges[did].nPos + challenges[did].nNeg == nVoters && !challenges[did].finish ) {
+                challenges[did].finish = true;
+                uint256 cur = challenges[did].nPos * 100;
+                uint256 target = nVoters * challenges[did].quorum;
+                if( cur >= target){
+                    challenges[did].result = true;
+                    emit verificationFinished(did, true);
+                } else {
+                    challenges[did].result = false;
+                    emit verificationFinished(did, false);
+                }
+        }
+    }
+	...
+```
+
+We use the local testnet to run the testing:
+
+<img src="img/compile.jpg" width=700/>
+
+In the same time, we need to generate ABI file that is needed in Rust code:
+
+```
+$ solc -o build --bin --abi contracts/*.sol --overwrite
+```
+It creates two files: `Verifier.abi` and `Verifier.bin` under the `build` directory.
+
+
+## 3.3 Rust Coding
+
+### 3.3.1 Interact with Smart Contract 
+
+* **setup network and web3**
+
+```Rust
+let (_eloop, transport) = web3::transports::Http::new("http://localhost:8545").unwrap();
+let web3 = web3::Web3::new(transport);
+```
+
+* **create contract interface using address and ABI**
+
+Note: the contract address should not include prefix of "0x"!
+
+```Rust
+let contract_address: Address = "916f91fe8a60012bad9b7264680afd008ed4cfc9".parse().unwrap();
+    let contract = Contract::from_json(
+        web3.eth(),
+        contract_address,
+        include_bytes!("../truffle/build/Verifier.abi"),
+    )
+    .unwrap();
+
+    println!("Contract deployed to: 0x{}", contract.address()); 
+```
+
+* **send transaction to smart contract**
+
+```Rust
+contract.call("addVerifier", (my_account,), my_account, Options::default());
+println!("add := {} as a verifier", my_account);
+```
+
+* **query the state of smart conntract**
+
+```Rust
+let result = contract.query("queryVerifier", (my_account,), None, Options::default(), None);
+let status: bool = result.wait().unwrap();
+println!("updated status := {}", status);
+```
+
+The local testnet needs to be launched in order to run the test. Use `cargo run` in the workspace to run the test:
+
+<img src="img/test1.jpg" />
+
+### 3.3.2 Subscribe to Event Message
+
+* **create event loop to monitor events**
+
+```Rust
+let mut eloop = tokio_core::reactor::Core::new().unwrap();
+let web3 = web3::Web3::new(web3::transports::Http::with_event_loop("http://localhost:8545", &eloop.handle(), 1).unwrap());
+```
+
+* **create eloop futures**
+
+```Rust
+eloop.run(web3.eth().accounts().then(|accounts| {
+	...
+	event_future.join(call_future)
+
+    })).unwrap();    
+```
+
+* **define parameters of event filter**
+
+the event signature is needed. For example, the event has signature (i.e., hash value) generated as:
+
+```
+> keccak('Pregnant(address,uint256,uint256,uint256)')
+241ea03ca20251805084d27d4440371c34a0b85ff108f6bb5611248f73818b80
+
+> keccak('Transfer(address,address,uint256)')
+ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+```
+
+It can be generated from online site: [Keccak256 online](https://emn178.github.io/online-tools/keccak_256.html)
+
+Similarly, the hash string should not have prefix of "0x"!
+
+In this step, the contract address and specificed event signature are defined so Rust code can listen to.
+
+```Rust
+let filter = FilterBuilder::default()
+            .address(vec![contract.address()])
+            .topics(
+                Some(vec![
+                    "dfe43d96a5e6e1b03e2e6d96aca2d45267ccc5929508587683bb45bddfae3bde" // verificationRequested event signature
+                    .parse()
+                    .unwrap(),
+                ]),
+                None,
+                None,
+                None,
+            )
+            .build();
+        println!("filer has been defined");
+```
+
+* **build event filter**
+
+It creates an event filter based on the definition in last step and sets the duration of monitoring.
+
+```Rust
+let event_future = web3
+            .eth_filter()
+            .create_logs_filter(filter)
+            .then(|filter| {
+                filter.unwrap().stream(time::Duration::from_secs(0)).for_each(|log| {
+                    println!("got log: {:?}", log);
+                    Ok(())
+                })
+            })
+            .map_err(|_| ());
+        println!("event_future has been built");
+```
+
+
+* **send transaction to trigger the event log**
+
+
+```Rust
+let call_future = contract.call("requestPOR", (2,), accounts[0], Options::default()).then(|tx| {
+            println!("got tx: {:?}", tx);
+            Ok(())
+        });
+        println!("call_future send tx");
+```
+
+<img src="img/msg.jpg" width=700/>
