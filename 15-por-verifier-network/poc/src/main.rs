@@ -2,11 +2,12 @@ extern crate rustc_hex;
 extern crate tokio_core; 
 extern crate web3;
 
-use std::time;
+use std::{time};
 use web3::contract::{Contract, Options};
 use web3::types::{Address, U256 };
 use web3::futures::{Future, Stream};
 use web3::types::FilterBuilder;
+
 
 
 fn main() {
@@ -20,7 +21,7 @@ fn main() {
         println!("accounts: {:?}", &accounts);
 
         // Accessing existing contract
-        let contract_address: Address = "7a32993de449327bbad29683a28bf336fed1e7e6".parse().unwrap();
+        let contract_address: Address = "1e1c43a26d8dcf385201e8258b88eb233286e9c5".parse().unwrap();
         let contract = Contract::from_json(
             web3.eth(),
             contract_address,
@@ -66,4 +67,80 @@ fn main() {
         event_future.join(call_future)
 
     })).unwrap();          
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_interact() {
+        let (_eloop, transport) = web3::transports::Http::new("http://localhost:8545").unwrap();
+        let web3 = web3::Web3::new(transport);
+        let accounts = web3.eth().accounts().wait().unwrap();
+
+        // Accessing existing contract
+        let contract_address: Address = "1e1c43a26d8dcf385201e8258b88eb233286e9c5".parse().unwrap();
+        let contract = Contract::from_json(
+            web3.eth(),
+            contract_address,
+            include_bytes!("../truffle/build/Verifier.abi"),
+        )
+        .unwrap();
+
+        println!("Contract deployed to: 0x{}", contract.address()); 
+
+        //interact with the contract
+        let my_account: Address = accounts[0]; 
+        let did = 4;
+
+        let result = contract.query("queryVerifier", (my_account,), None, Options::default(), None);
+        let status: bool = result.wait().unwrap();
+        println!("current user status := {}", status);
+
+        //Change state of the contract
+        contract.call("addVerifier", (my_account,), my_account, Options::default());
+        println!("add := {} as a verifier", my_account);
+
+        //View changes made
+        let result = contract.query("queryVerifier", (my_account,), None, Options::default(), None);
+        let status: bool = result.wait().unwrap();
+        println!("updated status := {}", status);
+
+        // request POR verification
+        contract.call("requestPOR", (did,), my_account, Options::default());
+        println!("por is requested");
+        
+        // submit signature
+        contract.call("submitSignature", (did, ), my_account, Options::default());
+        println!("signature submitted from := {} as a verifier", my_account);
+
+        let result = contract.query("getInfo", (did, 1,), None, Options::default(), None);
+        let status: U256 = result.wait().unwrap();
+        println!("info [1] nPos := {} now", status);
+
+        let result = contract.query("getInfo", (did, 2,), None, Options::default(), None);
+        let status: U256 = result.wait().unwrap();
+        println!("info [2] nNeg := {} now", status);
+
+        let result = contract.query("getInfo", (did, 3,), None, Options::default(), None);
+        let status: U256 = result.wait().unwrap();
+        println!("info [3] Quorum := {} now", status);
+
+        let result = contract.query("getInfo", (did, 4,), None, Options::default(), None);
+        let status: U256 = result.wait().unwrap();
+        println!("info [3] nVoter := {} now", status);
+
+        contract.call("resolveChallenge", (did, ), my_account, Options::default());
+
+        let result = contract.query("getInfo", (did, 1,), None, Options::default(), None);
+        let status: U256 = result.wait().unwrap();
+        println!("updated info [1] nPos := {} now", status);
+
+        let result = contract.query("queryVerification", (did,), None, Options::default(), None);
+        let status: bool = result.wait().unwrap();
+        assert_eq!(status, true);
+        println!("por verification status := {} now", status);
+        
+    }
 }
