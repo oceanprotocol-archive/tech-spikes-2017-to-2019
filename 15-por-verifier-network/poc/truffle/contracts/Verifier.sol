@@ -70,12 +70,6 @@ contract Verifier {
         }
     }
 
-    /*
-        uint256 nPos;
-        uint256 nNeg;
-        uint256 quorum;
-        uint256 nVoters
-    */
     function getInfo(uint256 did, uint256 x) public view returns(uint256) {
         if(x == 1) return challenges[did].nPos;
         if(x == 2) return challenges[did].nNeg;

@@ -40,6 +40,10 @@ Folder Name   |  Description | Issue |
 
 ## Updates
 
+* [07/22/2019] add poc of verifier network
+
+* [07/18/2019] update Rust tutorial using rust-web3
+
 * [07/02/2019] por verifier network ([345](https://github.com/oceanprotocol/ocean/issues/345))
 
 * [06/13/2019] proof of execution ([265](https://github.com/oceanprotocol/ocean/issues/265))
