@@ -341,3 +341,64 @@ let call_future = contract.call("requestPOR", (2,), accounts[0], Options::defaul
 ```
 
 <img src="img/msg.jpg" width=700/>
+
+<!--
+
+## 3.4 Calling Go functions from Node.js
+
+### 3.4.1 export functions from Golang 
+
+* The package must be a `main` package. 
+* The compiler will build the package and all of its dependencies into a single shared object binary.
+* The source must import the pseudo-package “C”.
+* Use the `//export` comment to annotate functions you wish to make accessible to other languages.
+* An empty main function must be declared.
+
+Assume we need to generate library of `provider.go` file:
+
+```
+package main;
+
+import "C"
+
+//export St
+func St(ssk_file string, fileName string, S int64, N int64, tau_file string, auth_file string, sample_file string) {
+...
+}
+
+func main() {}
+```
+
+The command can be used to generate header file and provider.so file:
+
+```
+$ go build -o provider.so -buildmode=c-shared provider.go
+$ ls
+provider.go  provider.h   provider.so
+```
+
+The header file defines the type and functions in Go code:
+
+```
+...
+#ifndef GO_CGO_GOSTRING_TYPEDEF
+typedef _GoString_ GoString;
+#endif
+typedef void *GoMap;
+typedef void *GoChan;
+typedef struct { void *t; void *v; } GoInterface;
+typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
+...
+extern void St(GoString p0, GoString p1, GoInt64 p2, GoInt64 p3, GoString p4, GoString p5, GoString p6);
+...
+```
+
+Similarly, we can generate header file and library for `verifier.go` and `storage.go`. These files can be found in `nodejs-golang-poc` folder. 
+
+### 3.4.2 Call Go function from Node.js
+
+Node uses a library called [node-ffi](https://github.com/node-ffi/node-ffi) (and a other dependent libraries) to dynamically load and call exported Go functions:
+
+Note that the library file in MacOS has the name of ".dylib" rather than ".so". The error will be encountered in Mac as [issue](https://github.com/vladimirvivien/go-cshared-examples/issues/1). Simply change the suffix to be ".dylib" in MacOs or switch to Linux machine.
+
+-->
