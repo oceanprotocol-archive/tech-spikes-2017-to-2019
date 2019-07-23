@@ -124,7 +124,7 @@ After research meeting, we agree to move forward to implement a POC, which is a 
 * **Storage**:
 	* use Rust code to gennerate proof according to challenges;
 
-<img src="img/arch.jpg" width=500 />
+<img src="img/arch2.jpg" width=800 />
 
 ## 3.2 Smart Contract using Solidity
 
