@@ -1,6 +1,6 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-#  Verifier Network Design (WORK IN PROGRESS)
+#  Verifier Network Design
 
 ```
 name: research on verifier network for Proof of Retrieveability

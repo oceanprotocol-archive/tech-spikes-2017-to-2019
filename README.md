@@ -37,8 +37,11 @@ Folder Name   |  Description | Issue |
 13-data-provenance | research data provenance | [245](https://github.com/oceanprotocol/ocean/issues/245) |
 14-proof-of-execution | research PoE | [265](https://github.com/oceanprotocol/ocean/issues/265) |
 15-por-verifier-network | design and prototype verifier network in POR | [345](https://github.com/oceanprotocol/ocean/issues/345) |
+16-bridge-bnb-chain | poc of token bridge between ETH and BNB | [354](https://github.com/oceanprotocol/ocean/issues/354) |
 
 ## Updates
+
+* [07/23/2019] token bridge to Binance Chain ([354](https://github.com/oceanprotocol/ocean/issues/354))
 
 * [07/22/2019] add poc of verifier network
 
