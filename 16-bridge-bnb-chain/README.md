@@ -171,6 +171,8 @@ The overall architecture of BNB bridge can be illustrated as below, which includ
 
 It worth mentioning that the bridge will NOT mint BEP-2 tokens every time it receives the swap request due to the high minting cost. In fact, **minting tokens in Binance chain was extremely expensive**, which was originally cost 200 BNB (worth several thousands dollars) for each minting transaction. Recently, Binance had cut it to be 5 BNB per mint, which implies a cost of \$140 for each swap. Instead, the bridge mints all tokens up to the total supply and locked in an escrow account. As such, it only needs to transfer BEP-2 token from escrow account to the usr's wallet for each swap, which has much lower cost.
 
+Moreover, since the ERC20 token must be locked inside the escrow account before any BEP-2 can be unlocked, the total supply of token remains the same all the time. The key is to keep the PostgreSQL DB safe, since it includes all credentials of escrow accounts.
+
 The workspace has a structure as belows:
 
 <img src="img/structure.jpg" width=300 />
@@ -431,42 +433,45 @@ We need to issue the BEP-2 token through bnbridge so that the PostgreSQL databas
 
 <img src="img/issue1.jpg" width=700 />
 
+* **Step 2**: the bridge creates a new escrow account `tbnb19mjkv6ew9w9tu7eqrfq8yz4rgkxfpld3rx3f0r` which is the owner of BEP-2 token in Binance Chain. Its credentials are stored in PostgreSQL DB. We need to transfer 500 BNB into the escrow account to cover the cost.
+
+<img src="img/issue2.jpg" width=700 />
+
+* **Step 3**: When the 500 BNB has been transfered (e.g., [tx](https://testnet-explorer.binance.org/tx/740243D3487BD188C1619E3ABBFE9200D09301DC6704FF32A61626E591FF804D) is complete), move forward in the frontend. 
+
+<img src="img/issue3.jpg" width=700 />
 
 
+From the Binance Chain explorer, the `Issue` transaction creates a new BEP-2 token with name `ERC20-2D3`:
 
-<!---
+<img src="img/issueToken.jpg" width=700 />
 
+The balance of `ERC20-2D3` is verified:
 
+<img src="img/issue4.jpg" width=700 />
 
+### 2.5 Swap ERC20 to BEP-2 Token
 
-```
+Now the BEP-2 token is ready to be swapped for corresponding ERC20 token. Switch to the `Swap` tab in the frontend. At this time, the ERC20 token should be able to be found in the token selection list. 
 
+* **Step 1**: choose the ERC20 token from the list and type in the receiver BEP-2 token wallet address:
 
+<img src="img/swap1.jpg" width=700 />
 
-$ cp index.dev.js index.js
+* **Step 2**: an escrow account for ERC20 token is created and user need to transfer to-be-swapped ERC20 tokens into it:
 
-$ node ./api.bnbridge.exchange.js 
-api.bnbridge.exchange 8000
-GET /api/v1/tokens 200 31.226 ms - 41
-GET /api/v1/fees 200 702.330 ms - 265
+<img src="img/swap2.jpg" width=700 />
 
+* **Step 3**: send 1000 ERC20 token into the escrow account in Ethereum network:
 
-$ cp config/example.config.js config.js
+<img src="img/swap3.jpg" width=700 />
 
+* **Step 4**: after the transaction is complete, mvoe forward in the frontend:
 
-npm start
+<img src="img/swap6.jpg" width=700 />
 
+* **Step 5**: check the BEP-2 token in the receiver wallet in Binance Chain
 
-// Step 1: deploy ERC20 token in Kovan
+<img src="img/swap7.jpg" width=800 />
 
-// step 2: 
-tbnb1ajh0593w6dehtvwld2t8f5vavnrksa9anyks8d
-
-gadget profit sniff network problem nothing act photo uncle multiply good rifle above worth puppy bus craft glow foot gloom theme drop divorce nominee
-
-
-transfer ERC20 token
-https://ropsten.etherscan.io/tx/0x52209c74ab50096a12a03c4e50e4b71eada38a35ab8282ed39abf2fa7ac871e9
-
-need wait a while before click 'next', otherwise, error out
---->
+The token swap is complete at this time using the bnbridge service.
