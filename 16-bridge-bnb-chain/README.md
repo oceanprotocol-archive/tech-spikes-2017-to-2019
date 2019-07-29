@@ -163,6 +163,8 @@ At least half of the voting power is required to vote “Yes” for the proposal
 
 ## 2. POC of BNB Bridge 
 
+This POC is based on the [bnbridge exchange](https://github.com/Fantom-foundation/bnbridge.exchange) from Fantom foundation. Node.js v8.11.1 and PostgreSQL 11.4 are used for the demonstration.
+
 The overall architecture of BNB bridge can be illustrated as below, which includes three components:
 
 * **frontend**: the webpage that interact with users to issue and swap BEP-2 tokens;
