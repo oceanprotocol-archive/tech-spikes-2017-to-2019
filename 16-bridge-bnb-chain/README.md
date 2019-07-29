@@ -160,44 +160,114 @@ At least half of the voting power is required to vote “Yes” for the proposal
 
 
 ## 2. POC of BNB Bridge 
-<!---
 
-Once the BEP-2 token is created in binance chain, we can investigate the token bridge in this section. The overall workflow and structure of the bridge is shown as follows:
+The overall architecture of BNB bridge can be illustrated as below, which includes three components:
 
-<img src="img/bnbridge.jpg" />
+* **frontend**: the webpage that interact with users to issue and swap BEP-2 tokens;
+* **sdk**: the backend server that listens to the request from the frontend and interacts with the DB and blockchain (both Ethereum and Binance Chain);
+* **DB**: the PostgreSQL database that stores the account and token information, which contains sensitive info and should be kept in high security.
+
+<img src="img/bnbridge__arch.jpg" />
+
+It worth mentioning that the bridge will NOT mint BEP-2 tokens every time it receives the swap request due to the high minting cost. In fact, **minting tokens in Binance chain was extremely expensive**, which was originally cost 200 BNB (worth several thousands dollars) for each minting transaction. Recently, Binance had cut it to be 5 BNB per mint, which implies a cost of \$140 for each swap. Instead, the bridge mints all tokens up to the total supply and locked in an escrow account. As such, it only needs to transfer BEP-2 token from escrow account to the usr's wallet for each swap, which has much lower cost.
+
+The workspace has a structure as belows:
+
+<img src="img/structure.jpg" width=300 />
+
+The "bnbridge" folder is the frontend part while "sdk" folder is the backend.
 
 
+### 2.1 Install PostgreSQL database
 
+The poc demonstrates the workflow in MacOS but the similar procedure can be applied to Linux system as well.
 
-```
-$ npm install
-...
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! tiny-secp256k1@1.1.0 install: `node-gyp rebuild`
-npm ERR! Exit status 1
-npm ERR! 
-npm ERR! Failed at the tiny-secp256k1@1.1.0 install script.
-...
-$ npm i tiny-secp256k1 --ignore-scripts
-npm WARN api.bnbridge.exchange@0.0.1 No repository field.
+Use the command below to install the [PostgreSQL database](https://www.postgresql.org/):
 
-+ tiny-secp256k1@1.1.3
-+ added 3 packages, removed 1 package, updated 1 package and audited 13667 packages in 3.19s
-found 182 high severity vulnerabilities
-
-$ npm install
-npm WARN api.bnbridge.exchange@0.0.1 No repository field.
-
-audited 13667 packages in 2.502s
-found 182 high severity vulnerabilities
-  run `npm audit fix` to fix them, or `npm audit` for details
+```bash
+$ brew install postgresql
+$ postgres -V
+postgres (PostgreSQL) 11.4
 ```
 
+Start the database service with command:
 
+```bash
+$ pg_ctl -D /usr/local/var/postgres start
+waiting for server to start....2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on IPv6 address "::1", port 5432
+2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2019-07-23 17:54:23.585 PDT [42782] LOG:  database system was shut down at 2019-07-23 17:52:08 PDT
+2019-07-23 17:54:23.589 PDT [42781] LOG:  database system is ready to accept connections
+ done
+server started
 ```
-$ cd cli
 
+Enter the interactive mode and check accounts (or update password). 
+
+```bash
+$ psql postgres
+psql (11.4)
+Type "help" for help.
+
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ fancy     | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ postgres  | Superuser, Create role, Create DB                          | {}
+ 
+postgres=# \password postgres
+Enter new password: 
+Enter it again:
+```
+
+At this time, the database is up and running. We can further initialize the Tables in DB with the SQL script in `sdk/sql/setup.sql`:
+
+```bash
+$ psql -f ./sql/setup.sql  postgres
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+```
+
+To visualize the tables in the database, a GUI can be used such as [DBeaver](https://dbeaver.io/download/). At the first time, we need to setup the connection information as:
+
+<img src="img/db_gui.jpg" width=700 />
+
+So we can check each table schema and values:
+<img src="img/dbtable.jpg" width=700 />
+
+### 2.2 Install BNB CLI
+
+BNB CLI is used to issue and transfer BEP-2 tokens. It can be installed to any place and set the path to it in bridge settings. In my case, it was installed in `/Users/fancy/bnbcli/cli/testnet/0.5.8/mac`.
+
+
+```bash
 $ git clone https://github.com/binance-chain/node-binary.git
 Cloning into 'node-binary'...
 remote: Enumerating objects: 1067, done.
@@ -215,49 +285,188 @@ $ ./node-binary/cli/prod/0.5.8/mac/bnbcli version
 Binance Chain Release: 0.5.8;Binance Chain Commit: 91044e2; Cosmos Release: =v0.25.0-binance.17; Tendermint Release: =v0.30.1-binance.6;
 ```
 
-brew install postgresql
+### 2.3 Deploy ERC20 Token to Ethereum (Testing Purpose)
 
-pg_ctl -D /usr/local/var/postgres start
+For demonstration purpose, we deploy an ERC20 token into Ropsten testnet. If we work on Ocean token, this step can be skipped. 
 
-$ pg_ctl -D /usr/local/var/postgres start
-waiting for server to start....2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on IPv6 address "::1", port 5432
-2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on IPv4 address "127.0.0.1", port 5432
-2019-07-23 17:54:23.573 PDT [42781] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
-2019-07-23 17:54:23.585 PDT [42782] LOG:  database system was shut down at 2019-07-23 17:52:08 PDT
-2019-07-23 17:54:23.589 PDT [42781] LOG:  database system is ready to accept connections
- done
-server started
-
-
-$ postgres -V
-postgres (PostgreSQL) 11.4
-
-$ psql postgres
-psql (11.4)
-Type "help" for help.
-
-postgres=# \du
-                                   List of roles
- Role name |                         Attributes                         | Member of 
------------+------------------------------------------------------------+-----------
- fancy     | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
-
-
-
-$ createuser --interactive postgres
-Shall the new role be a superuser? (y/n) y
-
-$ psql postgres
-
-postgres=# \du
-                                   List of roles
- Role name |                         Attributes                         | Member of 
------------+------------------------------------------------------------+-----------
- fancy     | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
- postgres  | Superuser, Create role, Create DB                          | {}
+The token contract is a simple ERC20 token, which can be found in folder `erc20` in the workspace. The token contract address is `0xADB63653B588096C8584F3e89c6bE58e664F53f9`.
  
-postgres=# \password postgres
-Enter new password: 
-Enter it again:
+```
+$ truffle migrate --network ropsten
 
+Starting migrations...
+======================
+> Network name:    'ropsten'
+> Network id:      3
+> Block gas limit: 8000029
+
+...
+
+
+2_erc20_token.js
+================
+
+   Deploying 'ERC20Token'
+   ----------------------
+   > transaction hash:    0xb444f2210f7705ed973f424b98bf28cce3b31ed739b166d7f065719d3c8d368b
+   > Blocks: 1            Seconds: 12
+   > contract address:    0xADB63653B588096C8584F3e89c6bE58e664F53f9
+   > account:             0x0E364EB0Ad6EB5a4fC30FC3D2C2aE8EBe75F245c
+   > balance:             1.028029306744727814
+   > gas used:            1214459
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01214459 ETH
+
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.01214459 ETH
+
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.0143563 ETH
+```
+
+### 2.3 Launch Backend Server
+
+the backend server must be started so that it can listen to the frontend activities and interact with both blockchains.
+
+```
+$ cd sdk
+$ npm install
+$ cp config/example.config.js config/config.js
+```
+
+In this `config.js` file, there are many settings need to be modified:
+
+* **DB connection**: it should match the account info in PostgreSQL database:
+
+```
+host: "localhost",
+database: "postgres",
+user: "fancy",
+password: "123123123",
+```
+
+* **Binance Chain settings**: update the api, filePath, chainID accordingly. In this POC, we use Binance testnet and test bnbcli. But production version shall be used in real deployment.
+
+```
+api: "https://testnet-dex.binance.org/",
+filePath: "/Users/fancy/bnbcli/cli/testnet/0.5.8/mac",
+fileName: "tbnbcli",
+chainID: "Binance-Chain-Nile",
+nodeData: "data-seed-pre-2-s1.binance.org:80",
+nodeHTTPS: "https://seed-pre-s3.binance.org:443",
+keyPrepend: "TEST10_",
+list_proposal_deposit: "200000000000",
+prefix: 'tbnb',
+network: 'testnet',
+```
+
+* **Ethereum Web3 provoider**: it shall match the Ethereum network that ERC20 token contract has deployed to.
+
+```
+provider: 'https://ropsten.infura.io/v3/2b1dbb61817f4ae6ac90d9b41662993b',
+```
+
+After the settings are updated, the server can be launched as:
+
+```bash
+$ node api.bnbridge.exchange.js 
+api.bnbridge.exchange 8000
+GET /api/v1/tokens 200 31.226 ms - 41
+GET /api/v1/fees 200 702.330 ms - 265
+```
+
+At this time, the backend is listening to `http://localhost:8000` for any request.
+
+
+### 2.4 Launch Frontend
+
+The fronend component is located in `bnbridge` folder. First, install the packages and libraries that are required:
+
+```
+$ cd bnbridge
+$ npm install
+```
+
+The config file at `bnbridge/src/config/config.js` needs to be updated:
+
+```
+apiUrl: "http://localhost:8000",
+apiToken: "ZTgwMTY1NjkzZjAyOTk1N2VjNDQ4MjBhNGRiODJiMGI1NjI5YjM2YjJkNjc1YjVhYjE0YmEwNTBhMDFiNDk3ZDpmYmM3MWMyOTRmOWE4N2VlM2QzMmVkZDVkNjExNTE4MTFlNDRmNzc0NDgzNzY4OWVmYWRkYmJiOWY3NjgxYzA5",
+explorerURL: "https://testnet-explorer.binance.org/tx/",
+etherscanURL: "https://ropsten.etherscan.io/tx/",
+bnbAddressLength: 43,
+erc20addressLength: 42,
+```
+
+The frontend service can be started now:
+
+```
+$ npm run start
+Compiled successfully!
+
+You can now view bnbridge in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://192.168.86.109:3000/
+
+Note that the development build is not optimized.
+To create a production build, use yarn build.
+```
+
+The webpage should be opened at `http://localhost:3000/` that looks similar as below:
+
+<img src="img/frontend.jpg" width=700 />
+
+
+### 2.5 Issue BEP-2 Token
+
+We need to issue the BEP-2 token through bnbridge so that the PostgreSQL database can have all the required information.
+
+* **Step 1**: fill the ERC20 token address and type the desired BEP-2 token name & supply:
+
+<img src="img/issue1.jpg" width=700 />
+
+
+
+
+<!---
+
+
+
+
+```
+
+
+
+$ cp index.dev.js index.js
+
+$ node ./api.bnbridge.exchange.js 
+api.bnbridge.exchange 8000
+GET /api/v1/tokens 200 31.226 ms - 41
+GET /api/v1/fees 200 702.330 ms - 265
+
+
+$ cp config/example.config.js config.js
+
+
+npm start
+
+
+// Step 1: deploy ERC20 token in Kovan
+
+// step 2: 
+tbnb1ajh0593w6dehtvwld2t8f5vavnrksa9anyks8d
+
+gadget profit sniff network problem nothing act photo uncle multiply good rifle above worth puppy bus craft glow foot gloom theme drop divorce nominee
+
+
+transfer ERC20 token
+https://ropsten.etherscan.io/tx/0x52209c74ab50096a12a03c4e50e4b71eada38a35ab8282ed39abf2fa7ac871e9
+
+need wait a while before click 'next', otherwise, error out
 --->
