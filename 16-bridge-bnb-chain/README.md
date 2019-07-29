@@ -12,7 +12,7 @@ date: 07/23/2019
 
 In this research, we investigate the issuance of BEP-2 token in binance chain and the token bridge converts ERC20 token in Ethereum into the BEP-2 token.
 
-The poc can be found in the `pos` folder inside the workspace.
+The poc can be found in the `poc` folder inside the workspace.
 
 ## 1. Issue New Token in Binance Chain
 
