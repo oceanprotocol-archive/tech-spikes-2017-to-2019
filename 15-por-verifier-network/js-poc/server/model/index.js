@@ -136,19 +136,7 @@ const models = {
     // submit signature
     submitSig(req, res, next) {
         // run go function to test the por before submit signature
-        models.verifyPOR((err, result) => {
-            if(err) {
-              console.log(err)
-              res.status(500)
-              res.body = { 'status': 500, 'success': false, 'result': err }
-              return next(null, req, res, next)
-            }
-
-            // res.status(205)
-            // res.body = { 'status': 200, 'success': true }
-            // return next(null, req, res, next)
-            
-            console.log("submit signature as por is successful")
+        if(config.runGo === false){
             const {
                 user_address,
                 privateKey,
@@ -167,7 +155,41 @@ const models = {
                 res.body = { 'status': 200, 'success': true }
                 return next(null, req, res, next)
             })
-        })
+        } else {
+
+            models.verifyPOR((err, result) => {
+                if(err) {
+                console.log(err)
+                res.status(500)
+                res.body = { 'status': 500, 'success': false, 'result': err }
+                return next(null, req, res, next)
+                }
+
+                // res.status(205)
+                // res.body = { 'status': 200, 'success': true }
+                // return next(null, req, res, next)
+                
+                console.log("submit signature as por is successful")
+                const {
+                    user_address,
+                    privateKey,
+                    did
+                    } = req.body
+
+                eth.submitSig(contract_address, privateKey, user_address, did, (err, state) => {
+                    if(err) {
+                        console.log(err)
+                        res.status(500)
+                        res.body = { 'status': 500, 'success': false, 'result': err }
+                        return next(null, req, res, next)
+                    }
+            
+                    res.status(205)
+                    res.body = { 'status': 200, 'success': true }
+                    return next(null, req, res, next)
+                })
+            })
+        }
     },
 
     // resolve a challenge

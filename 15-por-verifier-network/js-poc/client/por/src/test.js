@@ -1,9 +1,9 @@
 const fetch = require('node-fetch');
 
 const apiUrl = "http://localhost:8000"
-const contract_address = "0x511c6De67C4d0c3B6eb0AF693B226209E45e025A"
-const user_address = "0xd829a30ef7f5778b0f09f4fe6508d31b56cd40db"
-const privateKey = "8d8ef98e5ce2cea2422e39d906595e18af2f2d676ca89e4322efcf03a4595a72"
+const contract_address = "0x2345d5788C876878a020a57526f1D1C9c6f753B6"
+const user_address = "0x38b025b403871e95c2cc254374ee84fdad7ec2a9"
+const privateKey = "8d6f328eab36bd8829c340868d72fb8c8f08b443e5fbfbdb365d8ca06c7ea6cb"
 const did = 1
 
 async function por(){
