@@ -342,63 +342,155 @@ let call_future = contract.call("requestPOR", (2,), accounts[0], Options::defaul
 
 <img src="img/msg.jpg" width=700/>
 
-<!--
+## 3.4 JS POC
 
-## 3.4 Calling Go functions from Node.js
+The POC using Javascript is located in `js-poc` folder. It has following structure:
 
-### 3.4.1 export functions from Golang 
+* **client**: the frontend code using React
+* **server**: the api server as backend using express
+* **truffle**: the smart contract deployed on blockchain using Solidity
 
-* The package must be a `main` package. 
-* The compiler will build the package and all of its dependencies into a single shared object binary.
-* The source must import the pseudo-package “C”.
-* Use the `//export` comment to annotate functions you wish to make accessible to other languages.
-* An empty main function must be declared.
+### 3.4.1 Instruction
 
-Assume we need to generate library of `provider.go` file:
+### Install Packages
 
 ```
-package main;
+$ cd server
+$ npm install
 
-import "C"
+$ cd ../client/por
+$ npm install
+```
 
-//export St
-func St(ssk_file string, fileName string, S int64, N int64, tau_file string, auth_file string, sample_file string) {
-...
+### Migrate Contract
+
+```
+$ ganache-cli 
+
+$ cd truffle
+$ truffle migrate --network <network>
+```
+
+### Launch API Server
+
+change config file: `server/config/index.js` including contract_address, abi and boolean `runGo` (it switches off the go-lang function)
+
+```
+const config = {
+    // ethereum settings
+    provider: 'http://localhost:8545',
+    contract_address: '0x511c6De67C4d0c3B6eb0AF693B226209E45e025A',
+    abi: [{"constant":true,"inputs":..."name":"verificationFinished","type":"event"}],
+
+    // por settings
+    runGo: false,
+    goPath: "/usr/local/bin",
+    filePath: "/Users/fancy/go/por/por.go",
 }
 
-func main() {}
+module.exports = config
 ```
 
-The command can be used to generate header file and provider.so file:
+Launch the api server as:
 
 ```
-$ go build -o provider.so -buildmode=c-shared provider.go
-$ ls
-provider.go  provider.h   provider.so
+$ node server/api.server.js
+api.server listening on port  8000
 ```
 
-The header file defines the type and functions in Go code:
+### Launch Client 
+
+change config file: `client/por/src/config/config.js` includes the contract address and api server url.
 
 ```
-...
-#ifndef GO_CGO_GOSTRING_TYPEDEF
-typedef _GoString_ GoString;
-#endif
-typedef void *GoMap;
-typedef void *GoChan;
-typedef struct { void *t; void *v; } GoInterface;
-typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
-...
-extern void St(GoString p0, GoString p1, GoInt64 p2, GoInt64 p3, GoString p4, GoString p5, GoString p6);
-...
+const config = {
+    apiUrl: "http://localhost:8000",
+    contract_address: "0x2345d5788C876878a020a57526f1D1C9c6f753B6"
+  };
+  
+  export default config;
 ```
 
-Similarly, we can generate header file and library for `verifier.go` and `storage.go`. These files can be found in `nodejs-golang-poc` folder. 
+Launch the client page with: `npm start` and it opens the frontend page at `http://localhost:3000/`
 
-### 3.4.2 Call Go function from Node.js
 
-Node uses a library called [node-ffi](https://github.com/node-ffi/node-ffi) (and a other dependent libraries) to dynamically load and call exported Go functions:
+### 3.4.2 Demo
 
-Note that the library file in MacOS has the name of ".dylib" rather than ".so". The error will be encountered in Mac as [issue](https://github.com/vladimirvivien/go-cshared-examples/issues/1). Simply change the suffix to be ".dylib" in MacOs or switch to Linux machine.
+### Step 1: register as verifier
 
--->
+User needs to provide his own account address and private key to send tx to blockchain. The wallet must be well funded.
+
+<img src="img/step1.jpg" width=500 />
+
+### Step 2: request por verification
+
+In this step, user request por verification against dataset with id = 20
+
+<img src="img/step2.jpg" width=500/>
+
+### Step 3: verifier run por and submit signature
+
+At this moment, the challenge against dataset is not resolved yet, therefore, it shows `False` as status.
+
+<img src="img/step3.jpg" width=500/>
+
+### Step 4: resolve a challenge
+
+Click the button to resolve a challenge, where smart contract evaluates the received signatures and close challenge as requested.
+
+<img src="img/step4.jpg" width=500/>
+
+### Step 5: check status of challenge
+
+It query the state of smart contarct in blockchain to find out the status of resolved challenge.
+
+<img src="img/step5.jpg" width=500/>
+
+### Step 6: finish
+
+After the `check status` transaction finish, the status of challenge is updated in the webpage. It is `success` indicating the challenge is resolved and por proves to be true.
+
+<img src="img/step6.jpg" width=500/>
+
+### API calls history
+
+```
+[nodemon] starting `node server/api.server.js`
+api.server listening on port  8000
+add a new verifier
+POST /api/v1/verifier 200 128.593 ms - 29
+request a por verification
+POST /api/v1/request 200 51.589 ms - 29
+cd /usr/local/bin
+./go run /Users/fancy/go/por/por.go
+exit
+bash-3.2$ cd /usr/local/bin
+bash-3.2$ ./go run /Users/fancy/go/por/por.go
+Generating RSA keys...
+Generated!
+2019-08-07 15:08:43.929549 -0700 PDT m=+0.015428014
+Signing file /Users/fancy/go/por/data.txt
+
+Signed!
+Signing time is: 19.07447ms
+Generating challenge...
+Generated!
+Generating challenge time is: 133.637µs
+Issuing proof...
+Issued!
+Issuing proof time is: 251.018µs
+Verifying proof...
+Result: true!
+Verifying proof time is: 874.06µs
+Total time is: 20.336573ms
+submit signature as por is successful
+exit
+exit
+bash-3.2$ exit
+exit
+POST /api/v1/submit 200 697.646 ms - 29
+resolve a challenge
+POST /api/v1/resolve 200 39.783 ms - 29
+query status of a challenge
+POST /api/v1/check 200 30.026 ms - 109
+```

@@ -6,7 +6,11 @@ import Controller from './components/controller';
 
 function App() {
   return (
-    <Controller />
+    <div
+        style={{ fontFamily: '"Fira Code", verdana', marginTop: "50px" }}
+      >
+      <Controller />
+    </div>
   );
 }
 

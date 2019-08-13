@@ -54,6 +54,7 @@ class Controller extends Component {
             throw Error(res.message);
             // alert("success")
             this.setState({ loading: false, addVerifier: true, account: this.accountInput.current.value, privateKey: this.privateKeyInput.current.value})
+            this.onNext()
         })
         .catch(error => {
             alert(error)
@@ -83,6 +84,7 @@ class Controller extends Component {
             throw Error(res.message);
 
             this.setState({ loading: false, requestPOR: true, did: this.didInput.current.value})
+            this.onNext()
         })
         .catch(error => {
             alert(error)
@@ -112,6 +114,7 @@ class Controller extends Component {
             throw Error(res.message);
 
             this.setState({ loading: false, submitSig: true })
+            this.onNext()
         })
         .catch(error => {
             alert(error)
@@ -208,14 +211,6 @@ class Controller extends Component {
         })
       };
 
-    SwitchButtonPage0 = () => {
-        const verifierAdded = this.state.addVerifier
-        if (!verifierAdded) {
-            return <Button variant="primary" type="submit" onClick={(event) => { this.addVerifier(event);}}>Register</Button>;
-        }
-        return <Button variant="primary" type="submit" onClick={(event) => { this.onNext(event);}}>Next</Button>;
-    }
-
     // step 1: register as verifier (input address and private key)
     renderPage0 = () => {
         return(
@@ -238,7 +233,7 @@ class Controller extends Component {
                 </Form.Text>
                 </Form.Group>
                 </Form> 
-                <this.SwitchButtonPage0 />
+                <Button variant="primary" type="submit" onClick={(event) => { this.addVerifier(event);}}>Register</Button>
             </Container>
         )
     };
@@ -256,18 +251,10 @@ class Controller extends Component {
                 <Form.Control type="text" placeholder="e.g., 1, 2, ..."  ref={this.didInput}/>  
                 </Form.Group>
                 </Form> 
-                <this.SwitchButtonPage1 />
+                <Button variant="primary" type="submit" onClick={(event) => { this.requestPOR(event);}}>Request</Button>
             </Container>
         )
     };
-
-    SwitchButtonPage1 = () => {
-        const porRequested = this.state.requestPOR
-        if (!porRequested) {
-            return <Button variant="primary" type="submit" onClick={(event) => { this.requestPOR(event);}}>Request</Button>;
-        }
-        return <Button variant="primary" type="submit" onClick={(event) => { this.onNext(event);}}>Next</Button>;
-    }
 
     // Step 3: submit signature
     renderPage2 = () => {
@@ -279,7 +266,7 @@ class Controller extends Component {
                 <Row className="justify-content-md-left">
                 <h5>current challenge {this.state.did} status: <this.ShowBadge /> </h5>
                 </Row>
-                <this.SwitchButtonPage2 />
+                <Button variant="primary" type="submit" onClick={(event) => { this.submitSig(event);}}>Submit Signature</Button>
             </Container>
         )
     };
@@ -287,19 +274,10 @@ class Controller extends Component {
     ShowBadge = () => {
         const status = this.state.success
         if(status){
-            return <Badge variant="success">True</Badge>
+            return <Badge variant="success">Success</Badge>
         }
         return <Badge variant="secondary">False</Badge>
     }
-
-    SwitchButtonPage2 = () => {
-        const sigSubmitted = this.state.submitSig
-        if (!sigSubmitted) {
-            return <Button variant="primary" type="submit" onClick={(event) => { this.submitSig(event);}}>Submit Signature</Button>;
-        }
-        return <Button variant="primary" type="submit" onClick={(event) => { this.onNext(event);}}>Next</Button>;
-    }
-
 
     // Step 4: resolve challenge and check status
     renderPage3 = () => {
