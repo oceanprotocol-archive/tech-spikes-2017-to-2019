@@ -41,7 +41,7 @@ Folder Name   |  Description | Issue |
 
 ## Updates
 
-* [08/13/2019] deploy por as lambda function in AWS ([361](https://github.com/oceanprotocol/ocean/issues/361))
+* [08/13/2019] deploy por as [lambda function](15-por-verifier-network/lambda/README.md) in AWS ([361](https://github.com/oceanprotocol/ocean/issues/361))
 
 * [08/06/2019] refactor por verifier network ([345](https://github.com/oceanprotocol/ocean/issues/345))
 
