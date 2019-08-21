@@ -1,0 +1,726 @@
+{
+  "contracts": {
+    "OceanVoting": {
+      "address": "0xbc7df2d141998baee657e71ba430dc739dc2e30f",
+      "constructorCode": "608060405234801561001057600080fd5b50611b0b806100206000396000f300",
+      "bodyBytecodeHash": "8ad5121001f27e9ce4f346eb6c5347328f7b1080512ce0fcdb9d806339aee8b1",
+      "localBytecodeHash": "570ca34393a4c453d2bec47343cac1c846dfdbd90ce7c654017b935d67a420f3",
+      "deployedBytecodeHash": "570ca34393a4c453d2bec47343cac1c846dfdbd90ce7c654017b935d67a420f3",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_mapping<t_uint256>": {
+          "id": "t_mapping<t_uint256>",
+          "valueType": "t_uint256",
+          "label": "mapping(key => uint256)",
+          "kind": "mapping"
+        },
+        "t_struct<VoterMap.Node>": {
+          "id": "t_struct<VoterMap.Node>",
+          "kind": "struct",
+          "label": "VoterMap.Node",
+          "members": [
+            {
+              "label": "next",
+              "astId": 11314,
+              "type": "t_uint256",
+              "src": "101:9:14"
+            },
+            {
+              "label": "prev",
+              "astId": 11316,
+              "type": "t_uint256",
+              "src": "116:9:14"
+            }
+          ]
+        },
+        "t_mapping<t_struct<VoterMap.Node>>": {
+          "id": "t_mapping<t_struct<VoterMap.Node>>",
+          "valueType": "t_struct<VoterMap.Node>",
+          "label": "mapping(key => VoterMap.Node)",
+          "kind": "mapping"
+        },
+        "t_struct<OceanVoting.Poll>": {
+          "id": "t_struct<OceanVoting.Poll>",
+          "kind": "struct",
+          "label": "OceanVoting.Poll",
+          "members": [
+            {
+              "label": "commitEndDate",
+              "astId": 10178,
+              "type": "t_uint256",
+              "src": "1148:18:13"
+            },
+            {
+              "label": "revealEndDate",
+              "astId": 10180,
+              "type": "t_uint256",
+              "src": "1226:18:13"
+            },
+            {
+              "label": "voteQuorum",
+              "astId": 10182,
+              "type": "t_uint256",
+              "src": "1304:15:13"
+            },
+            {
+              "label": "votesFor",
+              "astId": 10184,
+              "type": "t_uint256",
+              "src": "1385:13:13"
+            },
+            {
+              "label": "votesAgainst",
+              "astId": 10186,
+              "type": "t_uint256",
+              "src": "1452:17:13"
+            },
+            {
+              "label": "didCommit",
+              "astId": 10190,
+              "type": "t_mapping<t_bool>",
+              "src": "1523:34:13"
+            },
+            {
+              "label": "didReveal",
+              "astId": 10194,
+              "type": "t_mapping<t_bool>",
+              "src": "1633:34:13"
+            },
+            {
+              "label": "voteOptions",
+              "astId": 10198,
+              "type": "t_mapping<t_uint256>",
+              "src": "1742:36:13"
+            }
+          ]
+        },
+        "t_mapping<t_bool>": {
+          "id": "t_mapping<t_bool>",
+          "valueType": "t_bool",
+          "label": "mapping(key => bool)",
+          "kind": "mapping"
+        },
+        "t_mapping<t_struct<OceanVoting.Poll>>": {
+          "id": "t_mapping<t_struct<OceanVoting.Poll>>",
+          "valueType": "t_struct<OceanVoting.Poll>",
+          "label": "mapping(key => OceanVoting.Poll)",
+          "kind": "mapping"
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 13463,
+          "type": "t_bool",
+          "src": "749:24:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 13465,
+          "type": "t_bool",
+          "src": "868:25:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 13514,
+          "type": "t_array:50<t_uint256>",
+          "src": "1883:29:21"
+        },
+        {
+          "contract": "AttributeStore",
+          "path": "contracts/voting/AttributeStore.sol",
+          "label": "store",
+          "astId": 10056,
+          "type": "t_mapping<t_uint256>",
+          "src": "55:30:12"
+        },
+        {
+          "contract": "VoterMap",
+          "path": "contracts/voting/VoterMap.sol",
+          "label": "dllMap",
+          "astId": 11323,
+          "type": "t_mapping<t_struct<VoterMap.Node>>",
+          "src": "134:48:14"
+        },
+        {
+          "contract": "OceanVoting",
+          "path": "contracts/voting/OceanVoting.sol",
+          "label": "pollNonce",
+          "astId": 10204,
+          "type": "t_uint256",
+          "src": "1959:21:13"
+        },
+        {
+          "contract": "OceanVoting",
+          "path": "contracts/voting/OceanVoting.sol",
+          "label": "pollMap",
+          "astId": 10208,
+          "type": "t_mapping<t_struct<OceanVoting.Poll>>",
+          "src": "1987:36:13"
+        },
+        {
+          "contract": "OceanVoting",
+          "path": "contracts/voting/OceanVoting.sol",
+          "label": "voteTokenBalance",
+          "astId": 10212,
+          "type": "t_mapping<t_uint256>",
+          "src": "2059:48:13"
+        },
+        {
+          "contract": "OceanVoting",
+          "path": "contracts/voting/OceanVoting.sol",
+          "label": "token",
+          "astId": 10214,
+          "type": "t_address",
+          "src": "2158:23:13"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    },
+    "OceanToken": {
+      "address": "0x8127de53d42717c5b8276fd09ee652628ef726a0",
+      "constructorCode": "608060405234801561001057600080fd5b506110b6806100206000396000f300",
+      "bodyBytecodeHash": "f142dfd0ad146c1af8490dfa3b31b23980510618d26024b77bbcf432a7bde196",
+      "localBytecodeHash": "c154e7d0e7b0874d27ab9bcbffe9f9a6492c1764a72b0c7a89ed21d86e95b45e",
+      "deployedBytecodeHash": "c154e7d0e7b0874d27ab9bcbffe9f9a6492c1764a72b0c7a89ed21d86e95b45e",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_mapping<t_uint256>": {
+          "id": "t_mapping<t_uint256>",
+          "valueType": "t_uint256",
+          "label": "mapping(key => uint256)",
+          "kind": "mapping"
+        },
+        "t_string": {
+          "id": "t_string",
+          "kind": "elementary",
+          "label": "string"
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_uint8": {
+          "id": "t_uint8",
+          "kind": "elementary",
+          "label": "uint8"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 13463,
+          "type": "t_bool",
+          "src": "749:24:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 13465,
+          "type": "t_bool",
+          "src": "868:25:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 13514,
+          "type": "t_array:50<t_uint256>",
+          "src": "1883:29:21"
+        },
+        {
+          "contract": "ERC20",
+          "path": "openzeppelin-eth/contracts/token/ERC20/ERC20.sol",
+          "label": "_balances",
+          "astId": 12955,
+          "type": "t_mapping<t_uint256>",
+          "src": "491:46:19"
+        },
+        {
+          "contract": "ERC20",
+          "path": "openzeppelin-eth/contracts/token/ERC20/ERC20.sol",
+          "label": "_allowed",
+          "astId": 12961,
+          "type": "t_mapping<t_uint256>",
+          "src": "542:66:19"
+        },
+        {
+          "contract": "ERC20",
+          "path": "openzeppelin-eth/contracts/token/ERC20/ERC20.sol",
+          "label": "_totalSupply",
+          "astId": 12963,
+          "type": "t_uint256",
+          "src": "613:28:19"
+        },
+        {
+          "contract": "ERC20",
+          "path": "openzeppelin-eth/contracts/token/ERC20/ERC20.sol",
+          "label": "______gap",
+          "astId": 13389,
+          "type": "t_array:50<t_uint256>",
+          "src": "7048:29:19"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "name",
+          "astId": 9728,
+          "type": "t_string",
+          "src": "373:18:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "symbol",
+          "astId": 9730,
+          "type": "t_string",
+          "src": "459:20:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "tokenReceiver",
+          "astId": 9732,
+          "type": "t_address",
+          "src": "582:28:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "rewardAddress",
+          "astId": 9734,
+          "type": "t_address",
+          "src": "681:28:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "decimals",
+          "astId": 9736,
+          "type": "t_uint8",
+          "src": "787:21:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "totalSupply",
+          "astId": 9738,
+          "type": "t_uint256",
+          "src": "879:26:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "currentSupply",
+          "astId": 9740,
+          "type": "t_uint256",
+          "src": "956:28:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "unmintedSupply",
+          "astId": 9742,
+          "type": "t_uint256",
+          "src": "1068:29:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "inflationRatePerInterval",
+          "astId": 9744,
+          "type": "t_uint256",
+          "src": "1156:39:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "blockInterval",
+          "astId": 9746,
+          "type": "t_uint256",
+          "src": "1263:28:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "mintingThreshold",
+          "astId": 9748,
+          "type": "t_uint256",
+          "src": "1348:31:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "initInflationBlock",
+          "astId": 9750,
+          "type": "t_uint256",
+          "src": "1468:33:11"
+        },
+        {
+          "contract": "OceanToken",
+          "path": "contracts/token/OceanToken.sol",
+          "label": "lastInflationBlock",
+          "astId": 9752,
+          "type": "t_uint256",
+          "src": "1507:33:11"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    },
+    "OceanRegistry": {
+      "address": "0x7395b4a3edb8304ef6010ef649008dbe63bba90f",
+      "constructorCode": "608060405234801561001057600080fd5b50611fe3806100206000396000f300",
+      "bodyBytecodeHash": "98b1d5d9a02bd161eed53b7e59caf4daf0dc00b35f92138c810475fe209bed06",
+      "localBytecodeHash": "a338c32a852c9ac521d0db7b86ac2085793f9cf683d60ef5ffcc299f656d5e1b",
+      "deployedBytecodeHash": "a338c32a852c9ac521d0db7b86ac2085793f9cf683d60ef5ffcc299f656d5e1b",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_struct<OceanRegistry.Challenge>": {
+          "id": "t_struct<OceanRegistry.Challenge>",
+          "kind": "struct",
+          "label": "OceanRegistry.Challenge",
+          "members": [
+            {
+              "label": "rewardPool",
+              "astId": 4528,
+              "type": "t_uint256",
+              "src": "2067:15:4"
+            },
+            {
+              "label": "challenger",
+              "astId": 4530,
+              "type": "t_address",
+              "src": "2165:18:4"
+            },
+            {
+              "label": "resolved",
+              "astId": 4532,
+              "type": "t_bool",
+              "src": "2219:13:4"
+            },
+            {
+              "label": "stake",
+              "astId": 4534,
+              "type": "t_uint256",
+              "src": "2293:10:4"
+            },
+            {
+              "label": "totalTokens",
+              "astId": 4536,
+              "type": "t_uint256",
+              "src": "2388:16:4"
+            },
+            {
+              "label": "tokenClaims",
+              "astId": 4540,
+              "type": "t_mapping<t_bool>",
+              "src": "2487:36:4"
+            }
+          ]
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_mapping<t_bool>": {
+          "id": "t_mapping<t_bool>",
+          "valueType": "t_bool",
+          "label": "mapping(key => bool)",
+          "kind": "mapping"
+        },
+        "t_mapping<t_struct<OceanRegistry.Challenge>>": {
+          "id": "t_mapping<t_struct<OceanRegistry.Challenge>>",
+          "valueType": "t_struct<OceanRegistry.Challenge>",
+          "label": "mapping(key => OceanRegistry.Challenge)",
+          "kind": "mapping"
+        },
+        "t_struct<OceanRegistry.Listing>": {
+          "id": "t_struct<OceanRegistry.Listing>",
+          "kind": "struct",
+          "label": "OceanRegistry.Listing",
+          "members": [
+            {
+              "label": "applicationExpiry",
+              "astId": 4513,
+              "type": "t_uint256",
+              "src": "1560:22:4"
+            },
+            {
+              "label": "whitelisted",
+              "astId": 4515,
+              "type": "t_bool",
+              "src": "1626:16:4"
+            },
+            {
+              "label": "owner",
+              "astId": 4517,
+              "type": "t_address",
+              "src": "1687:13:4"
+            },
+            {
+              "label": "unstakedDeposit",
+              "astId": 4519,
+              "type": "t_uint256",
+              "src": "1739:20:4"
+            },
+            {
+              "label": "challengeID",
+              "astId": 4521,
+              "type": "t_uint256",
+              "src": "1832:16:4"
+            },
+            {
+              "label": "exitTime",
+              "astId": 4523,
+              "type": "t_uint256",
+              "src": "1904:13:4"
+            },
+            {
+              "label": "exitTimeExpiry",
+              "astId": 4525,
+              "type": "t_uint256",
+              "src": "1971:19:4"
+            }
+          ]
+        },
+        "t_mapping<t_struct<OceanRegistry.Listing>>": {
+          "id": "t_mapping<t_struct<OceanRegistry.Listing>>",
+          "valueType": "t_struct<OceanRegistry.Listing>",
+          "label": "mapping(key => OceanRegistry.Listing)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 13463,
+          "type": "t_bool",
+          "src": "749:24:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 13465,
+          "type": "t_bool",
+          "src": "868:25:21"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 13514,
+          "type": "t_array:50<t_uint256>",
+          "src": "1883:29:21"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "challenges",
+          "astId": 4545,
+          "type": "t_mapping<t_struct<OceanRegistry.Challenge>>",
+          "src": "2644:44:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "listings",
+          "astId": 4549,
+          "type": "t_mapping<t_struct<OceanRegistry.Listing>>",
+          "src": "2752:43:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "token",
+          "astId": 4551,
+          "type": "t_address",
+          "src": "2826:23:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "voting",
+          "astId": 4553,
+          "type": "t_address",
+          "src": "2855:25:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "minDeposit",
+          "astId": 4555,
+          "type": "t_uint256",
+          "src": "2913:25:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "applyStageLength",
+          "astId": 4557,
+          "type": "t_uint256",
+          "src": "2944:31:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "commitStageLength",
+          "astId": 4559,
+          "type": "t_uint256",
+          "src": "2981:32:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "revealStageLength",
+          "astId": 4561,
+          "type": "t_uint256",
+          "src": "3019:32:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "dispensationPct",
+          "astId": 4563,
+          "type": "t_uint256",
+          "src": "3057:30:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "voteQuorum",
+          "astId": 4565,
+          "type": "t_uint256",
+          "src": "3093:25:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "exitTimeDelay",
+          "astId": 4567,
+          "type": "t_uint256",
+          "src": "3124:28:4"
+        },
+        {
+          "contract": "OceanRegistry",
+          "path": "contracts/registry/OceanRegistry.sol",
+          "label": "exitPeriodLen",
+          "astId": 4569,
+          "type": "t_uint256",
+          "src": "3158:28:4"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    }
+  },
+  "solidityLibs": {},
+  "proxies": {
+    "keeper/OceanToken": [
+      {
+        "address": "0x3df59d9a1efaf34c8bf098ba3fd8d482dac17268",
+        "version": "0.1.0",
+        "implementation": "0x8127de53d42717c5b8276fd09ee652628ef726a0"
+      }
+    ],
+    "keeper/OceanVoting": [
+      {
+        "address": "0x9243dc25599fb998c0b7bcfabe3b653048a9d369",
+        "version": "0.1.0",
+        "implementation": "0xbc7df2d141998baee657e71ba430dc739dc2e30f"
+      }
+    ],
+    "keeper/OceanRegistry": [
+      {
+        "address": "0x76587623a0ef4f1c0d8232fc052546571a5f4224",
+        "version": "0.1.0",
+        "implementation": "0x7395b4a3edb8304ef6010ef649008dbe63bba90f"
+      }
+    ]
+  },
+  "zosversion": "2",
+  "version": "0.1.0"
+}

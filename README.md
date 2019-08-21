@@ -41,6 +41,8 @@ Folder Name   |  Description | Issue |
 
 ## Updates
 
+* [08/21/2019] add archive folder `poc-12-2018`
+
 * [08/13/2019] deploy por as [lambda function](15-por-verifier-network/lambda/README.md) in AWS ([361](https://github.com/oceanprotocol/ocean/issues/361))
 
 * [08/06/2019] refactor por verifier network ([345](https://github.com/oceanprotocol/ocean/issues/345))
