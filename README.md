@@ -38,8 +38,11 @@ Folder Name   |  Description | Issue |
 14-proof-of-execution | research PoE | [265](https://github.com/oceanprotocol/ocean/issues/265) |
 15-por-verifier-network | design and prototype verifier network in POR | [345](https://github.com/oceanprotocol/ocean/issues/345) [361](https://github.com/oceanprotocol/ocean/issues/361) |
 16-bridge-bnb-chain | poc of token bridge between ETH and BNB | [354](https://github.com/oceanprotocol/ocean/issues/354) |
+17-permissionless-incentive | design of incentive mechanism for permissionless blockchain | [362](https://github.com/oceanprotocol/ocean/issues/362) |
 
 ## Updates
+
+* [08/27/2019] add architecture design of incentive mechanism 
 
 * [08/21/2019] add archive folder `poc-12-2018`
 
