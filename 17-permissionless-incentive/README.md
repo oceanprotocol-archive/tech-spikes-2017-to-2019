@@ -20,39 +20,29 @@ However, Ocean plan to **migrate to a permissionless blockchain network** such a
 
 # 2. Overview
 
-From the top-level point of view, the incentive mechanism can be divided into following layers:
+From the top-level point of view, the incentive mechanism can be divided into two layers:
 
-* **curation layer**: it rewards users to curate high quality dataset through staking such as bonding curves. 
-* **reputation layer**: it entitle users with more privilege for higher reputation:
-	* users build their reputation through their services:
-		* data provider serves high quality dataset; 
-		* verifier validates the availability of dataset timely and correctly;
-		* curators stake on high quality dataset;
-		* etc.
-	* they receive privilege for higher reputation, such as:
-		* dataset from provider can be promoted with higher rank in elastic search result;
-		* verifier will have higher probability to be chosen to fulfill the verification task;
-		* etc.
-* **storage layer**: it rewards users to serve the access request of data commons.
+* **curation layer**: it rewards users to curate high quality dataset through staking such as bonding curves.
+* **mining layer**: it rewards miners or providers to serve the access request of data commons.
 
-<img src="img/layer.jpg" width=500 />
+<img src="img/layer-1.jpg" width=500 />
 
 We compare these incentive layers from different perspectives in the below:
 
- **Layer**  |  Storage Layer |Reputation Layer | Curation Layer |
+ **Layer**  |  Mining Layer |Curation Layer |
 ---| ---|  ---| ---|
-**Participants** | data provider, verifier, challenger |   all service providers | curator |
-**Incentive** | network reward | privilege | profit gain | 
-**Mechanism** | reward token minting + por* |  layered TCR | bonding curves |
-**Required Effort** |  L1, L2 + RanDAO/Chainlink | L1 | L1 |
+**Participants** | data provider, verifier, challenger |    curator |
+**Incentive** | network reward |  profit gain | 
+**Mechanism** | reward token mining + por* |  bonding curves |
+**Required Effort** |  L1, L2 + RanDAO/Chainlink | L1 |
 
 \*por: `proof of retrieveability` which proves the dataset is available and ready for access.
 
-# 3. Incentive in Storage Layer
+# 3. Incentive in Mining Layer
 
-The storage layer is the fundamental cornerstone for all incentive mechanism. In this layer, the funding source of incentives is the network reward that will be minted over the time. 
+The mining layer is the fundamental cornerstone for all incentive mechanism. In this layer, the funding source of incentives is the network reward that will be minted over blocks. 
 
-To be clear, the network rewards in this layer aims to **reward the providers of data commons**, since providers of priced dataset can earn income of consumer payment.
+To be clear, the network rewards in this layer aims to **reward the providers of data commons**, since providers of priced dataset can earn income from consumer payment.
 
 ## 3.1 Key Problems
 
@@ -69,7 +59,7 @@ The key problems of incentive design in this layer are follows:
 	* how to challenge the chosen recipent for token rewards? 
 	* how to validate the recipent indeed provides the service? 
 	* how to build the verifier network and choose verifiers for the validation?
-	* how to introduce randomness in the selection process to prevent fraudulence?
+	* how to introduce randomness in the selection process to prevent potential fraudulence?
 
 <!--
 
@@ -85,7 +75,7 @@ To address these problems, we plotted the initial architecture design as follows
 
 <img src="img/arch2.jpg" width=1500 />
 
-* **Minting**: 
+* **Mining**: 
 	* the network reward tokens will be minted every period of blocks as pre-defined schedule.
 	* the minting transaction can be implemented in many different way:
 		* an external minter account monitors new blocks and send minting transaction to token contract;
@@ -241,9 +231,35 @@ Overall, all these modules can be built in the same time but they should be inte
 
 
 
+# 4. Incentive in Curation Layer
+
+# 5. Appendix
+
+## 5.1 Reward Multiple Providers for The Same Dataset
 
 
-# 4. Incentive in Reputation Layer
 
+### 5.1.1 Problem
 
-# 5. Incentive in Curation Layer
+In the current design of Ocean architecture, each proxy has a single URL pointing to a specific storage serving the dataset. However, many storage providers may serve the exactly the same dataset. 
+
+When users interact with the same proxy to access the dataset, **the proxy will route all requests to the same storage provider**. As such, other providers of the same dataset cannot serve the access request, therefore, making them unqualified to receive network rewards, which discourages other providers to continue storage services. 
+
+The root cause of the issue is that each proxy is not aware of the complete list of providers for the same dataset. Also, proxy shall not decide which storage provider serve the access request, which may potential cause fraudulence.
+
+<img src="img/proxy1.jpg" width=700 />
+
+### 5.1.2 Solution
+
+To resovle the issue, the key is to enable all proxies to be aware of all storage providers for the same dataset, which can be done through Keeper contract.
+
+When a storage provider registers with Ocean to serve a dataset, his DID will be recorded in Keeper contract for the specific dataset. It forms a complete list of providers for the same dataset.
+
+When users request dataset from a proxy, the proxy will query the Keeper contract for a provider for the requested dataset. Keeper contract will randomly choose a provider from the on-chain list so that each provider has the same probability to receive network reward. Here, a random number needs to be generated by RNG (e.g., RanDAO) or imported from Oracle network (e.g., Chainlink).
+
+After the proxy receives the provider DID from Keeper contract, it can retrieve the corresponding URL from metadata store to route the access correctly. As such, no matter which proxy the user is interacting with, the request can be routed to any provider who serve the same dataset.
+
+More importantly, Keeper contract is in charge of randomly choosing a provider from the list, which prevents potential attacks: for example, an attacker runs a proxy and a storage in the same time, and creates a huge amount of requests to access the dataset in his own storage. As such, he fakes the requests and earn network rewards. 
+
+<img src="img/proxy2.jpg" width=1000 />
+
