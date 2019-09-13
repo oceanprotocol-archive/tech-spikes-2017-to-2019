@@ -302,7 +302,7 @@ The potential disadvantage is the performance hit, since proxy needs to transact
 
 ### 3.5.2 IP Rights Violation (Elsa & Anna Attack)
 
-Miners may serve a IP-protected but very popular dataset (e.g., Disney movie, music songs and etc) to earn tremendous amount of network rewards in a short period of time. However, they clearly don't own the copyright. Such behavior creates an IP violation and critical legal issue. Ocean shall reduce the chance of such IP issue at the early stage.
+Providers may serve a IP-protected but very popular dataset (e.g., Disney movie, music songs and etc) to earn tremendous amount of network rewards in a short period of time. However, they clearly don't own the copyright. Such behavior creates an IP violation and critical legal issue. Ocean shall reduce the chance of such IP issue at the early stage.
 
 Depending on the required efforts from Ocean, the near-term solutions can be **challenge-response** approach: 
 
@@ -319,10 +319,10 @@ To prevent such attack, some potential approaches can be adopted:
 * **Simple Case: attack from single account**
 	* detect the abnormal access pattern from single account:
 		* repeatedly download the same dataset within a short period of time
-		* single account repeatedly download various datasets from one single miner;
+		* single account repeatedly download various datasets from one single provider;
 		* ...
 	* deactivate those account to stop their access to the Ocean network for a period of time or limit their transactions in a epoch of reward distribution.
-	* reward distribution smart contract can lower the winning probability for miners with such abnormal transaction history.
+	* reward distribution smart contract can lower the winning probability for providers with such abnormal transaction history.
 * **Complex Case: attack from many controlled accounts or a ring of actors**
 	* it becomes extremely difficult to recognize those controlled accounts in this scenario, because all of them seem to be normal;
 	* instead, Ocean can monitor the abnormal download stats for providers and properly scale down the factor of download transactions in calculating the probability of receiving network reward.
@@ -401,7 +401,7 @@ Instead, a **proposal-voting process** can be adopted to create new curation mar
 
 ### 5.3.2 Data Availability Attack
 
-It is possible that miner removes the dataset by accident or on purpose when the curation market has been created. In this way, the market becomes dangling without real dataset behind it and bonded tokens will be dumped. 
+It is possible that provider removes the dataset by accident or on purpose when the curation market has been created. In this way, the market becomes dangling without real dataset behind it and bonded tokens will be dumped. 
 
 <!---
 Much worse, the attacker may dump all his bonded token at higher price and remove the dataset after. Curators shall take this risk into account. 
