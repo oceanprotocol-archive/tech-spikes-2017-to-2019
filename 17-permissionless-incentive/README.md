@@ -1,9 +1,9 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-#  Incentive Design with Permissionless Settings
+#  Ocean Token Design: Structure and Behavior
 
 ```
-name: research on incentive design
+name: research on Ocean token design
 type: research
 status: updated draft
 editor: Fang Gong <fang@oceanprotocol.com>
@@ -12,44 +12,57 @@ date: 08/27/2019
 
 # 1. Introduction
 
-Incentive mechanism is an essential component in any decentralized applications (dApps), since dApps have no centralized authorities to govern it and each participant can join and leave at any time. Therefore, it is critical to reward the contributions from participants, who add more value to the network. As such, individual interest can be aligned with the entire network benefit. 
+Incentive mechanism is an essential component in any decentralized applications (dApps), since dApps have no centralized authorities to govern it and each participant can join and leave at any time. Therefore, it is critical to design an incentive mechanism to reward tokens to participants who made contributions. As such, individual interest can be aligned with the entire network benefit. 
 
-At this moment, Ocean keeper contracts are deployed to POA network, which is mainly maintained by POA nodes. In particular, these nodes govern the operation of the entire network and interaction with keeper contracts.
+In this research, we investigate the token dynamics in Ocean network and propose the token design to incentivize various participants in our ecosystem. It categorizes the token design into different layers and analyze the potential attack along with solutions.
 
-However, Ocean plan to **migrate to a permissionless blockchain network** such as Ethereum mainnet or so in the near future. In that situation, it is must to include incentive mechanism so that participants are motivated to contribute.
+In this research, we consider following types of roles in Ocean network:
+
+* **provider**: serve the dataset and fulfill the access request from users;
+* **consumer**: consume the dataset (no need to have extra incentive :)
+* **challenger**: challenge the provider about data availability;
+* **verifier**: verify the data availability of dataset served by a specific provider;
+* **curator**: stake on promising dataset to promote the high quality datasets;
+* **transaction validator**: relay consumers' tx and help cover the tx fee, which enables gasless tx for better user experience.
 
 # 2. Overview
 
-From the top-level point of view, the incentive mechanism can be divided into two layers:
+From the top-level point of view, the token design can be divided into two layers:
 
-* **curation layer**: it rewards users to curate high quality dataset through staking such as bonding curves.
-* **mining layer**: it rewards miners or providers to serve the access request of data commons.
+* **curation layer**: it rewards curators to curate high quality dataset through staking mechanism such as bonding curves.
+* **transaction layer**: validators relays user's tx to on-chain and pay for the tx cost (i.e., gas of Ether).
+* **mining layer**: it rewards providers to serve the access request of data commons.
 
-<img src="img/layer-1.jpg" width=500 />
+<img src="img/layer-3.jpg" width=500 />
 
 We compare these incentive layers from different perspectives in the below:
 
- **Layer**  |  Mining Layer |Curation Layer |
----| ---|  ---| ---|
-**Participants** | data provider, verifier, challenger |    curator |
-**Incentive** | network reward |  profit gain | 
-**Mechanism** | reward token mining + por* |  bonding curves |
-**Required Effort** |  L1, L2 + RanDAO/Chainlink | L1 |
+<img src="img/table-2.jpg" width=700 />
+
+<!---
+ **Layer**  |  Mining Layer | Tx Layer | Curation Layer |
+---| ---|  ---| ---| ---|
+**Participants** | data provider, verifier, challenger |  tx validator|   curator |
+**Incentive** | network reward | user's Ocean token payment | profit gain | 
+**Mechanism** | reward token mining + por* | token payment | bonding curves |
+**Required Effort** |  L1, L2 + RanDAO/Chainlink | L2 | L1 |
 
 \*por: `proof of retrieveability` which proves the dataset is available and ready for access.
 
-# 3. Incentive in Mining Layer
+--->
 
-The mining layer is the fundamental cornerstone for all incentive mechanism. In this layer, the funding source of incentives is the network reward that will be minted over blocks. 
+# 3. Token Design in Mining Layer
 
-To be clear, the network rewards in this layer aims to **reward the providers of data commons**, since providers of priced dataset can earn income from consumer payment.
+The mining layer is the fundamental cornerstone for all token design. In this layer, the funding source of incentives is the network reward that will be minted over blocks. 
+
+To be clear, the network rewards aims to **reward the providers of data commons**, since providers of priced dataset can earn income from their consumer payments.
 
 ## 3.1 Key Problems
 
 The key problems of incentive design in this layer are follows:
 
-* **Minting**: 
-	* how to mint network rewards tokens (e.g., trigger, amount, speed, ...)? 
+* **Mining**: 
+	* how to mine network rewards tokens (e.g., trigger, amount, speed, ...)? 
 	* how to securely keep or hold them?
 * **Distribution**: 
 	* how to gather the candidate recipents? 
@@ -73,29 +86,53 @@ The key problems of incentive design in this layer are follows:
 
 To address these problems, we plotted the initial architecture design as follows:
 
-<img src="img/arch.jpg" width=1500 />
+<img src="img/arch-1.jpg" width=1500 />
 
 * **Mining**: 
-	* the network reward tokens will be minted every period of blocks as pre-defined schedule.
-	* the minting transaction can be implemented in many different way:
-		* an external minter account monitors new blocks and send minting transaction to token contract;
-		* certain transaction in keeper contract can trigger the minting event;
-		* or reward tokens can even be pre-minted and unlock ever period of time;
-		* we can scale down the amount to put the risk under control in early stage.
-	* the minted tokens can be holded in a smart contract that is in charge of distribution.
-*  **Distribution**: 
+	* the network reward tokens (i.e., new Ocean tokens) will be mined every period of blocks as the releasing schedule (**ref**: Section 2.5 of [Ocean Token Design](https://docs.google.com/document/d/1zgf-rVW0UrAokJ2GZr_k4RKrcqgaP18Yj0aqMK16rh8/edit#heading=h.90ggq3ysgdu4)).
+	* the mining transaction can be implemented in many different way:
+		* an external miner (e.g., OPF) monitors new blocks and send mining transaction to token contract;
+		* a specific transaction in keeper contract may trigger the mining transaction;
+		* pre-mine tokens and unlock every period of time as scheduled;
+		* we can scale down the amount to lower the risk in the early stage.
+	* the mined tokens can be kept in a smart contract as a escrow account.
+* **Distribution**: 
 	* providers who fulfill the service agreement of **data commons** in the same period can be added into the candidate list;
 	* when current epoch is closed, the list will be cleared and start a new epoch;
-	* an random number generator (e.g., RanDAO) or oracle service (e.g. Chainlink) can be used to choose a random recipent from the list;
-	* assume each recipent has the same probability to be chosen, but the actual reward paid out might be a function of provider's staking amount);
-* **Verification: (challenge-response appraoch that assume to be good until challenged)**
-	* when a recipent is picked, the challenge period starts, which can be 1 week or 1 month.
-	* anyone can be the challenger to create a challenge against the picked recipent;
-	* anyone can register with Keeper contract and put down stakes to be an verifier;
+	* an random number generator (e.g., RanDAO) or oracle service (e.g. Chainlink) can be used to randomly choose a winner candidate from the list;
+	* **assume each candidate has the same probability to be chosen as the winner because:**
+		* it is impractical to calculate different probabilties for individual providers with smart contract in EVM due to the gas limit;
+		* much worse, the total number of candidates in the list may grow very fast when more and more providers join Ocean.
+	* (**Updated: 09/12**) However, the actual reward amount for the chosen winner candidate to receive is calculated with **network reward formula** considering below factors (see Section 1.4 of [Ocean Token Design](https://docs.google.com/document/d/1zgf-rVW0UrAokJ2GZr_k4RKrcqgaP18Yj0aqMK16rh8/edit#heading=h.90ggq3ysgdu4) for details):
+		* provider's staking amount;
+		* number of fulfillments or #bits downloaded in the epoch;
+		* ratio for provider serving up vs. accessing a dataset;
+* **Verification: (challenge-response appraoch)** (**Updated: 09/12**)
+	* the winner can take away the network rewards right away, but **the same amount of his stake will be locked** into "Locked Collateral Account" in case of potential challenge;
+	* the challenge period starts, which can be 1 week or 1 month.
+	* anyone can deposit stakes into "Free Collateral Account" and become a challenger;
+	* anyone can deposit stakes into "Free Collateral Account" and register to be an verifier;
 	* when a challenge is created, a group of verifiers will be chosen from the verifier network;
-	* these verifier perform POR verification against the data commons served by the recipent;
-	* if failed, the reward tokens will return to the pool; Also, provider's stakes are slashed and splitted between challenger and verifiers.
-	* if success, the reward tokens are distributed to recipent. Challenger loses stakes.
+	* For challenger and verifier, Keeper contract will move partial of their stakes from "Free Collateral Account" to "Locked Collateral Account";
+	* verifiers perform POR verification against the data commons served by the candidate winer;
+	* if failed, winner's stake that has the same amount of network reward will be returned to the pool; In addition, winner's own stake locked in "Locked Collateral Account" are slashed and splitted between challenger and winning verifiers.
+	* if success, challenger loses his stakes which will be distributed to verifiers in the winner party.
+
+The flowchart of provider's stakes is plotted as below:
+
+<img src="img/stake.jpg" width=1000 />
+
+* **Free Collateral Account (FCA)**: it holds the initial token deposits from provider, challenger and verifier, where tokens can be freely withdraw. However, each role needs enough token balance in the FCA in order to earn any token:
+	* provider must have more tokens deposited in FCA than the amount of network rewards that he can earn;
+	* provider must have adequate stakes in FCA in case of any challenge;
+	* challenger must have stakes in FCA in order to create any challenge against winner;
+	* verifiers must put in stakes in FCA in order to fulfill verification task. 
+
+* **Locked Collateral Account (LCA)**: stakes are automatically moved from FCA to LCA in the event of network reward distribution, challenge, and verification.
+	* winner's stake (equals to the same amount of network rewards) will be locked in LCA in case of any challenge is created;
+	* if no challenge happens or winner wins the challenge, the locked stakes will return to FCA;
+	* otherwise, partial of winner's locked stakes (i.e., same amount of network rewards) returns to network reward pool, while the remaining stakes will be distributed to challenger and winning verifiers.
+
 
 As such, we can summarize the **participants and their incentives** as below:
 
@@ -154,7 +191,7 @@ There are two approaches to deploy the code, which may needs some development in
 
 ### 3.3.2 Verifier Network
 
-The verifier network connsists of a group of registered verifiers. They will be randomly chosen to fulfill the verification tasks. In the future, they may have different probabilities to be chosen depending on their performance or reputation. 
+The verifier network connsists of a group of registered verifiers. They will be **randomly chosen** to fulfill the verification tasks. In the future, they may have different probabilities to be chosen depending on their performance. 
 
 A research poc can be found: [verifier network design document](../15-por-verifier-network/README.md) and [poc code](../15-por-verifier-network/js-poc)
 
@@ -179,20 +216,18 @@ This module includes following components:
 ### 3.3.3 Network Reward Distribution
 
 * **Minting network rewards**:
-	* the off-chain identity can be OPF or other governor, who has the permission to mint tokens. 
+	* the off-chain identity can be OPF or other governor, who has the permission to mine new Ocean tokens. 
 	* The mining service monitors new blocks in the blockchain network and trigger minting tx **periodically**.
-	* It requires modification and deployment of Keeper contracts including token contract.
+	* It requires proper modification on Keeper contracts (i.e., token contract).
 
 <img src="img/mining-2.jpg" />	
 
 * **Distribute network rewards**
 	* **(Update: 09/10/2019)**: each provider who have staked, made dataset available, and served the access to data commons in current epoch is eligible to receive network rewards;
 	* for each epoch, one eligible provider is chosen to receive all reward tokens in the pool;
-	* the reward tokens are locked up for a period (e.g., one week or one month) when anyone can challenge the reward and initiate a verification aganist the provider.
-	* **(Update: 09/10/2019)**: provider must stake more Ocean tokens than the amount of received network rewards:
-		* when picked as the winner, provider can get the reward tokens right away;
-		* meanwhile, their stakes become the "locked stake", which can be lost in the challenge period (e.g., one week or one month) if a successful challenge. 
-
+	* the reward tokens are available to the winner right away;
+	* but winner's stakes must be locked up in LCA for a period (e.g., one week or one month) when anyone can challenge aganist the winner.
+	* Note that provider must **stake more Ocean tokens than the amount of network rewards** that he can earn from Ocean.
 
 <img src="img/distr.jpg" />	
 
@@ -264,46 +299,20 @@ The potential disadvantage is the performance hit, since proxy needs to transact
 
 <img src="img/proxy2.jpg" width=1000 />
 
-### 3.5.2 Need to stake Ocean token to earn
 
-There is an option to requrie miners and sourcers to stake Ocean tokens on their served dataset in addition to serve access requests. The motivations have two folds:
-
-* the staking requirement can filter out most fraudulence, which serve tons of low-quality (if not garbage) dataset in Ocean network to earn network rewards;
-* it creates the huge demand of Ocean tokens and drive up the token price. 
-
-However, it creates certain entrance barrier or friction for new miners to Ocean, who only want to serve dataset to earn network rewards. It can potentially prevent them from participating in Ocean ecosystem. 
-
-Some thoughts of possible solution:
-
-* each miner has a one-time trail period (e.g., one month or so):
-	* miners do not need to stake in order to earn. They can start serving dataset right away without any friction;
-	* after the trail period expires, miners are requried to stake Ocean tokens (funding source can be purchased token or earned network rewards).
-	* possible attack:
-		* miners can create a new account to start a new trail period (i.e., Sybil attack);
-		* however, they cannot build up their reputations in this way;
-		* network rewards can be tuned to reward more to miners with longer time history.
-* alternatively, Ocean can enforce staking policy in a latter stage:
-	* in the early stage, the top priority is to encourage more miners to serve dataset, therefore, it helps them onboard by suspending the staking requirement for time being;
-	* when more and more miners join Ocean, we can enforce the staking policy at that time to prevent fraudulence.
-
-### 3.5.3 IP Rights Violation (Elsa & Anna Attack)
+### 3.5.2 IP Rights Violation (Elsa & Anna Attack)
 
 Miners may serve a IP-protected but very popular dataset (e.g., Disney movie, music songs and etc) to earn tremendous amount of network rewards in a short period of time. However, they clearly don't own the copyright. Such behavior creates an IP violation and critical legal issue. Ocean shall reduce the chance of such IP issue at the early stage.
 
-Depending on the required efforts from Ocean, the solutions can include:
+Depending on the required efforts from Ocean, the near-term solutions can be **challenge-response** approach: 
 
-* **challenge-response** approach: 
-	* Ocean will not step into the investigation of IP violation until anyone (e.g., real IP owner or normal user) challenge an existing dataset;
-	* for every distribution of network rewards, tokens will be locked up for a period time (e.g., one week, one month or even longer). So the miner can be challenged and lose their earned rewards. 
-	* the challenger will take the staking of the miner as his rewards.
-	* (optional): OPF may reserve a pool of network rewards for challengers to motivate them to detect the IP violations more actively.
-* **proactive infringement detection** approach:
-	* in order to actively detect the violation, Ocean can leverage external infringement detection service to inspect the dataset at the very beginning (e.g., when publisher upload the dataset through the client).
+* Users are encouraged to put in stakes and create "IP rights violation" challenges against the dataset, where provider may not own the copyright;
+* Both the challenger and the provider get their stake locked;
+* They enter "arbitration" to resolve the challenge, which could include a 3rd party (e.g., special arbitration center, law firms, or Kleros).
 
+### 3.5.3 Sybil Download Attack
 
-### 3.5.4 Sybil Download Attack
-
-To earn more network rewards, the miners may fake tremendous amount of access transactions on their own datasets *within one epoch of reward distribution*. In this way, miners serve more fake access requests and have higher probability to receive the rewards.
+To earn more network rewards, the providers may fake tremendous amount of access transactions on their own datasets *within one epoch of reward distribution*. In this way, providers serve more fake access requests and have higher probability to receive the rewards.
 
 To prevent such attack, some potential approaches can be adopted:
 
@@ -316,16 +325,25 @@ To prevent such attack, some potential approaches can be adopted:
 	* reward distribution smart contract can lower the winning probability for miners with such abnormal transaction history.
 * **Complex Case: attack from many controlled accounts or a ring of actors**
 	* it becomes extremely difficult to recognize those controlled accounts in this scenario, because all of them seem to be normal;
-	* instead, Ocean can monitor the abnormal download stats for miners and properly scale down the factor of download transactions in calculating the probability of receiving network reward.
+	* instead, Ocean can monitor the abnormal download stats for providers and properly scale down the factor of download transactions in calculating the probability of receiving network reward.
 	
-Overall, Ocean need to create a fair policy to distribute reward tokens to all miners with equal probability, who contribute dataset and serve the access requests in the network. 
+Overall, Ocean need to create a fair policy to distribute reward tokens to all providers, who contribute dataset and serve the access requests in the network. 
 
-# 4. Incentive in Curation Layer
+### 3.5.4 Sybil Verifiers Attack
+
+It is possible that an attacker registers many verifiers accounts and tries to control or manipulate the verification results. The solution to this attack include two folds:
+
+* **Skin-in-the-game**: each verifier needs to put in a non-negligible stake, which could cost a lot for attackers to create many fake verifier accounts. 
+* **Random Selection**: for each verification task, Ocean keeper contract will **randomly choose** verifiers for each task. Therefore, even though attacker may control some verifier accounts, they have no way to guarantee that those accounts will be selected when challenged. 
+
+# 4. Token Design in Transaction Layer
+
+# 5. Token Design in Curation Layer
 
 Ocean needs to motivate the community to curate high-quality dataset in a more decentralized way. To do so, each dataset can have corresponding bonding curve so that the community can stake and unstake on the dataset and make a profit. 
 
 
-## 4.1 Architecture
+## 5.1 Architecture
 
 The bonding curves is an automated market maker that accept reserve token deposit and mint bonded tokens at the price set by the curve; similarly, it can burn bonded token and return reserved token as the exchange. More details can be found in [POC of bonding curve](../02-signaling-mechanism/1-bonding-curve)
 
@@ -338,7 +356,7 @@ Token holders can deposit their Ocean tokens in the bonding curves of their favo
 
 <img src="img/bonding2.jpg" />
 
-## 4.2 Development
+## 5.2 Development
 
 The entire curation layer can be developed in Keeper contract, which includes two components:
 
@@ -357,12 +375,19 @@ The entire curation layer can be developed in Keeper contract, which includes tw
 
 Note that each bonding curve may have different parameters that determines the shape of curve and appreciation speed of bonded token price. These paramters can be set by Ocean in the global or individual governor from OPF.
 
-## 4.3 Outstanding Issues
+## 5.3 Outstanding Issues
 
-### 4.3.1 Curation Clone Attack
+### 5.3.1 Curation Clone Attack
 
 It is possible that attackers re-publish the super popular dataset and started a brand new curation market, where they get significant stake in the market because they were early adopters of the duplicate dataset. In this way, multiple duplicate curation market can be built for the same dataset, hindering discoverability not to mention being unfair to the first publisher..
 
+The potential solution at this moment: we choose bonding curve parameters that make it economically rational to join an existing BC. 
+
+* Ocean network can charge a large amount of setup fee for creation of a new curation market. As such, people may lose tokens by opening new market that is not popular.
+* Choose small slope for bonding curves, which make it more rational to join existing market rather than paying a lot to open a new one. 
+
+
+<!----
 The key to solve this issue is to prevent any publisher/miner from creating new curation market at their will. This is the root cause of this kind of fraudulence.
 
 Instead, a **proposal-voting process** can be adopted to create new curation markets:
@@ -372,21 +397,19 @@ Instead, a **proposal-voting process** can be adopted to create new curation mar
 * all miners can vote on the proposal in a certain period of time using TCR;
 	* miners are motivated to find duplicate markets, because they may be the victim of such attack;
 * when most miners approve the proposal, this curation market can be created.
+--->
 
-### 4.3.2 Data Availability Attack
+### 5.3.2 Data Availability Attack
 
 It is possible that miner removes the dataset by accident or on purpose when the curation market has been created. In this way, the market becomes dangling without real dataset behind it and bonded tokens will be dumped. 
 
-Much worse, the attacker may dump all his bonded token at higher price and remove the dataset after.
+<!---
+Much worse, the attacker may dump all his bonded token at higher price and remove the dataset after. Curators shall take this risk into account. 
+--->
 
-There are some approaches to reduce the chance of such attack:
+The issue can be mitigated with second sourcers, who serve the same dataset. If there is at least one second sourcer available, this attack cannot happen.
 
-* Miner is required to restore the access of dataset in a certain period of time;
-* If dataset is still unavailable after the time window, the stakes of the miner will be slashed as the penalty, which will be distributed to all curators of this dataset;
-* Miner of this dataset will become ineligible to receive any network rewards;
-* Miner account will be deactivated to publish new dataset.
-
-### 4.3.2 Pump-and-Dump Attack
+### 5.3.3 Pump-and-Dump Attack
 
 Attackers may stake in curation market at very low price, broadcast fake information to pump the token price and dump all their positions at higher price for profits.
 
@@ -396,9 +419,4 @@ Attackers may stake in curation market at very low price, broadcast fake informa
 * it requires the bonding curve can be defined as an analytic formula so that it is integral calculation can be programmed in smart contract;
 * more details in [shorting bonding curve research](../02-signaling-mechanism/2-shot-sell-bc/README.md) 
 
-## 4.4 More Features
-
-* **stake in Ether or any other ERC20 token**
-	* users can deposit Ocean, Ether or any other ERC20 token as the reserve token into the bonding curve contract;
-	* it can be enabled by integrating Uniswap to automated swap other tokens into Ocean tokens and deposit Ocean tokens into bonding curve contract.
 
