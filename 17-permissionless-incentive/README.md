@@ -18,37 +18,37 @@ In this research, we investigate the token dynamics in Ocean network and propose
 
 In this research, we consider following types of roles in Ocean network:
 
-* **provider**: serve the dataset and fulfill the access request from users;
+* **supplier**: have the data but don't know how to distribute;
 * **consumer**: consume the dataset (no need to have extra incentive :)
+* **sourcer**: publish the dataset and fulfill the access request from users;
+	* initial sourcer: first to publish dataset and initialize curation market, etc.
+	* second sourcer: identify a high quality dataset and make it available themselves.
 * **challenger**: challenge the provider about data availability;
 * **verifier**: verify the data availability of dataset served by a specific provider;
 * **curator**: stake on promising dataset to promote the high quality datasets;
-* **transaction validator**: relay consumers' tx and help cover the tx fee, which enables gasless tx for better user experience.
 
 # 2. Overview
 
 From the top-level point of view, the token design can be divided into two layers:
 
 * **curation layer**: it rewards curators to curate high quality dataset through staking mechanism such as bonding curves.
-* **transaction layer**: validators relays user's tx to on-chain and pay for the tx cost (i.e., gas of Ether).
-* **mining layer**: it rewards providers to serve the access request of data commons.
+* **mining layer**: it rewards sourcers to publish dataset and serve the access requests.
 
-<img src="img/layer-3.jpg" width=500 />
+<img src="img/layer-2.jpg" width=500 />
 
 We compare these incentive layers from different perspectives in the below:
 
-<img src="img/table-2.jpg" width=700 />
+<img src="img/table-3.jpg" width=700 />
 
 <!---
- **Layer**  |  Mining Layer | Tx Layer | Curation Layer |
+ **Layer**  |  Mining Layer | Curation Layer |
 ---| ---|  ---| ---| ---|
-**Participants** | data provider, verifier, challenger |  tx validator|   curator |
-**Incentive** | network reward | user's Ocean token payment | profit gain | 
-**Mechanism** | reward token mining + por* | token payment | bonding curves |
-**Required Effort** |  L1, L2 + RanDAO/Chainlink | L2 | L1 |
+**Participants** | data sourcer, verifier, challenger |     curator |
+**Incentive** | network reward and stakes | profit gain | 
+**Mechanism** | reward token mining + por* |  bonding curves |
+**Required Effort** |  L1, L2 + RanDAO/Chainlink | L1 |
 
 \*por: `proof of retrieveability` which proves the dataset is available and ready for access.
-
 --->
 
 # 3. Token Design in Mining Layer
@@ -86,7 +86,7 @@ The key problems of incentive design in this layer are follows:
 
 To address these problems, we plotted the initial architecture design as follows:
 
-<img src="img/arch-1.jpg" width=1500 />
+<img src="img/arch-2.jpg" width=1500 />
 
 * **Mining**: 
 	* the network reward tokens (i.e., new Ocean tokens) will be mined every period of blocks as the releasing schedule (**ref**: Section 2.5 of [Ocean Token Design](https://docs.google.com/document/d/1zgf-rVW0UrAokJ2GZr_k4RKrcqgaP18Yj0aqMK16rh8/edit#heading=h.90ggq3ysgdu4)).
@@ -108,38 +108,38 @@ To address these problems, we plotted the initial architecture design as follows
 		* number of fulfillments or #bits downloaded in the epoch;
 		* ratio for provider serving up vs. accessing a dataset;
 * **Verification: (challenge-response appraoch)** (**Updated: 09/12**)
-	* the winner can take away the network rewards right away, but **the same amount of his stake will be locked** into "Locked Collateral Account" in case of potential challenge;
+	* the winner can take away the network rewards right away, but **the same amount of his stake will be locked** into "Locked Escrow Account" (LEA) in case of potential challenge;
 	* the challenge period starts, which can be 1 week or 1 month.
-	* anyone can deposit stakes into "Free Collateral Account" and become a challenger;
-	* anyone can deposit stakes into "Free Collateral Account" and register to be an verifier;
+	* anyone can deposit stakes into "Open Pledge Account" (OPA) and become a challenger;
+	* anyone can deposit stakes into "Open Pledge Account" and register to be an verifier;
 	* when a challenge is created, a group of verifiers will be chosen from the verifier network;
-	* For challenger and verifier, Keeper contract will move partial of their stakes from "Free Collateral Account" to "Locked Collateral Account";
+	* For challenger and verifier, Keeper contract will move partial of their stakes from "Open Pledge Account" to "Locked Escrow Account";
 	* verifiers perform POR verification against the data commons served by the candidate winer;
-	* if failed, winner's stake that has the same amount of network reward will be returned to the pool; In addition, winner's own stake locked in "Locked Collateral Account" are slashed and splitted between challenger and winning verifiers.
+	* if failed, winner's stake that has the same amount of network reward will be returned to the pool; In addition, winner's own stake locked in "Locked Escrow Account" are slashed and splitted between challenger and winning verifiers.
 	* if success, challenger loses his stakes which will be distributed to verifiers in the winner party.
 
 The flowchart of provider's stakes is plotted as below:
 
-<img src="img/stake.jpg" width=1000 />
+<img src="img/stake-1.jpg" width=1000 />
 
-* **Free Collateral Account (FCA)**: it holds the initial token deposits from provider, challenger and verifier, where tokens can be freely withdraw. However, each role needs enough token balance in the FCA in order to earn any token:
-	* provider must have more tokens deposited in FCA than the amount of network rewards that he can earn;
-	* provider must have adequate stakes in FCA in case of any challenge;
-	* challenger must have stakes in FCA in order to create any challenge against winner;
-	* verifiers must put in stakes in FCA in order to fulfill verification task. 
+* **Open Pledge Account (OPA)**: it holds the initial token deposits from sourcer, challenger and verifier, where tokens can be freely withdraw. However, each role needs enough token balance in the OPA in order to earn any token:
+	* provider must have more tokens deposited in OPA than the amount of network rewards that he can earn;
+	* provider must have adequate stakes in OPA in case of any challenge;
+	* challenger must have stakes in OPA in order to create any challenge against winner;
+	* verifiers must put in stakes in OPA in order to fulfill verification task. 
 
-* **Locked Collateral Account (LCA)**: stakes are automatically moved from FCA to LCA in the event of network reward distribution, challenge, and verification.
-	* winner's stake (equals to the same amount of network rewards) will be locked in LCA in case of any challenge is created;
-	* if no challenge happens or winner wins the challenge, the locked stakes will return to FCA;
+* **Locked Escrow Account (LEA)**: stakes are automatically moved from OPA to LEA in the event of network reward distribution, challenge, and verification.
+	* winner's stake (equals to the same amount of network rewards) will be locked in LEA in case of any challenge is created;
+	* if no challenge happens or winner wins the challenge, the locked stakes will return to OPA;
 	* otherwise, partial of winner's locked stakes (i.e., same amount of network rewards) returns to network reward pool, while the remaining stakes will be distributed to challenger and winning verifiers.
 
 
 As such, we can summarize the **participants and their incentives** as below:
 
-| -  |  **data commons provider** | **challenger** | **verifier** |
+| -  |  **sourcer** | **challenger** | **verifier** |
 --- | ---|  ---| ---|
-**Favorable Behavior** | serve data commons | challenge fraudulent providers | verify POR correctly and timely |
-**Incentive** | network reward | provider's stakes | stakes of provider (if failed) or challenger (if sucess) |
+**Favorable Behavior** | serve data commons | challenge fraudulent sourcers | verify POR correctly and timely |
+**Incentive** | network reward | sourcer's stakes | sourcer's stakes (if failed) or challenger's stake (if sucess) |
 **Penalty** |  loss of token rewards and own stakes | loss of stakes | loss of stakes |
 
 
@@ -223,10 +223,10 @@ This module includes following components:
 <img src="img/mining-2.jpg" />	
 
 * **Distribute network rewards**
-	* **(Update: 09/10/2019)**: each provider who have staked, made dataset available, and served the access to data commons in current epoch is eligible to receive network rewards;
-	* for each epoch, one eligible provider is chosen to receive all reward tokens in the pool;
+	* **(Update: 09/10/2019)**: each sourcer who have staked, made dataset available, and served the access to data commons in current epoch is eligible to receive network rewards;
+	* for each epoch, one eligible sourcer is chosen to receive all reward tokens in the pool;
 	* the reward tokens are available to the winner right away;
-	* but winner's stakes must be locked up in LCA for a period (e.g., one week or one month) when anyone can challenge aganist the winner.
+	* but winner's stakes must be locked up in LEA for a period (e.g., one week or one month) when anyone can challenge aganist the winner.
 	* Note that provider must **stake more Ocean tokens than the amount of network rewards** that he can earn from Ocean.
 
 <img src="img/distr.jpg" />	
@@ -268,6 +268,26 @@ We estimate the roadmap of development in the following:
 Overall, all these modules can be built in the same time but they should be integrated at certain point along the time. In the below diagram, it shows verifier network should take longer time than that of POR, and they need to be integrated later. Moreover, the reward distribution provides the framework that needs to integrate other two modules, therefore, it takes longest time.
 
 <img src="img/roadmap.jpg" width=600 />
+
+### 3.4.1  POR deployment
+
+The first step is to deploy por as a micro-service inside Brizo, which is mostly related with Brizo at L2. There is no development work needed in L1 at this moment.
+
+The critical work is to run the [por Golang code](https://github.com/oceanprotocol/research/tree/master/03-data-availability/web2-compact-por/por-refactoring) in Brizo and develop code to interact with it.
+
+Some recommendation steps:
+
+* Brizo should allow owners to **sign the dataset** using `provider` module in the [por code](https://github.com/oceanprotocol/research/tree/master/03-data-availability/web2-compact-por/por-refactoring)
+	* when owner upload the dataset, sign it with private key to generate extra verification information; store both in the storage.
+	* it may needs parameter tuning (e.g., blocksize, sampling rate) for different size of dataset.
+* Brizo should build a API server to listen to por challenge request from the verifier:
+	* it has access to both raw dataset and the extra verification info;
+	* it should generate proof when received a challenge using `storage` module in [por code](https://github.com/oceanprotocol/research/tree/master/03-data-availability/web2-compact-por/por-refactoring)
+* For testing purpose at this moment, individual should be able to generate a challenge and verify the proof from the Brizo:
+	* generate the challenge using the `verifier` module in [por code](https://github.com/oceanprotocol/research/tree/master/03-data-availability/web2-compact-por/por-refactoring);
+	* verify the proof from the storage using the `verifier` module in [por code](https://github.com/oceanprotocol/research/tree/master/03-data-availability/web2-compact-por/por-refactoring);
+	* Keeper will create verifier network in the future that ;
+	
 
 ## 3.5 Outstanding Issues
 
@@ -336,14 +356,29 @@ It is possible that an attacker registers many verifiers accounts and tries to c
 * **Skin-in-the-game**: each verifier needs to put in a non-negligible stake, which could cost a lot for attackers to create many fake verifier accounts. 
 * **Random Selection**: for each verification task, Ocean keeper contract will **randomly choose** verifiers for each task. Therefore, even though attacker may control some verifier accounts, they have no way to guarantee that those accounts will be selected when challenged. 
 
-# 4. Token Design in Transaction Layer
+### 3.5.5 Enable Gasless Tx
 
-# 5. Token Design in Curation Layer
+If Ocean is deployed to Ethereum mainnet, it is paintful for users to pay tx fee (e.g., a small amount of Ether as gas fee) in order to access Ocean network.
+
+One possible solution to build a **gas station network** (GSN), which help user access Ocean network. More details can be found in [GSN research](https://github.com/oceanprotocol/research/tree/master/11-meta-tx )
+
+It can be implemented in either way: 
+
+* GSN charges users a small amount of Ocean tokens and pays Ether gas fee. In this way, user only need to hold Ocean tokens instead of holding both Ocean token and Ether. 
+* Users only sign the download tx without paying any fee, but they need to pay for other tx. GSN relays the signed download tx to Ocean keeper contracts. But how GSN get paid? Some options:
+	* the sourcers can pay GSN nodes, since sourcers have the great incentive (i.e., earn network reward) to serve the download tx;
+	* GSN nodes can be compensated with a piece of network rewards;
+	* BigchainDB can fund the GSN to facilitate users to download the dataset.
+
+<img src="img/gasless.jpg" width=600 />
+
+
+# 4. Token Design in Curation Layer
 
 Ocean needs to motivate the community to curate high-quality dataset in a more decentralized way. To do so, each dataset can have corresponding bonding curve so that the community can stake and unstake on the dataset and make a profit. 
 
 
-## 5.1 Architecture
+## 4.1 Architecture
 
 The bonding curves is an automated market maker that accept reserve token deposit and mint bonded tokens at the price set by the curve; similarly, it can burn bonded token and return reserved token as the exchange. More details can be found in [POC of bonding curve](../02-signaling-mechanism/1-bonding-curve)
 
@@ -356,7 +391,7 @@ Token holders can deposit their Ocean tokens in the bonding curves of their favo
 
 <img src="img/bonding2.jpg" />
 
-## 5.2 Development
+## 4.2 Development
 
 The entire curation layer can be developed in Keeper contract, which includes two components:
 
@@ -375,9 +410,9 @@ The entire curation layer can be developed in Keeper contract, which includes tw
 
 Note that each bonding curve may have different parameters that determines the shape of curve and appreciation speed of bonded token price. These paramters can be set by Ocean in the global or individual governor from OPF.
 
-## 5.3 Outstanding Issues
+## 4.3 Outstanding Issues
 
-### 5.3.1 Curation Clone Attack
+### 4.3.1 Curation Clone Attack
 
 It is possible that attackers re-publish the super popular dataset and started a brand new curation market, where they get significant stake in the market because they were early adopters of the duplicate dataset. In this way, multiple duplicate curation market can be built for the same dataset, hindering discoverability not to mention being unfair to the first publisher..
 
@@ -399,7 +434,7 @@ Instead, a **proposal-voting process** can be adopted to create new curation mar
 * when most miners approve the proposal, this curation market can be created.
 --->
 
-### 5.3.2 Data Availability Attack
+### 4.3.2 Data Availability Attack
 
 It is possible that provider removes the dataset by accident or on purpose when the curation market has been created. In this way, the market becomes dangling without real dataset behind it and bonded tokens will be dumped. 
 
@@ -409,7 +444,7 @@ Much worse, the attacker may dump all his bonded token at higher price and remov
 
 The issue can be mitigated with second sourcers, who serve the same dataset. If there is at least one second sourcer available, this attack cannot happen.
 
-### 5.3.3 Pump-and-Dump Attack
+### 4.3.3 Pump-and-Dump Attack
 
 Attackers may stake in curation market at very low price, broadcast fake information to pump the token price and dump all their positions at higher price for profits.
 
