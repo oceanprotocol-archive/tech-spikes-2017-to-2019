@@ -108,30 +108,35 @@ To address these problems, we plotted the initial architecture design as follows
 		* number of fulfillments or #bits downloaded in the epoch;
 		* ratio for provider serving up vs. accessing a dataset;
 * **Verification: (challenge-response appraoch)** (**Updated: 09/12**)
-	* the winner can take away the network rewards right away, but **the same amount of his stake will be locked** into "Locked Escrow Account" (LEA) in case of potential challenge;
+	* the winner can earn the network rewards without puting in stakes, but **they must stake the same amount tokens** to withdraw reward tokens.
+	* without stakes, the reward tokens will be locked into "Locked Escrow Account" (LEA) in case of potential challenge;
 	* the challenge period starts, which can be 1 week or 1 month.
 	* anyone can deposit stakes into "Open Pledge Account" (OPA) and become a challenger;
 	* anyone can deposit stakes into "Open Pledge Account" and register to be an verifier;
 	* when a challenge is created, a group of verifiers will be chosen from the verifier network;
 	* For challenger and verifier, Keeper contract will move partial of their stakes from "Open Pledge Account" to "Locked Escrow Account";
 	* verifiers perform POR verification against the data commons served by the candidate winer;
-	* if failed, winner's stake that has the same amount of network reward will be returned to the pool; In addition, winner's own stake locked in "Locked Escrow Account" are slashed and splitted between challenger and winning verifiers.
+	* if failed, winner will lose his accumulated network rewards that will be returned to the pool; In addition, winner's own stake or reward tokens (if unstaked) locked in "Locked Escrow Account" for the challenge will be slashed and splitted between challenger and winning verifiers.
 	* if success, challenger loses his stakes which will be distributed to verifiers in the winner party.
 
 The flowchart of provider's stakes is plotted as below:
 
-<img src="img/stake-1.jpg" width=1000 />
+<img src="img/stake-2.jpg" width=1000 />
 
-* **Open Pledge Account (OPA)**: it holds the initial token deposits from sourcer, challenger and verifier, where tokens can be freely withdraw. However, each role needs enough token balance in the OPA in order to earn any token:
-	* provider must have more tokens deposited in OPA than the amount of network rewards that he can earn;
-	* provider must have adequate stakes in OPA in case of any challenge;
+* **Open Pledge Account (OPA)**: it holds the initial token deposits from sourcer, challenger and verifier, where tokens can be freely withdraw. 
+	* The sourcers may not deposit up-front stakes to earn network rewards, but they need to stake in order to withdraw those rewards.
+	* However, challenger and verifier need enough token balance in the OPA in order to earn any token:
+	* if sourcers put in stakes, the amount of their stakes in OPA shall be larger than the amount of network rewards that he can earn;
+	* in case of any challenge:
+		* the stakes from sourcers will be locked for the challenge;
+		* if no stake is available, the locked network rewards will be used as the stakes for the challenge.
 	* challenger must have stakes in OPA in order to create any challenge against winner;
 	* verifiers must put in stakes in OPA in order to fulfill verification task. 
 
-* **Locked Escrow Account (LEA)**: stakes are automatically moved from OPA to LEA in the event of network reward distribution, challenge, and verification.
-	* winner's stake (equals to the same amount of network rewards) will be locked in LEA in case of any challenge is created;
-	* if no challenge happens or winner wins the challenge, the locked stakes will return to OPA;
-	* otherwise, partial of winner's locked stakes (i.e., same amount of network rewards) returns to network reward pool, while the remaining stakes will be distributed to challenger and winning verifiers.
+* **Locked Escrow Account (LEA)**: stakes are automatically moved locked LEA in the event of network reward distribution, challenge, and verification.
+	* winner's stake or locked network rewards (if no stake available) will be moved into LEA in case of any challenge is created;
+	* if no challenge happens or winner wins the challenge, the locked stakes will return to OPA, while the network rewards remains locked if no stake is available;
+	* if winner lose the challenge, the locked stakes will be distributed to challenger and winning verifiers, while the remaining network rewards will be returned to the reward pool.
 
 
 As such, we can summarize the **participants and their incentives** as below:
@@ -372,6 +377,74 @@ It can be implemented in either way:
 
 <img src="img/gasless.jpg" width=600 />
 
+## 3.6 Check Specs
+
+| Spec  | Met or Comments? | 
+--- | ---|
+Does Ocean Miner product full incorporate Ocean V3, in the spirit that Ocean Miner needs in order to achieve its related success metrics? | Yes |
+Ocean Marketplace can give network rewards on priced data, without any changes to backend code | may not need to reward priced data |
+
+
+### 3.6.1 Migrate ERC20 Token Contract
+
+| Spec  | Met or Comments? | 
+--- | ---|
+we don’t want someone to deploy a few $M and bring the network to its knees. | limit the impact factor of stakes in calculating reward amount |
+Reconcile existing bridge |  |
+Have a plan for handling community. Should have full transparency for the Ocean community into how the 51% of Ocean tokens are allocated, over time. | Ocean can provide token allocation map and release plan to the community for information |
+Reconciles v5 permissionless. The challenge: this may mean migrating to a different network | keeper contract can migrate without change; but token bridge needs re-engineering |
+
+
+### 3.6.2 Reconciles v2, v4, v5
+| Spec  | Met or Comments? | 
+--- | ---|
+Upon release of V3, it be in the same codebase that has V2, even if their functionalities don’t merge yet. (Assumes V2 is released before V3. If V3 first, then vice versa.) |  |
+Of the remaining token supply dedicated to network rewards, there’s an explicit carve-out for on-chain bounties. | |
+V3 functions normally well in a permissionless  & censorship-resistant network. | Yes |
+V3 should not constrain our (still open) choice to use a 3rd party network or a dedicated Ocean network for V5. | Yes |
+Challenge: who tx fees for downloaders (we don’t want them to have to pay). | sourcers that running GSN |
+
+
+### 3.6.3 Good Token Design
+
+| Spec  | Met or Comments? | 
+--- | ---|
+For priced data, is there an incentive for supplying more? | Yes, to earn token payment |
+For priced data, is there an incentive for referring? |  |
+For free data, is there an incentive for supplying more? | Yes, network rewards |
+For free data, is there an incentive for referring? | Yes |
+Is the tx fee zero for data consumers? | Yes, sourcer pay tx fee |
+Are Transaction Validators incentivized to run nodes? | Yes, block rewards |
+For priced data, is there a good spam prevention? ie Sourcer getting paid for lots of junk data | Yes, curation market |
+For free data, is there good spam prevention? ie Sourcer getting paid for lots of junk data | Yes, curation market |
+Address: Curation Clones | Yes |
+Address: Sybil Downloads | |
+Address: Data Availability Issue. Sourcer goes down | Yes, second sourcers |
+Address: a Sourcer claims to serve a dataset, but didn’t | Yes, verify POR |
+Address: IP Rights Violation: Priced Data | |
+Address: IP Rights Violation: Free Data (Elsa & Anna Attack) | Yes, challenge-response + arbitrage |
+Address: Initial vs Second Sourcer Rewards | Yes |
+Address: a Sourcer served a dataset; 1 verifier says it didn’t | Yes, he can challenge the sourcer |
+Address: a Sourcer served a dataset; majority of verifiers says it didn’t | verifier needs to put in stakes and may lose if cheat; injected error can help |
+Address: a Challenger challenges everything because it’s so cheap to challenge | limit the # of challenge from the same challenger at the same time; properly choose the stake amount to challenge |
+Address: Pump & Dump on Drops | flat bonding curve + shorting BC|
+Is onboarding low-friction? | Yes, no up-front stake to earn rewards|
+Is cash income low-friction? Delays to payout <1h. To solve, could reward more if staked longer (up to 30 days). Eg tx fee → 0 if staked → 30, ie discount token. | |
+Is offboarding low-friction?  | Yes |
+Are there zero centralized points of failure or gatekeepers? | token bridge running by Ocean can be a centralized point of failure |
+Are there zero points of old-school centralization? E.g. can’t link to old-school lawyers for arbitration on IP. | IP violation may need external arbitration |
+Are any components prone to censorship? E.g. after v5, is the whole system censorship-resistant end-to-end? | |  
+Does the token give higher marginal value to users of the network versus HODLers? | Yes, token has more utility value in the network |
+Do not distinguish between free & priced data for incentives | |
+Is it simple (enough, but no simpler)?  | it has some complexity |
+
+
+### 3.6.4 Token Verification / Adapatability
+| Spec  | Met or Comments? | 
+--- | ---|
+Few tokens are at risk, at least at first | Yes, scale down the network rewards |
+Are the milestones to ratchet up the % rewards clearly defined? Or are they too subjective and subject to centralized control? | It is defined by Ocean team (centralized control) |
+We have a methodology laid out, to follow, to improve the system. | needs governance mechanism to upgrade |
 
 # 4. Token Design in Curation Layer
 
