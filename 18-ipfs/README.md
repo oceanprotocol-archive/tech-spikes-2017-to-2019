@@ -86,8 +86,34 @@ The other important functionality is to serve a specific data and announce to th
 	
 	The [example](https://github.com/ipfs/interface-js-ipfs-core/blob/master/src/dht/provide.js) test case can be helpful.
 
+### 3.3 request data from a specific peer
 
-### 3.3 Experiment
+Unfortuantely, IPFS does not support this option at this time. When request a data from IPFS, it will automatically retrieve data blocks from neighboring peers for fast delivery. Here, the blocks of the same file could be download from different peers at various locations.
+
+Since IPFS is a **content-addressing** network, users can request `which data` they need without knowing `where those data locate`. So, they do not need to know which peer have the data but only request the data from IPFS using the multihash as the key.
+
+### 3.4 find out who serve the data request
+
+* `ipfs bitswap ledger <peer>`: Show the current ledger for a peer.
+
+	it accepts a peer identifier and display if any data blocks had been pulled from the peer. **This command only shows the stats between provider and downloader**. As such, Brizo can download data from IPFS peers and get information about its providers.
+	
+	Some [extended features](https://github.com/ipfs/go-bitswap/issues/186) are requested for IPFS bitswap protocol.
+
+	1. `$ ipfs get <multihash>` to download data from peers;
+	2. `$ ipfs dht findprovs <multihash>` to get list of providers
+	3. `$ ipfs bitswap ledger <peer>` to find out the amount of blocks download from this peer. For example:
+	
+	```
+	$ ipfs bitswap ledger QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3
+	Ledger for QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3
+	Debt ratio: 0.000000
+	Exchanges:  11
+	Bytes sent: 0
+	Bytes received: 2883738
+	```
+
+### 3.5 Experiment
 
 * Initialize a IPFS node and create a new peer ID: `QmSDACfhmkn53kq6NCciQswu3oJV3gbrY25KDh1gh15vcW`
 
@@ -219,3 +245,23 @@ In this scenario, one potential **free-riding attack** is following:
 
 <img src="img/risk.jpg" />
 
+## 5. Integration with Ocean
+
+* **registration**:
+	* IPFS peers who serve the data must register their Ethereum wallets with Ocean keeper, so network rewards can be distributed to their wallets;
+	* IPFS peers must prove their identity to Ocean:
+		* sign message using private key and pass the signature along with public key to Ocean;
+		* Ocean will verify the signature and validate their IPFS peer identity by hashing their public keys;
+* **access data**:
+	* consumer come into Ocean data marketplace to request public data;
+	* a service agreement is fulfilled and Brizo download the requested dataset from IPFS peers;
+	* Brizo delivers the dataset to consumer;
+* **distribute rewards**:
+	* every period of time, Ocean will distribute reward tokens to providers of public data that had been downloaded in the same time period;
+	* Ocean will pull out the provider list of download dataset from IPFS;
+		* data integration and availability is guaranteed by IPFS network;
+	* Ocean randomly choose one provider from the candidate list and distribute available network reward to him;
+		* Ocean can request provider to put in Ocean tokens as the stake inside Ocean network in order to receive the reward tokens;
+		* as such, the actual amount of network rewards is calculated by formula considering the staking amount.
+
+ 
