@@ -87,6 +87,105 @@ The other important functionality is to serve a specific data and announce to th
 	The [example](https://github.com/ipfs/interface-js-ipfs-core/blob/master/src/dht/provide.js) test case can be helpful.
 
 
+### 3.3 Experiment
+
+* Initialize a IPFS node and create a new peer ID: `QmSDACfhmkn53kq6NCciQswu3oJV3gbrY25KDh1gh15vcW`
+
+```
+$ ipfs init
+initializing IPFS node at /Users/fancy/.ipfs
+generating 2048-bit RSA keypair...done
+peer identity: QmSDACfhmkn53kq6NCciQswu3oJV3gbrY25KDh1gh15vcW
+to get started, enter:
+
+	ipfs cat /ipfs/QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv/readme
+```
+
+* Verify the IPFS node work properly:
+
+```
+$ ipfs cat /ipfs/QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv/readme
+Hello and Welcome to IPFS!
+
+██╗██████╗ ███████╗███████╗
+██║██╔══██╗██╔════╝██╔════╝
+██║██████╔╝█████╗  ███████╗
+██║██╔═══╝ ██╔══╝  ╚════██║
+██║██║     ██║     ███████║
+╚═╝╚═╝     ╚═╝     ╚══════╝
+
+If you're seeing this, you have successfully installed
+IPFS and are now interfacing with the ipfs merkledag!
+
+ -------------------------------------------------------
+| Warning:                                              |
+|   This is alpha software. Use at your own discretion! |
+|   Much is missing or lacking polish. There are bugs.  |
+|   Not yet secure. Read the security notes for more.   |
+ -------------------------------------------------------
+
+Check out some of the other files in this directory:
+
+  ./about
+  ./help
+  ./quick-start     <-- usage examples
+  ./readme          <-- this file
+  ./security-notes
+```
+
+* Upload a file into IPFS
+
+```
+$ ipfs add truffle-config.js 
+added QmbcYU2qnXtc8Wowgqo7NygFvnuWVw9EBr6DkvBRiJAQZi truffle-config.js
+ 354 B / 354 B [=================================================================] 100.00%
+```
+
+* launch the IPFS daemon to run online mode in order to call DHT API
+
+```
+$ ipfs daemon
+Initializing daemon...
+go-ipfs version: 0.4.22-
+Repo version: 7
+System version: amd64/darwin
+Golang version: go1.12.7
+Swarm listening on /ip4/127.0.0.1/tcp/4001
+Swarm listening on /ip4/192.168.86.111/tcp/4001
+Swarm listening on /ip6/::1/tcp/4001
+Swarm listening on /p2p-circuit
+Swarm announcing /ip4/127.0.0.1/tcp/4001
+Swarm announcing /ip4/192.168.86.111/tcp/4001
+Swarm announcing /ip6/::1/tcp/4001
+API server listening on /ip4/127.0.0.1/tcp/5001
+WebUI: http://127.0.0.1:5001/webui
+Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
+Daemon is ready
+```
+
+* find providers of a specific data using DHT API
+
+We can query the provider list of the data that was uploaded to IPFS just now.
+
+```
+$ ipfs dht findprovs QmbcYU2qnXtc8Wowgqo7NygFvnuWVw9EBr6DkvBRiJAQZi
+QmSDACfhmkn53kq6NCciQswu3oJV3gbrY25KDh1gh15vcW
+```
+
+1.  `QmbcYU2qnXtc8Wowgqo7NygFvnuWVw9EBr6DkvBRiJAQZi` is the multihash of the file `truffle-config.js` that I just added to IPFS. 
+
+2. the output provider `QmSDACfhmkn53kq6NCciQswu3oJV3gbrY25KDh1gh15vcW` is local IPFS node since it is the only node that serves the data. 
+
+* Similarly, we can query provider list of other dataset that includes many providers. For example:
+
+```
+$ ipfs dht findprovs QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u
+QmTGfEbUM1xz5Po6sVNj2KcMP6HjmrivRB9PLE13GxFZFG
+QmQVricDKJeFWFvvyD3E7WwwRBkum54jmjdj5yv3NpdqAs
+QmQayCUCyEMpg2tgs9PKCHgaAYs4rYbYSWEAPmqSeFciBj
+QmW4m2XzAmSb7GsXMk1FKjyUkPvYQHmj1EyPxWbZWv9paY
+```
+
 ## 4. Outstanding Issues
 
 ### 4.1 Where IPFS Peer ID comes from?
@@ -101,7 +200,7 @@ The workflow that generates the key pairs is shown as below. Note that the **pee
 
 From the above description, it is obvious that IPFS identity is different from the wallet account in Ethereum. Therefore, Ocean cannot directly distribute reward tokens to the IPFS nodes that serve a specific dataset. 
 
-To receive the reward tokens, **IPFS nodes must register themselves with Ocean** since they are dealing with two different networks. 
+To receive the reward tokens, **IPFS nodes must register themselves with Ocean and provide an Ethereum wallet** since they are dealing with two different networks. 
 
 The registration information shall include:
 
@@ -114,9 +213,9 @@ In this scenario, one potential **free-riding attack** is following:
 * if the dataset is popular and many people download it, Ocean is more likely to distribute network rewards to the providers of this dataset;
 * attacker may search for the provider peer ID of this dataset, which is not registered with Ocean yet;
 * attacker claims himself as the provider in IPFS network and register with Ocean using his own Ethereum wallet along with other person's peer ID in IPFS;
-* as such, the attacker do not need to serve the dataset but receive the network rewards from Ocean network.
+* as such, the attacker do not need to serve the dataset but receive the network rewards from Ocean network for free.
 
-The root cause of this attack is IPFS and Ocean network are two different and separated network. Therefore, it is possible to have inconsistent information across both networks. Attackers may take advantage of it to get Ocean network rewards for free.
+**solution**: require the provider in IPFS network to submit a signature when registering the Ethereum wallet with Ocean network. The signature can be a customized message signed by the private key. As such, Ocean network can validate his identity by decrypting the message with the public key and verifying the signature.
 
 <img src="img/risk.jpg" />
 
