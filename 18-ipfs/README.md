@@ -88,7 +88,7 @@ The other important functionality is to serve a specific data and announce to th
 
 ### 3.3 request data from a specific peer
 
-Unfortuantely, IPFS does not support this option at this time. When request a data from IPFS, it will automatically retrieve data blocks from neighboring peers for fast delivery. Here, the blocks of the same file could be download from different peers at various locations.
+IPFS does not support this option at this time. When request a data from IPFS, it will automatically retrieve data blocks from neighboring peers for fast delivery. Here, the blocks of the same file could be download from different peers at various locations.
 
 Since IPFS is a **content-addressing** network, users can request `which data` they need without knowing `where those data locate`. So, they do not need to know which peer have the data but only request the data from IPFS using the multihash as the key.
 
