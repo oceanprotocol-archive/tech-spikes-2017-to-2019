@@ -40,8 +40,11 @@ Folder Name   |  Description | Issue |
 16-bridge-bnb-chain | poc of token bridge between ETH and BNB | [354](https://github.com/oceanprotocol/ocean/issues/354) |
 17-permissionless-incentive | design of incentive mechanism for permissionless blockchain | [362](https://github.com/oceanprotocol/ocean/issues/362) |
 18-ipfs | investigate ipfs and explore its usage in Ocean | [v3_miner#10](https://github.com/oceanpro/v3_miner/issues/10)
+19-rft | investigate re-fungible token for data marketplace | |
 
 ## Updates
+
+* [10/24/2019] re-fungible token investigation
 
 * [10/06/2019] ipfs investigation ([v3_miner issue#10](https://github.com/oceanpro/v3_miner/issues/10))
 
