@@ -72,6 +72,12 @@ contract RFT {
 }
 ``` 
 
+My search found an ERC Implementation for Refungible Token (RFT) at [RFT - ERC721 backed by ERC20](https://github.com/tallyxinc/top-rft). The folder is duplicated in current directory [top-rft-master](./top-rft-master), which can be used as the starting point to develop our own RFT contract. The RFT contract can pass the testing:
+
+<img src="img/top-rf.jpg" />
+
+
+
 ## Trust Wallet
 
 Trust wallet support ERC20 and ERC721 tokens, however, it requires the team to add token asset to a centralized repository in order to be displayed in the wallet.
