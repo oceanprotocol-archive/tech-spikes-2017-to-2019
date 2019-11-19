@@ -1,6 +1,6 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-#   xDai vs. Ethereum
+#   xDai vs. Ethereum for Ocean ERC20
 ```
 name: investigate xDai and Ethereum for Ocean token contract
 type: research
