@@ -41,8 +41,14 @@ Folder Name   |  Description | Issue |
 17-permissionless-incentive | design of incentive mechanism for permissionless blockchain | [362](https://github.com/oceanprotocol/ocean/issues/362) |
 18-ipfs | investigate ipfs and explore its usage in Ocean | [v3_miner#10](https://github.com/oceanpro/v3_miner/issues/10)
 19-rft | investigate re-fungible token for data marketplace | |
+20-nft-wallet | investigate NFT wallet to integrate with Ocean | |
+21-eth-xdai | compare xDai and Ethereum for Ocean token | |
 
 ## Updates
+
+* [11/18/2019] investigate xDai vs Ethereum
+
+* [11/05/2019] investigate NFT wallet
 
 * [10/24/2019] re-fungible token investigation
 
