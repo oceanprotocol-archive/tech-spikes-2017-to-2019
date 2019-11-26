@@ -1,6 +1,6 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-#   xDai vs. Ethereum
+#   xDai vs. Ethereum for Ocean ERC20
 ```
 name: investigate xDai and Ethereum for Ocean token contract
 type: research
@@ -21,7 +21,7 @@ Ocean token is deployed to Ethereum mainnet at this time, but Ocean keeper contr
 	* it has a native stablecoin token that’s also called xDai;
 	* it offers low gas prices that is fixed at 1Gwei and paid with xDai;
 	* it uses Proof of Authority consensus;
-	* it may adopt POSDAO in the future to become permissionless.
+	* it will adopt POSDAO in the future to become permissionless.
 	
 * **Token transfer between Ethereum and xDai Chain**
 	* xDai is a USD-pegged stable coin in the xDai chain, which can be transferred to Ethereum mainnt through a token bridge;
