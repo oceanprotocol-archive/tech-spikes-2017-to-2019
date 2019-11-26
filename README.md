@@ -43,8 +43,11 @@ Folder Name   |  Description | Issue |
 19-rft | investigate re-fungible token for data marketplace | |
 20-nft-wallet | investigate NFT wallet to integrate with Ocean | |
 21-eth-xdai | compare xDai and Ethereum for Ocean token | |
+22-data-token-poc | prototype of data token as a standalone module | |
 
 ## Updates
+
+* [11/19/2019] develop POC of data token
 
 * [11/18/2019] investigate xDai vs Ethereum
 
