@@ -1,14 +1,5 @@
 [![banner](https://raw.githubusercontent.com/oceanprotocol/art/master/github/repo-banner%402x.png)](https://oceanprotocol.com)
 
-# Research Work 
-
-```
-name: repository of research work what we are interested.
-type: research
-status: updated draft
-editor: Fang Gong <fang@oceanprotocol.com>
-```
-
 ## Introduction
 
 Research work includes investigation, PoC and Implementation of various topics that are interesting to Ocean and transferred to production in the later stage.
