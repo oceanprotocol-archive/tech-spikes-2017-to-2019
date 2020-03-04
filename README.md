@@ -44,6 +44,7 @@ Folder Name   |  Description | Issue |
 20-nft-wallet | investigate NFT wallet to integrate with Ocean | |
 21-eth-xdai | compare xDai and Ethereum for Ocean token | |
 22-data-token-poc | prototype of data token as a standalone module | |
+23-ocean-v3 | Proof of concepts for Ocean protocol v3 | |
 
 ## Updates
 
