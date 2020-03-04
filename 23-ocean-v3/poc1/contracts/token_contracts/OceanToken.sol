@@ -25,14 +25,14 @@ contract OceanToken is Ownable, ERC20Pausable, ERC20Detailed, ERC20Capped {
     /**
      * @dev OceanToken constructor
      */
-    constructor()
+    constructor(
+        address contractOwner
+    )
     public
     ERC20Detailed('OceanToken', 'OCEAN', DECIMALS)
     ERC20Capped(TOTALSUPPLY)
     Ownable()
     {
-        address contractOwner = msg.sender;
-
         addPauser(contractOwner);
         renouncePauser();
         addMinter(contractOwner);

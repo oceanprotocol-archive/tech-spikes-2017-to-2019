@@ -11,12 +11,15 @@ var OceanToken = artifacts.require("OceanToken");
 var X20ONE = artifacts.require("X20ONE");
 var X20TWO = artifacts.require("X20TWO");
 
+
 module.exports = function(deployer) {
+
   deployer.deploy(UniswapExchange);
   deployer.deploy(X20ONE, web3.utils.fromAscii("X20ONE"), web3.utils.fromAscii("X20ONE"));
   deployer.deploy(X20TWO, web3.utils.fromAscii("X20TWO"), web3.utils.fromAscii("X20TWO"));
-  deployer.deploy(OceanToken)
-  		.then(() =>  deployer.deploy(UniswapFactory))
-  		.then(() =>  deployer.deploy(Market, UniswapFactory.address, OceanToken.address))
-  		.then(() =>  deployer.deploy(Factory, Market.address, OceanToken.address, UniswapFactory.address));
+  web3.eth.getAccounts()
+  			.then((accounts) => deployer.deploy(OceanToken, accounts[1], {from:accounts[2]}))
+ 			.then(() =>  deployer.deploy(UniswapFactory))
+  	 		.then(() =>  deployer.deploy(Market, UniswapFactory.address, OceanToken.address))
+  	 		.then(() =>  deployer.deploy(Factory, Market.address, OceanToken.address, UniswapFactory.address));
 };
