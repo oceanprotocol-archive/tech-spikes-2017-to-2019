@@ -11,15 +11,19 @@ var OceanToken = artifacts.require("OceanToken");
 var X20ONE = artifacts.require("X20ONE");
 var X20TWO = artifacts.require("X20TWO");
 
+module.exports = function(deployer, accounts) {
 
-module.exports = function(deployer) {
+    deployer.then(async () => {
+    	let accounts = await web3.eth.getAccounts();
+    	
+        await deployer.deploy(UniswapExchange);
+    	await deployer.deploy(UniswapFactory);
+		await deployer.deploy(OceanToken, accounts[1]);
+        await deployer.deploy(X20ONE, web3.utils.fromAscii("X20ONE"), web3.utils.fromAscii("X20ONE"));
+		await deployer.deploy(X20TWO, web3.utils.fromAscii("X20TWO"), web3.utils.fromAscii("X20TWO"));
+    	await deployer.deploy(Market, UniswapFactory.address, OceanToken.address);
+    	await deployer.deploy(Factory, Market.address, OceanToken.address, UniswapFactory.address);
+    });
 
-  deployer.deploy(UniswapExchange);
-  deployer.deploy(X20ONE, web3.utils.fromAscii("X20ONE"), web3.utils.fromAscii("X20ONE"));
-  deployer.deploy(X20TWO, web3.utils.fromAscii("X20TWO"), web3.utils.fromAscii("X20TWO"));
-  web3.eth.getAccounts()
-  			.then((accounts) => deployer.deploy(OceanToken, accounts[1], {from:accounts[2]}))
- 			.then(() =>  deployer.deploy(UniswapFactory))
-  	 		.then(() =>  deployer.deploy(Market, UniswapFactory.address, OceanToken.address))
-  	 		.then(() =>  deployer.deploy(Factory, Market.address, OceanToken.address, UniswapFactory.address));
 };
+
