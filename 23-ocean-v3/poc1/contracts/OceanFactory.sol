@@ -7,7 +7,8 @@ contract OceanFactory {
 	
 	OceanMarket     public oceanMarket;
 	IUniswapFactory public uniswapFactory;
-	
+	address 		public oceanToken;
+
 	mapping (address => address) tokenToMarket;
 	mapping (address => address) marketToToken;
 
@@ -16,6 +17,7 @@ contract OceanFactory {
 				address _uniswapFactory) 
 	public 
 	{
+		oceanToken     = _oceanToken;
 		oceanMarket    = OceanMarket(_oceanMarket);
 		uniswapFactory = IUniswapFactory(_uniswapFactory);
 		
@@ -45,5 +47,10 @@ contract OceanFactory {
 	function isOceanMarket(address marketAddress) public view returns(bool){
 		return(marketAddress == address(oceanMarket));
 	}
+
+	function getOceanToken() public view returns(address){
+		return(oceanToken);
+	}
+
 
 }

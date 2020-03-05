@@ -81,18 +81,25 @@ contract("OceanMarket", () => {
    });
 
   it("...should escrow x20one tokens with fee", async () => {
-     
+
      let accounts = await web3.eth.getAccounts();
 
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
      const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
 
-     await x20oneToken.transfer(accounts[2], 50000000);
+     await x20oneToken.transfer(accounts[2], 500000000);
      await x20oneToken.approve(x20oneExchange.address, 23000000000000, {from: accounts[2]});
      await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
 
-     await truffleAssert.passes(x20oneMarket.escrow(20000000, {from: accounts[2]}));
+     await truffleAssert.passes(x20oneMarket.escrow(500000000, {from: accounts[2]}));
+     await truffleAssert.passes(x20oneMarket.swapToOcean());
+
+     // let balance = await x20oneToken.balanceOf(x20oneMarket.address);
     
+     // await console.log(balance.toNumber());
+
+     // await console.log(await x20oneToken.balanceOf(x20oneMarket.address));
+     // await console.log(await x20oneToken.balanceOf(oceanToken.address));
     });
 
 });
