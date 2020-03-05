@@ -1,77 +1,75 @@
 const BigNumber = require('bn.js');
 
-const Factory = artifacts.require("UniswapFactory");
-const Exchange = artifacts.require("UniswapExchange");
-const OCEAN = artifacts.require("OCEAN");
-const XYZ = artifacts.require("XYZ");
-
-web3.eth.getAccounts().then(function(acc){ accounts = acc })
+const UniswapExchange = artifacts.require("UniswapExchange");
+const UniswapFactory = artifacts.require("UniswapFactory");
+const OceanToken = artifacts.require("OceanToken");
+const X20ONE = artifacts.require("X20ONE");
+const X20TWO = artifacts.require("X20TWO");
 
 contract("UniswapFactory", () => {
 
-  it("...should create exchange", async () => {
-    const exchange = await Exchange.deployed();
-    const factory = await Factory.deployed();
-    const ocean = await OCEAN.deployed();
+    let uniswapExchange;
+    let uniswapFactory;
+    let x20twoToken;
+    let x20oneToken;
+    let x20oneExchangeAddress; 
+    let x20twoExchangeAddress;   
+    let x20oneExchange;
+    let x20twoExchange;  
+    let block;
+    let accounts;
 
-    await factory.initializeFactory(exchange.address);
-    await factory.createExchange(ocean.address);
+
+
+  beforeEach('innit contracts for each test', async function () {
+    uniswapExchange = await UniswapExchange.deployed();
+    uniswapFactory = await UniswapFactory.deployed();   
+    oceanToken = await  OceanToken.deployed();
+    x20oneToken = await X20ONE.deployed();
+    x20twoToken = await X20TWO.deployed();
+    accounts = await web3.eth.getAccounts();
+  })
+
+  it("...should create exchange", async () => {
+
+    await uniswapFactory.initializeFactory(uniswapExchange.address);
+    await uniswapFactory.createExchange(x20twoToken.address);
     
-    const token = await factory.getTokenWithId(1);
-    assert.equal(token, ocean.address, "err, exchange");
+    const token = await uniswapFactory.getTokenWithId(1);
+    assert.equal(token, x20twoToken.address, "err, exchange");
 
   });
 
   it("...should create second exchange and add liquidity", async () => {
-    const factory = await Factory.deployed();
 
-    const xyz = await XYZ.deployed();
-    const ocean = await OCEAN.deployed();
+    await uniswapFactory.createExchange(x20oneToken.address);
 
-    await factory.createExchange(xyz.address);
-
-    const token = await factory.getTokenWithId(2);
-    assert.equal(token, xyz.address, "err, exchange");
+    const token = await uniswapFactory.getTokenWithId(2);
+    assert.equal(token, x20oneToken.address, "err, exchange");
     
-    const oceanExchangeAddress = await factory.getExchange(ocean.address);  
-    const xyzExchangeAddress = await factory.getExchange(xyz.address);  
-    const oceanExchange = await Exchange.at(oceanExchangeAddress);
-    const xyzExchange = await Exchange.at(xyzExchangeAddress);
+    x20twoExchangeAddress = await uniswapFactory.getExchange(x20twoToken.address);  
+    x20oneExchangeAddress = await uniswapFactory.getExchange(x20oneToken.address);  
+    x20twoExchange = await UniswapExchange.at(x20twoExchangeAddress);
+    x20oneExchange = await UniswapExchange.at(x20oneExchangeAddress);
 
     let block = await web3.eth.getBlock();
     const ethValue = new BigNumber(50);
     const ethValue2 = new BigNumber(30);
 
-    await ocean.approve(oceanExchangeAddress, 17000000000000);
-    await oceanExchange.addLiquidity(10, 17000000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether")});
-    await xyz.approve(xyzExchangeAddress, 23000000000000);
-    await xyzExchange.addLiquidity(10, 23000000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue2, "ether")});
+    await x20twoToken.approve(x20twoExchangeAddress, 1700000000);
+    await x20twoExchange.addLiquidity(10, 1700000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether")});
+    await x20oneToken.approve(x20oneExchangeAddress, 230000000);
+    await x20oneExchange.addLiquidity(10, 230000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue2, "ether")});
   });
 
   it("... swap tokens", async () => {
-    const factory = await Factory.deployed();
-
-    const xyz = await XYZ.deployed();
-    const ocean = await OCEAN.deployed();
-
-    const oceanExchangeAddress = await factory.getExchange(ocean.address);  
-    const xyzExchangeAddress = await factory.getExchange(xyz.address);  
-    const oceanExchange = await Exchange.at(oceanExchangeAddress);
-    const xyzExchange = await Exchange.at(xyzExchangeAddress);
 
     let eth = await web3.utils.toWei(new BigNumber(2), "ether");
-    // let minEth = await web3.utils.toWei(new BigNumber(0.000000000001), "ether");
     let block = await web3.eth.getBlock();
-    let accounts = await web3.eth.getAccounts();
 
-    //swap eth to xyz
-    xyzExchange.ethToTokenSwapInput(1, block.timestamp + 1000000, {value:eth, from: accounts[1]});
-    let xyzBalance = await xyz.balanceOf(accounts[1]);
-    assert(xyzBalance.toNumber()>0);
+    x20twoToken.transfer(accounts[1], 5000000);
     
-    //swap eth to ocean
-    oceanExchange.ethToTokenSwapInput(1, block.timestamp + 1000000, {value:eth, from: accounts[1]});
-    let oceanBalance = await ocean.balanceOf(accounts[1]);
-    assert(oceanBalance.toNumber()>0);
+    await x20twoToken.approve(x20twoExchangeAddress, 1700000000, {from: accounts[1]});
+    await x20twoExchange.tokenToTokenSwapInput(5000000, 1, 1, block.timestamp+100000, x20oneToken.address, {from: accounts[1]});
   });
 });

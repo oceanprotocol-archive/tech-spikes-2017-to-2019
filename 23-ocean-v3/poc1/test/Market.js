@@ -2,9 +2,9 @@ const UniswapExchange = artifacts.require("UniswapExchange");
 const UniswapFactory = artifacts.require("UniswapFactory");
 const OceanMarket = artifacts.require("OceanMarket");
 const OceanFactory = artifacts.require("OceanFactory");
-var OceanToken = artifacts.require("OceanToken");
-var X20ONE = artifacts.require("X20ONE");
-var X20TWO = artifacts.require("X20TWO");
+const OceanToken = artifacts.require("OceanToken");
+const X20ONE = artifacts.require("X20ONE");
+const X20TWO = artifacts.require("X20TWO");
 
 const truffleAssert = require('truffle-assertions');
 const BigNumber = require('bn.js');
@@ -17,10 +17,11 @@ contract("OceanMarket", () => {
     let oceanFactory;
     let oceanToken;
     let x20oneToken;
-    let xyzExchangeAddress; 
-    let xyzExchange;
+    let x20oneExchangeAddress; 
+    let x20oneExchange;
     let block;
-
+    let accounts;
+    let ethValue;
 
   beforeEach('innit contracts for each test', async function () {
     uniswapExchange = await UniswapExchange.deployed();
@@ -30,50 +31,68 @@ contract("OceanMarket", () => {
     oceanToken = await  OceanToken.deployed();
     x20oneToken = await X20ONE.deployed();
     x20twoToken = await X20TWO.deployed();
+    accounts = await web3.eth.getAccounts();
   })
 
-  it("...should create XYZ exchange", async () => {
+  it("...should create x20one exchange", async () => {
     await uniswapFactory.initializeFactory(uniswapExchange.address);
     truffleAssert.passes(uniswapFactory.createExchange(x20oneToken.address));
   });
 
-  it("...should create XYZ market and get it's address", async () => {
+  it("...should create x20one market and get it's address", async () => {
     await truffleAssert.passes(oceanFactory.createMarket(x20oneToken.address));
 
-    let xyzMarket = await oceanFactory.getMarket(x20oneToken.address);
-    assert(xyzMarket != "0x0000000000000000000000000000000000000000");
+    let x20oneMarket = await oceanFactory.getMarket(x20oneToken.address);
+    assert(x20oneMarket != "0x0000000000000000000000000000000000000000");
       
   });
 
-  it("...should not create XYZ market", async () => {
+  it("...should not create x20one market", async () => {
     await truffleAssert.reverts(oceanFactory.createMarket(x20oneToken.address), "market already exists.");
   });
 
-  it("...should not create XYZ market", async () => {
+  it("...should not create x20one market", async () => {
     await truffleAssert.reverts(oceanFactory.createMarket(x20oneToken.address), "market already exists.");
   });
 
-  it("...should add liquidity to xyz ezchange", async () => {
+  it("...should add liquidity to x20one exchange", async () => {
     
-    let ethValue = new BigNumber(10);
+    ethValue = new BigNumber(10);
     block = await web3.eth.getBlock();
 
-    xyzExchangeAddress = await uniswapFactory.getExchange(x20oneToken.address); 
-    xyzExchange = await UniswapExchange.at(xyzExchangeAddress);
+    x20oneExchangeAddress = await uniswapFactory.getExchange(x20oneToken.address); 
+    x20oneExchange = await UniswapExchange.at(x20oneExchangeAddress);
 
-    await x20oneToken.approve(xyzExchangeAddress, 23000000000000);
-    await xyzExchange.addLiquidity(10, 100000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether")});
+    await x20oneToken.approve(x20oneExchangeAddress, 23000000000000);
+    await x20oneExchange.addLiquidity(10, 100000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether")});
   });
 
-  it("...should escrow XYZ tokens with fee", async () => {
-     let xyzMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
-     const xyzMarket = await OceanMarket.at(xyzMarketAddress);     
+  it("...should create ocean exchange and add liquidity", async () => {
 
-     await x20oneToken.approve(xyzMarket.address, 23000000000000);
+    truffleAssert.passes(uniswapFactory.createExchange(oceanToken.address));
+    
+    oceanToken.mint(accounts[1], 23000000000000, {from: accounts[1]});    
 
-     await truffleAssert.passes(xyzMarket.escrow(20000000));
+    oceanExchangeAddress = await uniswapFactory.getExchange(oceanToken.address); 
+    oceanExchange = await UniswapExchange.at(oceanExchangeAddress);
 
+    await oceanToken.approve(oceanExchangeAddress, 23000000000000, {from: accounts[1]});
+    await oceanExchange.addLiquidity(10, 100000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether"), from: accounts[1]});
+   });
+
+  it("...should escrow x20one tokens with fee", async () => {
+     
+     let accounts = await web3.eth.getAccounts();
+
+     let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
+     const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
+
+     await x20oneToken.transfer(accounts[2], 50000000);
+     await x20oneToken.approve(x20oneExchange.address, 23000000000000, {from: accounts[2]});
+     await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
+
+     await truffleAssert.passes(x20oneMarket.escrow(20000000, {from: accounts[2]}));
+    
     });
-
 
 });

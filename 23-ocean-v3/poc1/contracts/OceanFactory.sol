@@ -1,7 +1,7 @@
 pragma solidity >=0.5.0 <0.6.0;
 
-import './OceanMarket.sol';
-import './uniswap_interfaces/IUniswapFactory.sol';
+import "./OceanMarket.sol";
+import "./uniswap_interfaces/IUniswapFactory.sol";
 
 contract OceanFactory {
 	
@@ -26,7 +26,6 @@ contract OceanFactory {
 	function createMarket(address token) public returns(address) {
 		require(tokenToMarket[token] == address(0),
 			"market already exists");
-		// TODO: add check if ERC20
 		OceanMarket market = new OceanMarket(address(uniswapFactory), token);
 		
 		tokenToMarket[token] 		   = address(market);
@@ -37,6 +36,10 @@ contract OceanFactory {
 
 	function getMarket(address token) public view returns(address){
 		return(tokenToMarket[token]);
+	}
+
+	function getToken(address market) public view returns(address){
+		return(marketToToken[market]);
 	}
 
 	function isOceanMarket(address marketAddress) public view returns(bool){

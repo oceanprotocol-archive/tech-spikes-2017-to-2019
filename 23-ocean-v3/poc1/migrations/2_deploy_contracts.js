@@ -11,11 +11,11 @@ var OceanToken = artifacts.require("OceanToken");
 var X20ONE = artifacts.require("X20ONE");
 var X20TWO = artifacts.require("X20TWO");
 
-module.exports = function(deployer, accounts) {
+module.exports = function(deployer) {
 
     deployer.then(async () => {
     	let accounts = await web3.eth.getAccounts();
-    	
+
         await deployer.deploy(UniswapExchange);
     	await deployer.deploy(UniswapFactory);
 		await deployer.deploy(OceanToken, accounts[1]);
