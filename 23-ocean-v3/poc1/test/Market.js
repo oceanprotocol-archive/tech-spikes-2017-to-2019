@@ -94,12 +94,9 @@ contract("OceanMarket", () => {
      await truffleAssert.passes(x20oneMarket.escrow(500000000, {from: accounts[2]}));
      await truffleAssert.passes(x20oneMarket.swapToOcean());
 
-     // let balance = await x20oneToken.balanceOf(x20oneMarket.address);
-    
-     // await console.log(balance.toNumber());
-
-     // await console.log(await x20oneToken.balanceOf(x20oneMarket.address));
-     // await console.log(await x20oneToken.balanceOf(oceanToken.address));
+     let balance = await oceanToken.balanceOf(x20oneMarket.address);    
+     assert(balance.toNumber()>0);
+     
     });
 
 });
