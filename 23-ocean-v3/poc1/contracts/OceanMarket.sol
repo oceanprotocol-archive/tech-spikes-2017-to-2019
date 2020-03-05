@@ -14,10 +14,10 @@ contract OceanMarket {
 	IUniswapExchange public uniswapExchange;
 	IERC20           public token;
 	OceanFactory     public oceanFactory;
-	// uint256			 public feePool;
+	uint256			 public feePool;
 	uint256			 public constant PPM = 1000000;  
 
-	// mapping (address => uint256) escrowBalances;
+	mapping (address => uint256) escrowBalances;
 
 	constructor(address _uniswapFactory, address _token) public {
 		uniswapFactory 	   = IUniswapFactory(_uniswapFactory);
@@ -28,13 +28,32 @@ contract OceanMarket {
 
 	function escrow(uint256 amount) public {
 		require(!oceanFactory.isOceanMarket(address(this)), 
-			"err: should not be an ocean exchange");
+			"should not be an ocean market");
 		token.transferFrom(msg.sender, address(this), amount);
+		uint256 fee = amount.sub((amount.mul(950000)).div(PPM));
+		feePool = feePool.add(fee);
+		escrowBalances[msg.sender] = amount.sub(fee);
+	}
+
+	function feelessEscrow(uint256 amount) public {
+		require(oceanFactory.isOceanMarket(address(this)), 
+			"should be an ocean market");
+		token.transferFrom(msg.sender, address(this), amount);
+		escrowBalances[msg.sender] = amount;
+	}
+
+	function withdraw(address to) public {
+		require(escrowBalances[msg.sender] > 0,
+			"should have tokens escrowed");
+		require(to != msg.sender,
+			"cannot withdraw to this address");
+		token.transfer(to, escrowBalances[msg.sender]);
+		escrowBalances[msg.sender] = 0;	
 	}
 
 	function swapToOcean() public payable {
-		token.approve(address(uniswapExchange), token.balanceOf(address(this)));
-		uniswapExchange.tokenToTokenSwapInput(token.balanceOf(address(this)), 1, 1, block.timestamp.add(100000), oceanFactory.getOceanToken());
+		token.approve(address(uniswapExchange), feePool);
+		uniswapExchange.tokenToTokenTransferInput(feePool, 1, 1, block.timestamp.add(100000), oceanFactory.getOceanToken(), oceanFactory.getOceanProxy());
 	}
 
 	// fallback function

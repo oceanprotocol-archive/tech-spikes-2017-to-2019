@@ -8,16 +8,19 @@ contract OceanFactory {
 	OceanMarket     public oceanMarket;
 	IUniswapFactory public uniswapFactory;
 	address 		public oceanToken;
+	address 		public oceanProxy;
 
 	mapping (address => address) tokenToMarket;
 	mapping (address => address) marketToToken;
 
 	constructor(address payable _oceanMarket, 
-				address _oceanToken, 
+				address _oceanToken,
+				address _oceanProxy, 
 				address _uniswapFactory) 
 	public 
 	{
 		oceanToken     = _oceanToken;
+		oceanProxy     = _oceanProxy;
 		oceanMarket    = OceanMarket(_oceanMarket);
 		uniswapFactory = IUniswapFactory(_uniswapFactory);
 		
@@ -50,6 +53,10 @@ contract OceanFactory {
 
 	function getOceanToken() public view returns(address){
 		return(oceanToken);
+	}
+
+	function getOceanProxy() public view returns(address){
+		return(oceanProxy);
 	}
 
 
