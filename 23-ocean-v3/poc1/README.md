@@ -17,6 +17,9 @@ source ~/vyper-venv/bin/activate
 
 ```
 npm install
+npm install web3
+npm install truffle-assertions
+npm install @openzeppelin/contracts
 ```
 
 ```

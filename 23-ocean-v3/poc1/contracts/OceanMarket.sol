@@ -53,7 +53,7 @@ contract OceanMarket {
 
 	function swapToOcean() public payable {
 		token.approve(address(uniswapExchange), feePool);
-		uniswapExchange.tokenToTokenTransferInput(feePool, 1, 1, block.timestamp.add(100000), oceanFactory.getOceanToken(), oceanFactory.getOceanProxy());
+		uniswapExchange.tokenToTokenTransferInput(feePool, 1, 1, block.timestamp.add(100000), oceanFactory.getOceanProxy(), oceanFactory.getOceanToken());
 	}
 
 	// fallback function

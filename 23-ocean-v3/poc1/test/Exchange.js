@@ -72,4 +72,17 @@ contract("UniswapFactory", () => {
     await x20twoToken.approve(x20twoExchangeAddress, 1700000000, {from: accounts[1]});
     await x20twoExchange.tokenToTokenSwapInput(5000000, 1, 1, block.timestamp+100000, x20oneToken.address, {from: accounts[1]});
   });
+
+  it("... swap tokens to the third address", async () => {
+
+    let eth = await web3.utils.toWei(new BigNumber(2), "ether");
+    let block = await web3.eth.getBlock();
+
+    x20twoToken.transfer(accounts[1], 5000000);
+    
+    await x20twoToken.approve(x20twoExchangeAddress, 1700000000, {from: accounts[1]});
+    await x20twoExchange.tokenToTokenTransferInput(5000000, 1, 1, block.timestamp+100000, accounts[2], x20oneToken.address, {from: accounts[1]});
+  });
+
+
 });
