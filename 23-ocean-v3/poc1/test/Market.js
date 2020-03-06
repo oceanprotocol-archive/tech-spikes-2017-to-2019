@@ -103,7 +103,7 @@ contract("OceanMarket", () => {
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
      const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
      
-     await truffleAssert.passes(await truffleAssert.passes(x20oneMarket.swapToOcean());     
+     await truffleAssert.passes(await truffleAssert.passes(x20oneMarket.swapToOcean()));     
     });
 
 });
