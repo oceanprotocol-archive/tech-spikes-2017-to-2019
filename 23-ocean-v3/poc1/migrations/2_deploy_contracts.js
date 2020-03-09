@@ -25,8 +25,8 @@ module.exports = function(deployer) {
 		await deployer.deploy(OceanToken, accounts[1]);
         await deployer.deploy(X20ONE, web3.utils.fromAscii("X20ONE"), web3.utils.fromAscii("X20ONE"));
 		await deployer.deploy(X20TWO, web3.utils.fromAscii("X20TWO"), web3.utils.fromAscii("X20TWO"));
-    	await deployer.deploy(Market, UniswapFactory.address, OceanToken.address);
-    	await deployer.deploy(Factory, Market.address, OceanToken.address, OceanProxy.address, UniswapFactory.address);
+    	await deployer.deploy(Market, UniswapFactory.address, OceanToken.address, DataToken.address);
+    	await deployer.deploy(Factory, DataToken.address, OceanToken.address, OceanProxy.address, UniswapFactory.address);
     });
 
 };

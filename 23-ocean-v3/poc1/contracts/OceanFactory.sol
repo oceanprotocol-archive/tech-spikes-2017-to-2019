@@ -11,6 +11,7 @@ contract OceanFactory {
 	
 	OceanMarket     public oceanMarket;
 	IUniswapFactory public uniswapFactory;
+	address 		public dataToken;
 	address 		public oceanToken;
 	address 		public oceanProxy;
 
@@ -19,25 +20,25 @@ contract OceanFactory {
 
 	/**
      * @notice constructor
-     * @param _oceanMarket market contract that works with OCEAN ERC20
-     * and acts as a template for other ERC20 contracts
+     * @param _dataToken data token address
      * @param _oceanToken address of OCEAN ERC20 token
      * @param _oceanProxy address that recieves fees in OCEAN
      * @param _uniswapFactory address of Uniswap exchange factory 
      */
-	constructor(address payable _oceanMarket, 
+	constructor(address _dataToken, 
 				address _oceanToken,
 				address _oceanProxy, 
 				address _uniswapFactory) 
 	public 
 	{
+		dataToken 	   = _dataToken;
 		oceanToken     = _oceanToken;
 		oceanProxy     = _oceanProxy;
-		oceanMarket    = OceanMarket(_oceanMarket);
 		uniswapFactory = IUniswapFactory(_uniswapFactory);
+		oceanMarket    = new OceanMarket(_uniswapFactory, _oceanToken, dataToken);
 		
-		tokenToMarket[_oceanToken]  = _oceanMarket;
-		marketToToken[_oceanMarket] = _oceanToken;
+		tokenToMarket[_oceanToken]  = address(oceanMarket);
+		marketToToken[address(oceanMarket)] = _oceanToken;
 	} 
 
 	/**
@@ -48,7 +49,7 @@ contract OceanFactory {
 	function createMarket(address token) public returns(address) {
 		require(tokenToMarket[token] == address(0),
 			"market already exists");
-		OceanMarket market = new OceanMarket(address(uniswapFactory), token);
+		OceanMarket market = new OceanMarket(address(uniswapFactory), token, dataToken);
 		
 		tokenToMarket[token] 		   = address(market);
 		marketToToken[address(market)] = token;
@@ -97,6 +98,14 @@ contract OceanFactory {
      */
 	function getOceanProxy() public view returns(address){
 		return(oceanProxy);
+	}
+
+	/**
+     * @notice Returns data token address 
+     * @return dataToken address
+     */ 
+	function getDataToken() public view returns(address){
+		return(dataToken);
 	}
 
 

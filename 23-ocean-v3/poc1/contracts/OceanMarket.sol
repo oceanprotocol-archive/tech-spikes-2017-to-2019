@@ -1,5 +1,6 @@
 pragma solidity >=0.5.0 <0.6.0;
 
+import './DataToken.sol';
 import './OceanFactory.sol';
 import './uniswap_interfaces/IERC20.sol';
 import './uniswap_interfaces/IUniswapFactory.sol';
@@ -14,6 +15,7 @@ contract OceanMarket {
 
 	using SafeMath for uint256;
 
+	DataToken		 public dataToken;
 	IUniswapFactory  public uniswapFactory;
 	IUniswapExchange public uniswapExchange;
 	IERC20           public token;
@@ -26,19 +28,26 @@ contract OceanMarket {
 	/**
      * @notice constructor
      * @param _uniswapFactory address of Uniswap exchange factory 
-     * @param _token address of an ERC20 token for the given exchange 
+     * @param _token address of an ERC20 token for the given exchange
+     * @param _dataToken data token
      */
-	constructor(address _uniswapFactory, address _token) public {
+	constructor(address _uniswapFactory, address _token, address _dataToken) public {
 		uniswapFactory 	   = IUniswapFactory(_uniswapFactory);
 		uniswapExchange    = IUniswapExchange(uniswapFactory.getExchange(_token)); 	 
 		oceanFactory   	   = OceanFactory(msg.sender);
 		token 		   	   = IERC20(_token);
+		dataToken 		   = DataToken(_dataToken);
+		// TODO: add did
 	}
 
 	/**
      * @notice Escrow tokens with fee
      * @param amount amount of tokens escrowed
      */
+
+    // notes: rename to lockAndMint
+    // take url
+    // return tokenId
 	function escrow(uint256 amount) public {
 		require(!oceanFactory.isOceanMarket(address(this)), 
 			"should not be an ocean market");
