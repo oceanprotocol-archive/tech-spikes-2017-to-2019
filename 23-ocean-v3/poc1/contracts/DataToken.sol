@@ -2,18 +2,19 @@ pragma solidity ^0.5.6;
 
 import '@openzeppelin/contracts/ownership/Ownable.sol';
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Metadata.sol";
 
 
-contract DataToken is Ownable, ERC721, ERC721Metadata {
+contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable {
 
     mapping(uint256 => uint256) private tokenExpiresAt;
 
     event Minted (
         address indexed to,
         uint256 indexed tokenId,
-        string metadata,
-        uint256 expireAt
+        string metadata
+        // uint256 expireAt
     );
 
     constructor()
@@ -33,7 +34,7 @@ contract DataToken is Ownable, ERC721, ERC721Metadata {
     function mint(
         address to,
         uint256 tokenId,
-        uint256 expireAt,
+        // uint256 expireAt,
         string memory metadata
     )
     public
@@ -41,50 +42,53 @@ contract DataToken is Ownable, ERC721, ERC721Metadata {
     {
         _mint(to, tokenId);
         _setTokenURI(tokenId, metadata);
-        _setTokenExpireAt(tokenId, expireAt);
+        // _setTokenExpireAt(tokenId, expireAt);
         emit Minted(
             to,
             tokenId,
-            metadata,
-            expireAt
+            metadata
+            // expireAt
         );
         return true;
     }
 
-    function _setTokenExpireAt(
-        uint256 tokenId,
-        uint256 expireAt
-    )
-    private
-    {
-        require(
-        // change this to safeMath
-            (expireAt + block.number) > block.number,
-            'ERC721: Invalid tokenId expiration date'
-        );
-        tokenExpiresAt[tokenId] = expireAt + block.number;
-    }
 
-    function getTokenExpiredAt(
-        uint256 tokenId
-    )
-    external
-    view
-    returns(uint256)
-    {
-        return tokenExpiresAt[tokenId];
-    }
-
-    function isExpiredToken(
-        uint256 tokenId
-    )
-    external
-    view
-    returns(bool)
-    {
-        if(block.number >= tokenExpiresAt[tokenId]){
-            return true;
-        }
-        return false;
-    }
 }
+
+
+    // function _setTokenExpireAt(
+    //     uint256 tokenId,
+    //     uint256 expireAt
+    // )
+    // private
+    // {
+    //     require(
+    //     // change this to safeMath
+    //         (expireAt + block.number) > block.number,
+    //         'ERC721: Invalid tokenId expiration date'
+    //     );
+    //     tokenExpiresAt[tokenId] = expireAt + block.number;
+    // }
+
+    // function getTokenExpiredAt(
+    //     uint256 tokenId
+    // )
+    // external
+    // view
+    // returns(uint256)
+    // {
+    //     return tokenExpiresAt[tokenId];
+    // }
+
+    // function isExpiredToken(
+    //     uint256 tokenId
+    // )
+    // external
+    // view
+    // returns(bool)
+    // {
+    //     if(block.number >= tokenExpiresAt[tokenId]){
+    //         return true;
+    //     }
+    //     return false;
+    // }

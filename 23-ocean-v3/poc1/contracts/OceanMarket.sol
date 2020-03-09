@@ -23,7 +23,13 @@ contract OceanMarket {
 	uint256			 public feePool;
 	uint256			 public constant PPM = 1000000;  
 
-	mapping (address => uint256) escrowBalances;
+	struct Escrow {
+		address minter;
+		uint256 value;
+		bool    isConsumed;
+	}
+
+	mapping (uint256 => Escrow) escrowData;
 
 	/**
      * @notice constructor
@@ -37,57 +43,63 @@ contract OceanMarket {
 		oceanFactory   	   = OceanFactory(msg.sender);
 		token 		   	   = IERC20(_token);
 		dataToken 		   = DataToken(_dataToken);
-		// TODO: add did
 	}
 
 	/**
-     * @notice Escrow tokens with fee
-     * @param amount amount of tokens escrowed
+     * @notice Lock ERC20 tokens and mint ERC721 data token
+     * @param amount amount of ERC721 tokens
+     * @param metadata dataToken related metadata
      */
-
-    // notes: rename to lockAndMint
-    // take url
-    // return tokenId
-	function escrow(uint256 amount) public {
-		require(!oceanFactory.isOceanMarket(address(this)), 
-			"should not be an ocean market");
-		token.transferFrom(msg.sender, address(this), amount);
-		uint256 fee = amount.sub((amount.mul(950000)).div(PPM));
-		feePool = feePool.add(fee);
-		escrowBalances[msg.sender] = amount.sub(fee);
-	}
-
-	/**
-     * @notice Escrow tokens without fees, works only for OCEAN tokens
-     * @param amount amount of tokens escrowed
-     */
-	function feelessEscrow(uint256 amount) public {
-		require(oceanFactory.isOceanMarket(address(this)), 
-			"should be an ocean market");
-		token.transferFrom(msg.sender, address(this), amount);
-		escrowBalances[msg.sender] = amount;
-	}
+    function lockAndMint(uint256 amount, string memory metadata) public returns(uint256) {
+		uint tokensLocked = _lock(amount);
+		uint id = uint(keccak256(abi.encodePacked(now, msg.sender, amount)));
+		dataToken.mint(msg.sender, id, metadata);
+		escrowData[id] = Escrow({
+			minter: msg.sender,
+			value: tokensLocked,
+			isConsumed: false   		
+		});		
+		return id;
+    }
 
 	/**
      * @notice Withdraw escrowed tokens
      * @param to address to withdraw tokens to
      */
-	function withdraw(address to) public {
-		require(escrowBalances[msg.sender] > 0,
+	function withdrawAndBurn(uint id, address to) public {
+		require(escrowData[id].value > 0,
 			"should have tokens escrowed");
-		require(to != msg.sender,
+		// TODO: should be changed to signer
+		require(escrowData[id].minter == msg.sender,
+			"only minter can withdraw");
+		require(to != escrowData[id].minter,
 			"cannot withdraw to this address");
-		token.transfer(to, escrowBalances[msg.sender]);
-		escrowBalances[msg.sender] = 0;	
+		token.transfer(to, escrowData[id].value);
+		dataToken.burn(id);
+		escrowData[id].value = 0;
+		escrowData[id].isConsumed = true;	
 	}
 
 	/**
      * @notice Swap accumulated tokens to OCEAN and transfer to Ocean Proxy
      */
 	function swapToOcean() public payable {
+		require(feePool > 0,
+			"There is nothing to withdraw");
 		token.approve(address(uniswapExchange), feePool);
 		uniswapExchange.tokenToTokenTransferInput(feePool, 1, 1, block.timestamp.add(100000), oceanFactory.getOceanProxy(), oceanFactory.getOceanToken());
 		feePool = 0;
+	}
+
+	function _lock(uint256 amount) private returns(uint256) {
+		token.transferFrom(msg.sender, address(this), amount);
+		if (oceanFactory.isOceanMarket(address(this))) {
+			return amount;
+		} else {
+			uint256 fee = amount.sub((amount.mul(950000)).div(PPM));
+			feePool = feePool.add(fee);
+			return amount.div(fee);
+		} 
 	}
 
 	/**

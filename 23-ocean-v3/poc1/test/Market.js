@@ -5,6 +5,7 @@ const OceanFactory = artifacts.require("OceanFactory");
 const OceanToken = artifacts.require("OceanToken");
 const X20ONE = artifacts.require("X20ONE");
 const X20TWO = artifacts.require("X20TWO");
+const DataToken = artifacts.require("DataToken");
 
 const truffleAssert = require('truffle-assertions');
 const BigNumber = require('bn.js');
@@ -22,6 +23,7 @@ contract("OceanMarket", () => {
     let block;
     let accounts;
     let ethValue;
+    let dataToken;
 
   beforeEach('innit contracts for each test', async function () {
     uniswapExchange = await UniswapExchange.deployed();
@@ -31,6 +33,7 @@ contract("OceanMarket", () => {
     oceanToken = await  OceanToken.deployed();
     x20oneToken = await X20ONE.deployed();
     x20twoToken = await X20TWO.deployed();
+    dataToken = await DataToken.deployed();
     accounts = await web3.eth.getAccounts();
   })
 
@@ -80,22 +83,35 @@ contract("OceanMarket", () => {
     await oceanExchange.addLiquidity(10, 100000000000, block.timestamp+100000, {value:web3.utils.toWei(ethValue, "ether"), from: accounts[1]});
    });
 
-  it("...should escrow x20one tokens with fee", async () => {
+   it("...should lockAndMint", async () => {
 
-     let accounts = await web3.eth.getAccounts();
+    let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
+    const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
+
+    await x20oneToken.transfer(accounts[2], 500000000);
+    await x20oneToken.approve(x20oneExchange.address, 23000000000000, {from: accounts[2]});
+    await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
+
+    // await x20oneMarket.lockAndMint(500000000, "metadata", {from: accounts[2]});
+    await truffleAssert.passes(x20oneMarket.lockAndMint(500000000, "metadata", {from: accounts[2]}));     
+    let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
+    assert(dataTokenBalance.toNumber() == 1);
+   });
+
+   it("...should withdraw escrowed tokens", async () => {
 
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
      const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
-
-     await x20oneToken.transfer(accounts[2], 500000000);
-     await x20oneToken.approve(x20oneExchange.address, 23000000000000, {from: accounts[2]});
-     await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
-
-     await truffleAssert.passes(x20oneMarket.escrow(500000000, {from: accounts[2]}));
-
-     let balance = await x20oneToken.balanceOf(x20oneMarket.address);    
-     assert(balance.toNumber() == 500000000);
      
+    let event = await dataToken.getPastEvents('Minted', { fromBlock: 0, toBlock: 'latest'});
+    let tokenId = await event[0].returnValues[1];
+
+    await dataToken.approve(x20oneMarket.address, tokenId, {from: accounts[2]});
+
+    await truffleAssert.passes(await x20oneMarket.withdrawAndBurn(tokenId, accounts[1], {from: accounts[2]}));     
+
+    let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
+    assert(dataTokenBalance.toNumber() == 0);
     });
 
    it("...should swap x20 tokean to ocean and withdraw to proxy", async () => {
@@ -103,7 +119,6 @@ contract("OceanMarket", () => {
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
      const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
      
-     await truffleAssert.passes(await truffleAssert.passes(x20oneMarket.swapToOcean()));     
+     await truffleAssert.passes(await x20oneMarket.swapToOcean());     
     });
-
 });
