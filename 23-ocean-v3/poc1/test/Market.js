@@ -45,8 +45,8 @@ contract("OceanMarket", () => {
   it("...should create x20one market and get it's address", async () => {
     await truffleAssert.passes(oceanFactory.createMarket(x20oneToken.address));
 
-    // let x20oneMarket = await oceanFactory.getMarket(x20oneToken.address);
-    // assert(x20oneMarket != "0x0000000000000000000000000000000000000000");
+    let x20oneMarket = await oceanFactory.getMarket(x20oneToken.address);
+    assert(x20oneMarket != "0x0000000000000000000000000000000000000000");
       
   });
 
@@ -92,21 +92,21 @@ contract("OceanMarket", () => {
     await x20oneToken.approve(x20oneExchange.address, 23000000000000, {from: accounts[2]});
     await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
 
-    // await x20oneMarket.lockAndMint(500000000, "metadata", {from: accounts[2]});
+    await dataToken.setApprovalForAll(x20oneMarket.address, true, {from: accounts[2]});
+    
     await truffleAssert.passes(x20oneMarket.lockAndMint(500000000, "metadata", {from: accounts[2]}));     
+
     let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
     assert(dataTokenBalance.toNumber() == 1);
    });
 
-   it("...should withdraw escrowed tokens", async () => {
+   it("...should withdrawAndBurn", async () => {
 
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
      const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
      
     let event = await dataToken.getPastEvents('Minted', { fromBlock: 0, toBlock: 'latest'});
     let tokenId = await event[0].returnValues[1];
-
-    await dataToken.approve(x20oneMarket.address, tokenId, {from: accounts[2]});
 
     await truffleAssert.passes(await x20oneMarket.withdrawAndBurn(tokenId, accounts[1], {from: accounts[2]}));     
 

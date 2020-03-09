@@ -51,6 +51,8 @@ contract OceanMarket {
      * @param metadata dataToken related metadata
      */
     function lockAndMint(uint256 amount, string memory metadata) public returns(uint256) {
+		require(dataToken.isApprovedForAll(msg.sender, address(this)),
+			"should be ApprovedForAll");
 		uint tokensLocked = _lock(amount);
 		uint id = uint(keccak256(abi.encodePacked(now, msg.sender, amount)));
 		dataToken.mint(msg.sender, id, metadata);
