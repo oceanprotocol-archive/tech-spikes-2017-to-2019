@@ -93,7 +93,7 @@ contract("OceanMarket", () => {
     await x20oneToken.approve(x20oneMarket.address, 23000000000000, {from: accounts[2]});
 
     await dataToken.setApprovalForAll(x20oneMarket.address, true, {from: accounts[2]});
-    
+
     await truffleAssert.passes(x20oneMarket.lockAndMint(500000000, "metadata", {from: accounts[2]}));     
 
     let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
@@ -103,15 +103,20 @@ contract("OceanMarket", () => {
    it("...should withdrawAndBurn", async () => {
 
      let x20oneMarketAddress = await oceanFactory.getMarket(x20oneToken.address);
-     const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);     
-     
-    let event = await dataToken.getPastEvents('Minted', { fromBlock: 0, toBlock: 'latest'});
-    let tokenId = await event[0].returnValues[1];
+     const x20oneMarket = await OceanMarket.at(x20oneMarketAddress);       
 
-    await truffleAssert.passes(await x20oneMarket.withdrawAndBurn(tokenId, accounts[1], {from: accounts[2]}));     
+     let event = await dataToken.getPastEvents('Minted', { fromBlock: 0, toBlock: 'latest'});
+     let tokenId = await event[0].returnValues[1];
 
-    let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
-    assert(dataTokenBalance.toNumber() == 0);
+
+     let hash = await dataToken.getHash(tokenId, 500000000, "metadata", {from: accounts[2]});
+     signature = await web3.eth.sign(hash, accounts[2]);
+
+     await truffleAssert.passes(await x20oneMarket.withdrawAndBurn(tokenId, accounts[1], 500000000, "metadata", signature, {from: accounts[4]}));     
+
+     let dataTokenBalance = await dataToken.balanceOf(accounts[2]);
+     assert(dataTokenBalance.toNumber() == 0);
+
     });
 
    it("...should swap x20 tokean to ocean and withdraw to proxy", async () => {
@@ -121,4 +126,5 @@ contract("OceanMarket", () => {
      
      await truffleAssert.passes(await x20oneMarket.swapToOcean());     
     });
+
 });

@@ -1,12 +1,13 @@
 pragma solidity ^0.5.6;
 
+import './MessageSigned.sol';
 import '@openzeppelin/contracts/ownership/Ownable.sol';
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Metadata.sol";
 
 
-contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable {
+contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable, MessageSigned {
 
     mapping(uint256 => uint256) private tokenExpiresAt;
 
@@ -14,7 +15,6 @@ contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable {
         address indexed to,
         uint256 indexed tokenId,
         string metadata
-        // uint256 expireAt
     );
 
     constructor()
@@ -34,7 +34,6 @@ contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable {
     function mint(
         address to,
         uint256 tokenId,
-        // uint256 expireAt,
         string memory metadata
     )
     public
@@ -42,53 +41,39 @@ contract DataToken is Ownable, ERC721, ERC721Metadata, ERC721Burnable {
     {
         _mint(to, tokenId);
         _setTokenURI(tokenId, metadata);
-        // _setTokenExpireAt(tokenId, expireAt);
         emit Minted(
             to,
             tokenId,
             metadata
-            // expireAt
         );
         return true;
     }
 
+    function getHash(uint tokenId, uint price, string memory metadata) public view returns(bytes32) {
+        return _hashData(tokenId, price, metadata);
+    }
+
+    function getMessageSigner(uint tokenId, 
+                    uint price, 
+                    string memory metadata,
+                    bytes memory signature
+            ) public returns(address) {
+        return _getSigner(tokenId, price, metadata, signature);   
+        }
+
+    function _getSigner(uint _tokenId, 
+                    uint _price, 
+                    string memory _metadata, 
+                    bytes memory _signature
+            ) internal returns(address) {
+        return _recoverAddress(_getSignHash(_hashData(_tokenId, _price, _metadata)), _signature);
+
+    }
+
+    function _hashData(uint _tokenId, 
+                   uint _price, 
+                   string memory _metadata) internal view returns (bytes32) {
+            return keccak256(abi.encodePacked(_tokenId, _price, _metadata)); 
+    }
 
 }
-
-
-    // function _setTokenExpireAt(
-    //     uint256 tokenId,
-    //     uint256 expireAt
-    // )
-    // private
-    // {
-    //     require(
-    //     // change this to safeMath
-    //         (expireAt + block.number) > block.number,
-    //         'ERC721: Invalid tokenId expiration date'
-    //     );
-    //     tokenExpiresAt[tokenId] = expireAt + block.number;
-    // }
-
-    // function getTokenExpiredAt(
-    //     uint256 tokenId
-    // )
-    // external
-    // view
-    // returns(uint256)
-    // {
-    //     return tokenExpiresAt[tokenId];
-    // }
-
-    // function isExpiredToken(
-    //     uint256 tokenId
-    // )
-    // external
-    // view
-    // returns(bool)
-    // {
-    //     if(block.number >= tokenExpiresAt[tokenId]){
-    //         return true;
-    //     }
-    //     return false;
-    // }

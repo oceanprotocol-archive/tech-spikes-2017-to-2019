@@ -53,6 +53,7 @@ contract OceanMarket {
     function lockAndMint(uint256 amount, string memory metadata) public returns(uint256) {
 		require(dataToken.isApprovedForAll(msg.sender, address(this)),
 			"should be ApprovedForAll");
+	
 		uint tokensLocked = _lock(amount);
 		uint id = uint(keccak256(abi.encodePacked(now, msg.sender, amount)));
 		dataToken.mint(msg.sender, id, metadata);
@@ -66,16 +67,29 @@ contract OceanMarket {
 
 	/**
      * @notice Withdraw escrowed tokens
-     * @param to address to withdraw tokens to
      */
-	function withdrawAndBurn(uint id, address to) public {
+	function withdrawAndBurn(
+						uint id, 
+					    address to, 
+					    uint price, 
+					    string memory metadata, 
+					    bytes memory signature
+		) public 
+	{
 		require(escrowData[id].value > 0,
 			"should have tokens escrowed");
-		// TODO: should be changed to signer
-		require(escrowData[id].minter == msg.sender,
-			"only minter can withdraw");
 		require(to != escrowData[id].minter,
 			"cannot withdraw to this address");
+
+		address _addressSigned = dataToken.getMessageSigner(id, price, metadata, signature);
+        require(_addressSigned == escrowData[id].minter,
+        		"signer should be the minter");
+        // _user = address(uint160(_userSigned))
+
+		// // TODO: should be changed to signer
+		// require(escrowData[id].minter == msg.sender,
+		// 	"only minter can withdraw");
+
 		token.transfer(to, escrowData[id].value);
 		dataToken.burn(id);
 		escrowData[id].value = 0;
