@@ -50,7 +50,13 @@ contract OceanMarket {
      * @param amount amount of ERC721 tokens
      * @param metadata dataToken related metadata
      */
-    function lockAndMint(uint256 amount, string memory metadata) public returns(uint256) {
+    function lockAndMint(
+    	uint256 amount, 
+    	string memory metadata
+    ) 
+    public 
+    returns(uint256) 
+    {
 		require(dataToken.isApprovedForAll(msg.sender, address(this)),
 			"should be ApprovedForAll");
 	
@@ -67,14 +73,20 @@ contract OceanMarket {
 
 	/**
      * @notice Withdraw escrowed tokens
+     * @param id ERC721 token id
+     * @param to withdraw ERC0 to
+	 * @param price price of ERC721
+	 * @param metadata dataToken related metadata
+	 * @param signature message signed by token minter
      */
 	function withdrawAndBurn(
-						uint id, 
-					    address to, 
-					    uint price, 
-					    string memory metadata, 
-					    bytes memory signature
-		) public 
+		uint id, 
+		address to, 
+		uint price, 
+		string memory metadata, 
+		bytes memory signature
+	) 
+	public 
 	{
 		require(escrowData[id].value > 0,
 			"should have tokens escrowed");
@@ -84,11 +96,6 @@ contract OceanMarket {
 		address _addressSigned = dataToken.getMessageSigner(id, price, metadata, signature);
         require(_addressSigned == escrowData[id].minter,
         		"signer should be the minter");
-        // _user = address(uint160(_userSigned))
-
-		// // TODO: should be changed to signer
-		// require(escrowData[id].minter == msg.sender,
-		// 	"only minter can withdraw");
 
 		token.transfer(to, escrowData[id].value);
 		dataToken.burn(id);
