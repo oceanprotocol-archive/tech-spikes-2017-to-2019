@@ -4,11 +4,22 @@ The purpose of this repo is to act as a demonstration of the basic functionality
 
 In this proof of concept we have several key elements that the protocol is build of:
 
-`OceanFactory.sol` - is a "gateway" contract to the Ocean protocol as it unites together all of the parts of the protocol such as `DataToken`, `UniswapExchange` etc. It also allows to create new `ERC20 -> DataToken` markets where users and data providers can exchange ERC20 token of their choice ERC721 tokens that represent off-chain digital assets.
+![High Level architecture](imgs/HighLevelArchPoc1Oceanv3.png)
 
-`OceanMarket.sol` - is a template for `ERC20 -> DataToken` markets. For each individual ERC20 token a new market is being created and deployed. If ERC20 is OCEAN token then users do not pay any fees. If ERC20 is not OCEAN then a 5% fee(in this implementation) should be paid. The fees are being accumulated in the token being used as a mean of exchange and after reaching a certain threshold they are being automatically swapped to OCEAN through `Uniswap` protocol and transferred to `OceanProxy` contract.
+- Exchange factory contract `OceanFactory.sol` a "gateway" contract to the Ocean protocol. 
+It also allows users to create new `ERC20 -> DataToken` 
+exchange where users and data providers can exchange ERC20 token of their 
+choice ERC721 tokens that represent off-chain digital assets.
 
-`OceanProxy.sol` - currently just an empty placeholder contract where fees are being sent. In the future, it could be a DAO contract, fees redistribution contract, etc. 
+- `OceanMarket.sol` - is a template for `ERC20 -> DataToken` markets. 
+For each individual ERC20 token a new market is being created and deployed. 
+If ERC20 is OCEAN token then users do not pay any fees. If ERC20 is not OCEAN 
+then a 5% fee(in this implementation) should be paid. The fees are being 
+accumulated in the token being used as a mean of exchange and after reaching 
+a certain threshold they are being automatically swapped to OCEAN through 
+`Uniswap` protocol and transferred to `OceanProxy` contract.
+
+- `OceanProxy.sol` - currently just an empty placeholder contract where fees are being sent. In the future, it could be a DAO contract, fees redistribution contract, etc. 
 
 
 Test:
