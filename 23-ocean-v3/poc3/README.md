@@ -3,7 +3,7 @@
 
 ### Introduction
 This repo demonstrates the L1 dynamic fee in ocean protocol prior 
-token minting. The fee it self is based on the price of the gas and 
+token minting. The fee itself is based on the price of the gas and 
 the amount of the consumed/used gas (gas count).
 
 The below formula describes how the fee is calculated:
@@ -12,7 +12,7 @@ The below formula describes how the fee is calculated:
 fee = usedGas * trx.gasprice ; // value in ETH
 ```
 
-The following sudo code shows how the fee is deducted:
+The following pseudocode shows how the fee is deducted:
 ```
 startGas = gasLeft();
 .....
@@ -37,3 +37,11 @@ npm install
 ```bash
 npm run test
 ```
+
+## Metamask
+One of the most important setups is to integrate the same minting operation
+with metamask.
+
+
+### References
+- https://solidity.readthedocs.io/en/develop/units-and-global-variables.html#special-variables-and-functions
