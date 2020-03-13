@@ -13,19 +13,21 @@ fee = usedGas * trx.gasprice ; // value in ETH
 ```
 
 The following pseudocode shows how the fee is deducted:
-```
-startGas = gasLeft();
-.....
-super.mint()
-.....
-usedGas = startGas - gasleft();
-fee = usedGas * trx.gasprice ; // value in ETH
-require(deduct(fee));
-transfer(token, msg.sender);
+```javascript
+function mint() {
+    uint256 startGas = gasLeft(); // before mint
+    .....
+    super.mint(token, this)
+    .....
+    uint256 usedGas = startGas - gasleft(); // after mint
+    uint256 fee = usedGas * trx.gasprice ; // value in ETH
+    require(deduct(fee));
+    transfer(token, msg.sender);
+}
 ```
 the `gas price` is changing over the time based on the network (Ethereum mainnet)
 utilization. The value of `used gas` for minting new token can be 
-estimated using the static analysis tools.
+estimated using the [static analysis tools](https://github.com/ethereum/remix/tree/master/remix-analyzer).
 
 ### Setup
 
