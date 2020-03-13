@@ -13,11 +13,16 @@ contract XToken is Ownable, ERC20Detailed, ERC20Capped {
     uint256 constant CAP = 1000000000;
     uint256 TOTALSUPPLY = uint256(10) ** DECIMALS;
 
+    event DeductedFee(
+        address from,
+        uint256 value
+    );
+
     constructor(
         address contractOwner
     )
         public
-        ERC20Detailed('XToken', 'X', DECIMALS)
+        ERC20Detailed('XToken', 'X', DECIMALS) // Datatoken ID, tokenID
         ERC20Capped(TOTALSUPPLY)
         Ownable()
     {
@@ -26,22 +31,30 @@ contract XToken is Ownable, ERC20Detailed, ERC20Capped {
         transferOwnership(contractOwner);
     }
 
-    function mint()
+    function mint(address to)
         public
         payable
         onlyOwner
     {
+        uint256 startGas = gasleft();
         super._mint(address(this), 1);
+        uint256 usedGas = startGas - gasleft();
+        uint256 fee = usedGas * tx.gasprice;
         require(
-            deduct(),
-            'unable to deduct fee'
+            deduct(fee, msg.sender),
+            'failed to deduct ocean fee'
         );
+        _transfer(address(this), to, 1);
     }
 
-    function deduct()
+    function deduct(uint256 fee, address from)
         private
         returns (bool)
     {
+        emit DeductedFee(
+            from,
+            fee
+        );
         return true;
     }
 }
