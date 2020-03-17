@@ -1,9 +1,8 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 import './common/ERC20.sol';
-import './common/ERC20Mintable.sol';
 
-contract DataToken is ERC20, ERC20Mintable {
+contract DataToken is ERC20 {
 
     string  name;
     string  symbol;
@@ -27,7 +26,5 @@ contract DataToken is ERC20, ERC20Mintable {
 		decimals = _decimals;
 		metadata = _metadata;
 		owner 	 = msg.sender;
-
-		addMinter(owner);
 	}
 }
