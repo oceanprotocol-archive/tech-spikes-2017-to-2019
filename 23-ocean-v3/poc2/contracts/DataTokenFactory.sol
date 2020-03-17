@@ -13,5 +13,4 @@ contract CoinFactory is CloneFactory {
 	function createMinimalToken() external returns(address  minimalToken) {
 		minimalToken = createClone(TokenTemplate);
 	}
-
 }
