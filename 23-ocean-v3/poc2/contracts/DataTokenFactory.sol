@@ -8,6 +8,13 @@ contract DataTokenFactory is CloneFactory {
 	address public tokenTemplate;
 
     uint8 constant DECIMALS = 18;
+    
+    address[] tokens;
+
+    event TokenCreated (
+        uint256  tokenId,
+        address  tokenAddress
+    );
 
 	constructor(address _template) public {
     	tokenTemplate = _template;
@@ -23,5 +30,8 @@ contract DataTokenFactory is CloneFactory {
 	{
 		minimalToken = createClone(tokenTemplate);
 		DataToken(minimalToken).setDataToken(_name, _symbol, _metadata, DECIMALS);
+		tokens.push(minimalToken);
+
+		emit TokenCreated(tokens.length, minimalToken);
 	}
 }
