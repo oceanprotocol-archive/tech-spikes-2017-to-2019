@@ -1,16 +1,27 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 import '@optionality.io/clone-factory/contracts/CloneFactory.sol';
+import './DataToken.sol';
 
-contract CoinFactory is CloneFactory {
+contract DataTokenFactory is CloneFactory {
 
-	address public TokenTemplate;
+	address public tokenTemplate;
 
 	constructor(address _template) public {
-    	TokenTemplate = _template;
+    	tokenTemplate = _template;
   	}
   	
-	function createMinimalToken() external returns(address  minimalToken) {
-		minimalToken = createClone(TokenTemplate);
+	function createMinimalToken(
+		string  _name, 
+		string  _symbol, 
+		string  _metadata,
+		uint8   _decimals
+	) 
+	external 
+	returns(address  minimalToken) 
+	{
+		minimalToken = createClone(tokenTemplate);
+
+		DataToken(minimalToken).setDataToken(_name, _symbol, _metadata, _decimals);
 	}
 }
