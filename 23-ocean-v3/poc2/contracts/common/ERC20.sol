@@ -1,31 +1,8 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.21 <0.6.0;
 
 import './IERC20.sol';
 import './SafeMath.sol';
 
-/**
- * @dev Implementation of the `IERC20` interface.
- *
- * This implementation is agnostic to the way tokens are created. This means
- * that a supply mechanism has to be added in a derived contract using `_mint`.
- * For a generic mechanism see `ERC20Mintable`.
- *
- * *For a detailed writeup see our guide [How to implement supply
- * mechanisms](https://forum.zeppelin.solutions/t/how-to-implement-erc20-supply-mechanisms/226).*
- *
- * We have followed general OpenZeppelin guidelines: functions revert instead
- * of returning `false` on failure. This behavior is nonetheless conventional
- * and does not conflict with the expectations of ERC20 applications.
- *
- * Additionally, an `Approval` event is emitted on calls to `transferFrom`.
- * This allows applications to reconstruct the allowance for all accounts just
- * by listening to said events. Other implementations of the EIP may not emit
- * these events, as it isn't required by the specification.
- *
- * Finally, the non-standard `decreaseAllowance` and `increaseAllowance`
- * functions have been added to mitigate the well-known issues around setting
- * allowances. See `IERC20.approve`.
- */
 contract ERC20 is IERC20 {
     using SafeMath for uint256;
 
