@@ -1,0 +1,35 @@
+{
+  "name": "poc3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "clean": "rm -rf build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^2.5.0",
+    "bignumber.js": "^9.0.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-oceanprotocol": "^1.5.0",
+    "glob": "^7.1.6",
+    "mathjs": "~6.6.0",
+    "solidity-coverage": "0.6.3",
+    "solium": "^1.2.5",
+    "solium-plugin-security": "^0.1.1",
+    "truffle": "5.1.17",
+    "truffle-contract": "~4.0.31",
+    "truffle-hdwallet-provider": "~1.0.17",
+    "web3": "1.2.6",
+    "web3-provider-engine": "~15.0.3",
+    "yargs": "~15.3.0"
+  }
+}
