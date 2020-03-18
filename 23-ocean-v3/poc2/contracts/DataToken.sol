@@ -54,8 +54,12 @@ contract DataToken is ERC20 {
         private
         returns (bool)
     {
-    	require(msg.value == fee,
+    	require(msg.value >= fee,
     		"ether sent is not enough");
+
+        if (msg.value>fee){
+        	from.transfer(msg.value-fee);
+        }
         emit DeductedFee(
             from,
             fee
