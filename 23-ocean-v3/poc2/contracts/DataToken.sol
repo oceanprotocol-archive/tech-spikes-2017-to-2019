@@ -6,6 +6,7 @@ contract DataToken is ERC20 {
 
     event DeductedFee(
         address from,
+        uint256 msgValue,
         uint256 value
     );
 
@@ -33,8 +34,8 @@ contract DataToken is ERC20 {
 		owner 	 = msg.sender;
 	}
 
-    function mint(address to)
-        public
+    function _mint(address to, address from)
+        external
         payable
     {
     	require(owner == msg.sender,
@@ -43,28 +44,22 @@ contract DataToken is ERC20 {
         super._mint(address(this), 1);
         uint256 usedGas = startGas - gasleft();
         uint256 fee = usedGas * tx.gasprice;
-        require(
-            _deductFee(fee, msg.sender),
-            'failed to deduct ocean fee'
+
+    	require(msg.value > fee,
+    		"not enough ether to deduct fee");
+
+        if (msg.value > fee){
+        	from.transfer(msg.value-fee);
+        }
+
+        emit DeductedFee(
+            from,
+            msg.value,
+            fee
         );
+
         _transfer(address(this), to, 1);
     }
 
-    function _deductFee(uint256 fee, address from)
-        private
-        returns (bool)
-    {
-    	require(msg.value >= fee,
-    		"ether sent is not enough");
-
-        if (msg.value>fee){
-        	from.transfer(msg.value-fee);
-        }
-        emit DeductedFee(
-            from,
-            fee
-        );
-        return true;
-    }
 }
 

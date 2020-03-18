@@ -10,6 +10,8 @@ contract DataTokenFactory is CloneFactory {
     uint8 constant DECIMALS = 18;
     
     address[] tokens;
+   	// mapping (address => address) ownerToToken;
+
 
     event TokenCreated (
         uint256  tokenId,
@@ -20,18 +22,37 @@ contract DataTokenFactory is CloneFactory {
     	tokenTemplate = _template;
   	}
   	
-	function createMinimalToken(
+	function createToken(
 		string  _name, 
 		string  _symbol, 
 		string  _metadata
 	) 
 	external 
-	returns(address  minimalToken) 
+	returns(address  token) 
 	{
-		minimalToken = createClone(tokenTemplate);
-		DataToken(minimalToken).setDataToken(_name, _symbol, _metadata, DECIMALS);
-		tokens.push(minimalToken);
+		token = createClone(tokenTemplate);
+		DataToken(token).setDataToken(_name, _symbol, _metadata, DECIMALS);
+		
+		tokens.push(token);
+		// ownerToToken[msg.sender] = token;
 
-		emit TokenCreated(tokens.length, minimalToken);
+		emit TokenCreated(tokens.length-1, token);
+	}
+
+	function mintTo(
+		uint256 tokenId, 
+		address to
+		) 
+	public 
+	payable 
+	{
+		require(msg.value > 0,
+			"no fee sent");
+
+		address token = tokens[tokenId];
+
+		// require(ownerToToken[msg.sender] == token,
+		// 	"should be a token owner");
+		DataToken(token)._mint.value(msg.value)(to, msg.sender);
 	}
 }
