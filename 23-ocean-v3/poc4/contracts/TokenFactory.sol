@@ -20,30 +20,28 @@ contract TokenFactory is Deployer {
     );
     
     constructor (
-        address _template,
-        address _registry
+        address _template
+        // address _registry
     ) 
         public 
     {
         require(
-            _template != address(0) &&
-            _registry != address(0),
+            _template != address(0) , //&&
+           // _registry != address(0),
             'Invalid TokenFactory initialization'
         );
         tokenTemplate = _template;
         // create tokenRegistry instance 
     }
     
-    // equals publish new asset 
     function createToken(
         string memory _logic,
         string memory _name, 
-        uint256 _value
+        string memory _symbol
     ) 
         public
         returns (address token)
     {
-        bytes memory _initPayload  = abi.encodeWithSignature(_logic, _name, _value);
         token = deploy(tokenTemplate);
         
         require(
@@ -52,6 +50,13 @@ contract TokenFactory is Deployer {
         );
         
         // init Token
+        bytes memory _initPayload  = abi.encodeWithSignature(
+                _logic, 
+                _name, 
+                _symbol,
+                msg.sender
+        );
+        
         token.call(_initPayload);
         //TODO: store Token in Token Registry
         currentTokenAddress = token;
@@ -65,16 +70,16 @@ contract TokenFactory is Deployer {
     }
     
     
-    function removeToken(
-        address _token
-    ) 
-        public 
-        //onlyTokenOwner(_token)
-    {
-        emit TokenRemoved(
-            _token,
-            tokenTemplate,
-            msg.sender
-        );
-    }
+    // function removeToken(
+    //     address _token
+    // ) 
+    //     public 
+    //     //onlyTokenOwner(_token)
+    // {
+    //     emit TokenRemoved(
+    //         _token,
+    //         tokenTemplate,
+    //         msg
+    //     );
+    // }
 }
