@@ -37,7 +37,8 @@ contract TokenFactory is Deployer {
     function createToken(
         string memory _logic,
         string memory _name, 
-        string memory _symbol
+        string memory _symbol,
+        address _minter
     ) 
         public
         returns (address token)
@@ -54,7 +55,7 @@ contract TokenFactory is Deployer {
                 _logic, 
                 _name, 
                 _symbol,
-                msg.sender
+                _minter
         );
         
         token.call(_initPayload);
