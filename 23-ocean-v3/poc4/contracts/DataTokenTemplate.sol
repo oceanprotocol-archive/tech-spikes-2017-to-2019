@@ -1,6 +1,6 @@
 pragma solidity ^0.5.7;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 contract DataTokenTemplate is ERC20 {
     using SafeMath for uint256;
