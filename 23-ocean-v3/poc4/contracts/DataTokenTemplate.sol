@@ -1,8 +1,9 @@
 pragma solidity ^0.5.7;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./ServiceFeeManager.sol";
 
-contract DataTokenTemplate is ERC20 {
+contract DataTokenTemplate is ERC20, ServiceFeeManager {
     using SafeMath for uint256;
     
     bool private initialized = false;
@@ -79,9 +80,23 @@ contract DataTokenTemplate is ERC20 {
         initialized = true;
     }
     
-    function mint(address account, uint256 value) public onlyMinter {
+    function mint(address account, uint256 value) public payable onlyMinter {
         require(totalSupply().add(value) <= _cap, "ERC20Capped: cap exceeded");
-        super._mint(account, value);
+        
+        uint256 startGas = gasleft();
+        address payable sender = msg.sender;
+        super._mint(address(this), value);
+
+        uint256 fee = getFee(startGas, value); 
+        uint256 cashback = getCashback(fee, msg.value);
+
+        require(msg.value >= fee,
+            "fee amount is not enough");
+
+        sender.transfer(cashback);
+
+        _transfer(address(this), account, value);
+
     }
     
     function setMinter(address minter) public onlyMinter {

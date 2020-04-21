@@ -1,21 +1,26 @@
-pragma solidity 0.5.7;
+pragma solidity ^0.5.7;
+
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract ServiceFeeManager {
+    using SafeMath for uint256;
 
-	address payable public collector;
+    // uint256 public constant PCT_BASE = 10 ** 18; // 0% = 0; 1% = 10 ** 16; 100% = 10 ** 18
 
-    function cutFee(
-        uint256 _startGas
+    function getFee(
+        uint256 _startGas,
+        uint256 _tokenAmount
     )
     public
     view 
     returns(uint256)
     {
-        uint256 usedGas = _startGas-gasleft();
-    	return  usedGas*tx.gasprice; 
+
+        uint256 txPrice = _getTxPrice(_startGas);
+        return  ((_tokenAmount.mul(txPrice)).mul(90)).div(100); 
     }
 
-    function cashBack(
+    function getCashback(
         uint256 _fee,
         uint256 _payed
     )
@@ -23,23 +28,17 @@ contract ServiceFeeManager {
     pure 
     returns(uint256)
     {
-        return _payed-_fee;
+        return _payed.sub(_fee);
     }
  
-    function addFeeCollector(
-    	address payable _collector
-    ) 
-    public 
+    function _getTxPrice(
+        uint256 _startGas
+    )
+    private
+    view
+    returns(uint256)
     {
-    	collector = _collector;
-    }
-
-    function revokeFeeCollector(
-
-    ) 
-    public 
-    {
-    	collector = address(0);    	
-    }
-
+        uint256 usedGas = _startGas.sub(gasleft());
+        return  usedGas.mul(tx.gasprice); 
+    } 
 }
