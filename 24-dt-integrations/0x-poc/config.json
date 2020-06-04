@@ -4,21 +4,6 @@
     },
     "tokens": [
         {
-            "symbol": "zrx",
-            "name": "0x Protocol Token",
-            "primaryColor": "#333333",
-            "icon": "assets/icons/zrx.svg",
-            "addresses": {
-                "1": "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
-                "3": "0xff67881f8d12f372d91baae9752eb3631ff0ed00",
-                "4": "0x8080c7e4b81ecf23aa6f877cfbfd9b0c228c6ffa",
-                "42": "0x2002d3812f58e35f0ea1ffbf80a75a38c32175fa",
-                "50": "0x871dd7c2b4b25e1aa18728e9d5f2af4c4e431f5c"
-            },
-            "decimals": 18,
-            "displayDecimals": 2
-        },
-        {
             "symbol": "weth",
             "name": "Wrapped Ether",
             "primaryColor": "#3333ff",
@@ -32,20 +17,6 @@
             },
             "decimals": 18,
             "displayDecimals": 2
-        },
-        {
-            "decimals": 18,
-            "symbol": "dai",
-            "name": "Dai",
-            "icon": "assets/icons/dai.svg",
-            "primaryColor": "#DEA349",
-            "addresses": {
-                "1": "0x6b175474e89094c44da98b954eedeac495271d0f",
-                "3": "0xfc8862446cd3e4a2e7167e7d97df738407fead07",
-                "4": "0x6f2d6ff85efca691aad23d549771160a12f0a0fc",
-                "42": "0xc4375b7de8af5a38a93548eb8453a498222c4ff2",
-                "50": "0x34d402f14d58e001d8efbe6585051bf9706aa064"
-            }
         },
         {
             "decimals": 9,
@@ -78,16 +49,8 @@
     ],
     "pairs": [
         {
-            "base": "zrx",
-            "quote": "weth"
-        },
-        {
-            "base": "zrx",
-            "quote": "dai"
-        },
-        {
             "base": "weth",
-            "quote": "dai"
+            "quote": "ocean"
         },
         {
             "base": "ocean",
@@ -95,7 +58,7 @@
         },
         {
             "base": "dt1",
-            "quote": "weth"
+            "quote": "ocean"
         }
     ],
     "marketFilters": [
@@ -104,8 +67,8 @@
             "value": "weth"
         },
         {
-            "text": "DAI",
-            "value": "dai"
+            "text": "OCEAN",
+            "value": "ocean"
         }
     ]
 }
