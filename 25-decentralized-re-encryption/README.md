@@ -22,7 +22,7 @@ In Ocean Market, if the user chooses to use the OPF-run Provider, set the expect
 
 # Nucypher
 
-It provides a decentralized key management system (KMS) and cryptographic access control layer to distributed systems. It uses PoS as underlying protocol for decentralized proxy re-encryption. 
+It provides a decentralized key management system (KMS) and cryptographic access control layer to distributed systems. There are extra services such as FHE secure computation, dynamic access management, and secret management but they are out-of-scope. Nucypher uses PoS as underlying protocol for decentralized proxy re-encryption. 
 
 The decentralized proxy re-encryption uses an asymmetric non-interactive re-encryption key method that allows an untrusted proxy entity  to transform cipher-texts from one public key to another without learning anything about the underlying message.
 
@@ -42,6 +42,14 @@ Nucypher implemented a new PRE librray called [pyUmbral](https://github.com/nucy
 
 
 ## Tokenomics
+
+Nodes are incentivized to continually provide re-encryption services by receiving fees from users (paid in ETH) and participation rewards (paid in NU tokens). Node operators must stake NU tokens to their node and will receive rewards which are earned in proportion to their stake. When the mainnet launches, incentives will mostly come in the form of rewards rather than fees. Eventually, when the network gains users, fees will become a large part of the financial incentive to run a node.
+
+Staking rewards are automatically restaked after each period, unless the user has opted out or the period ends. At the end of the staking period, if the Ursula Node did it’s job providing re-encryption services, the stake plus rewards can be claimed.
+
+## Integration
+
+The NuCypher protocol requires access to an Ethereum node for the Ursula worker node to read and write to NuCypher’s smart contracts
 
 TBD
 
