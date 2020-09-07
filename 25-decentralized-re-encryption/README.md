@@ -12,7 +12,7 @@ Possible tools:
 - [nucypher]()
 - [keep.network]()
 - [Enigma / Secret Network]()
-- [enzypt.io]()
+- [enzypt.io](https://github.com/flex-dapps/enzypt)
 
 If we can't find a simple/fast solution in the near term, then here's a path forward for V3.0:
 
@@ -20,7 +20,31 @@ In Ocean Market, ensure there's an option for people to provide an endpoint of t
 In Ocean Market, if the user chooses to use the OPF-run Provider, set the expectation that this Provider will only be run until some specific cut-off date (e.g. Dec 31, 2021). This ensures that OPF is not bound to some weird long-term commitment that it didn't mean to make.
 
 
-## Enzypt
+# Nucypher
+
+It provides a decentralized key management system (KMS) and cryptographic access control layer to distributed systems. It uses PoS as underlying protocol for decentralized proxy re-encryption. 
+
+The decentralized proxy re-encryption uses an asymmetric non-interactive re-encryption key method that allows an untrusted proxy entity  to transform cipher-texts from one public key to another without learning anything about the underlying message.
+
+![nucypher PRE scheme from nuchyper whitepaper](images/nucypher-pre-scheme.png)
+
+NuCypher implements a [threshold split-key re-encryption scheme](https://arxiv.org/pdf/1707.06140.pdf) to decentralize as follows:
+
+- Alice broadcasts data (with a smart contract policy) and a re-encryption key to the network (proxies/nodes).
+- The re-encryption key is splitted between different nodes. Splitting the key splits trust.
+- The trust relies on how much a proxy's/node's nucypher token staked as a collateral.
+- When Bob asks to re-encrypt using his public key, proxies will use threshold re-encryption keys to re-encrypt the payload using re-encryption keys. 
+- Finally, Bob decrypt and read the message.
+
+Nucypher implemented a new PRE librray to do that called [pyUmbral](https://github.com/nucypher/pyUmbral). Aquick demo is shown below:
+
+[<img src="https://img.youtube.com/vi/M8IZ1MTOd24/maxresdefault.jpg" width="100%">](https://youtu.be/M8IZ1MTOd24)
+
+# Keep Netwrork
+
+# Secret Network
+
+# Enzypt
 
 Enzypt has the workflow for publish/sell data assets:
 
