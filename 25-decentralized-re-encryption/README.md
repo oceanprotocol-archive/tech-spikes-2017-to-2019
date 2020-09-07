@@ -49,16 +49,16 @@ Staking rewards are automatically restaked after each period, unless the user ha
 
 ## Integration
 
-The NuCypher protocol requires access to an Ethereum node for the Ursula worker node to read and write to NuCypher’s smart contracts
-
-![participatation in Nucypher network](images/running_a_node_decision.svg)
-
+The NuCypher protocol requires access to an Ethereum node for the Ursula worker node to read and write to NuCypher’s smart contracts. 
 Due to the complexity of running a node on the network, there are a variety of ways to participate depending on your comfort level:
 
 - Delegate custody of NU and work to a third-party custodian.
-- Delegate work via a staking pool or Node-as-a-Service provider.
+- Delegate work via a staking pool or [Node-as-a-Service provider](https://github.com/nucypher/validator-profiles).
 - Run your own node ([worker](https://docs.nucypher.com/en/latest/guides/network_node/staking_guide.html) + [staker](https://docs.nucypher.com/en/latest/guides/network_node/staking_guide.html))
 
+![participatation in Nucypher network](images/running_a_node_decision.svg)
+
+More details WorkLock Participation to be found [here](https://blog.nucypher.com/the-worklock/)
 # Keep Network
 
 TBD
