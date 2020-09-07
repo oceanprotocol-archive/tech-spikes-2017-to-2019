@@ -9,10 +9,10 @@ The question in this tech spike is to answer if we can solve this by somehow sto
 
 Possible tools:
 
-- [nucypher]()
-- [keep.network]()
-- [Enigma / Secret Network]()
-- [enzypt.io](https://github.com/flex-dapps/enzypt)
+- [Nucypher](#nucypher)
+- [Keep Network](#keep-network)
+- [Secret Network](#secret-network)
+- [Enzypt.io](#enzypt)
 
 If we can't find a simple/fast solution in the near term, then here's a path forward for V3.0:
 
@@ -28,21 +28,30 @@ The decentralized proxy re-encryption uses an asymmetric non-interactive re-encr
 
 ![nucypher PRE scheme from nuchyper whitepaper](images/nucypher-pre-scheme.png)
 
-NuCypher implements a [threshold split-key re-encryption scheme](https://arxiv.org/pdf/1707.06140.pdf) to decentralize as follows:
+NuCypher implements a [threshold split-key re-encryption scheme](https://arxiv.org/pdf/1707.06140.pdf) as follows:
 
 - Alice broadcasts data (with a smart contract policy) and a re-encryption key to the network (proxies/nodes).
 - The re-encryption key is splitted between different nodes. Splitting the key splits trust.
 - The trust relies on how much a proxy's/node's nucypher token staked as a collateral.
-- When Bob asks to re-encrypt using his public key, proxies will use threshold re-encryption keys to re-encrypt the payload using re-encryption keys. 
-- Finally, Bob decrypt and read the message.
+- When Bob asks for re-encryption using his public key, proxies will use threshold re-encryption keys to re-encrypt the payload and send it back to Bob. 
+- Finally, Bob decrypts and reads the message.
 
-Nucypher implemented a new PRE librray to do that called [pyUmbral](https://github.com/nucypher/pyUmbral). Aquick demo is shown below:
+Nucypher implemented a new PRE librray called [pyUmbral](https://github.com/nucypher/pyUmbral) to do that. The demo below shows how to use PRE in Nuchyper:
 
 [<img src="https://img.youtube.com/vi/M8IZ1MTOd24/maxresdefault.jpg" width="100%">](https://youtu.be/M8IZ1MTOd24)
 
-# Keep Netwrork
+
+## Tokenomics
+
+TBD
+
+# Keep Network
+
+TBD
 
 # Secret Network
+
+TBD
 
 # Enzypt
 
