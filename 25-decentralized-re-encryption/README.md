@@ -83,6 +83,33 @@ The following process describes, step by step, how a secret contract is submitte
 - At least 2/3 participating validators achieve consensus on the encrypted output and state.
 - The encrypted output and state is committed on-chain.
 
+## Components
+
+![](images/secret-network.3f0f1b33.png)
+
+- Validators
+
+The Secret Network validator (full node) is responsible for proposing new blocks to the blockchain, and confirming blocks proposed by other validators.
+
+ Delegators can delegate to validators they believe will maintain proper uptime, and will grow the blockchain through governance in what delegators feel is the right direction 
+
+- Secret Contracts
+
+Secret Contracts are code which executes over encrypted data. Secret Contracts are currently written in Rust (though this could be potentially expanded in the future to include AssemblyScript), and compile to WASM.
+
+
+- Compute Module
+
+It out of scope.
+
+- Client Library
+
+The Secret Network client library is an API included in decentralized applications that enables them to easily communicate with Secret Contracts on the Secret blockchain. ***This component is still under development***, but will most likely be built on top of CosmWasmJS, and include novel functions for specific tasks.
+
+
+## Integration
+
+It is possible for anyone who holds SCRT to become a Secret Network validator or delegator, and thus participate in both staking and governance processes. If and when the network upgrades to integrate Secret Contract functionality, validators will be required to run nodes equipped with the latest version of Intel SGX.
 
 # Enzypt
 
