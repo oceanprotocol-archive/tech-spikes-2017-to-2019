@@ -65,7 +65,24 @@ TBD
 
 # Secret Network
 
-TBD
+Enigma is the software company that developed the Secret newtork. The secret network mainnet is a proof-of-stake-based blockchain based on [Cosmos SDK/Tendermint](https://github.com/cosmos/cosmos-sdk). It is backed by a new native coin, Secret (SCRT), which is used for staking and transaction fees within the network.
+
+The following process describes, step by step, how a secret contract is submitted and a computation performed on the Secret Network:
+
+- Developers write and deploy Secret Contracts to the Secret Network
+- **Validators run full nodes and execute Secret Contracts**
+- Users submit transactions to Secret Contracts (on-chain), which can include encrypted data inputs.
+- Validators receive encrypted data from users, and execute the Secret Contract.
+- During Secret Contract execution:
+   - Encrypted inputs are decrypted inside a Trusted Execution Environment.
+   - Requested functions are executed inside a Trusted Execution Environment.
+   - Read/Write state from Tendermint can be performed (state is always encrypted when at rest, and is only decrypted within the Trusted Execution Environment).
+   - Outputs are encrypted.
+   - In summary, at all times, data is carefully always encrypted when outside the Trusted Compute Base (TCB) of the TEE.
+- The Block-proposing validator proposes a block containing the encrypted outputs and updated encrypted state.
+- At least 2/3 participating validators achieve consensus on the encrypted output and state.
+- The encrypted output and state is committed on-chain.
+
 
 # Enzypt
 
