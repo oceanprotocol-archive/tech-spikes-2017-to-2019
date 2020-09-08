@@ -20,7 +20,7 @@ In Ocean Market, ensure there's an option for people to provide an endpoint of t
 In Ocean Market, if the user chooses to use the OPF-run Provider, set the expectation that this Provider will only be run until some specific cut-off date (e.g. Dec 31, 2021). This ensures that OPF is not bound to some weird long-term commitment that it didn't mean to make.
 
 
-At the [end](#summary) of this teck-spike, there is a comparison which summerize the different
+At the [end](#conclusion) of this teck-spike, there is a comparison which summarizes the different
 features that are provided by each network/service.
 
 # Nucypher
@@ -156,6 +156,13 @@ Cons:
 
 # Conculsion
 
-The below table lists all the supported features for the 4 discussed networks/services:
+The below table lists and summarizes all the supported features fthat are provided by each network/service.
 
-TBD
+| Feature/Network | Nucypher | Secret.network | Keep.network | Enzypt |
+|-----------------------------------|---------|----------------------------------------------|-------|-------|
+| **Requires Token**                 | Yes ($NU)              | Yes  ($SCRT)   |Yes  ($KEEP)               |NA|
+| **Etherum Support**              | Yes  | No (lives on Cosmos/Tendermint) | Separate Parachain | Yes |
+| **Proxy Re-encryption Support**  | Yes        |  No (secret contracts & SGX) | Unknown | Yes (happens on the client side) |
+| **Requires running Node**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Valdiators + SGX support) | Yes (KEEP worker)   | NA |
+| **Tokonmics**        | Staking | Staking | Staking   | NA |
+| **3rd Party Service Providers**        | Yes | Unknown | Unknown   | NA |
