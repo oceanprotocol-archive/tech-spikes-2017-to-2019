@@ -20,6 +20,9 @@ In Ocean Market, ensure there's an option for people to provide an endpoint of t
 In Ocean Market, if the user chooses to use the OPF-run Provider, set the expectation that this Provider will only be run until some specific cut-off date (e.g. Dec 31, 2021). This ensures that OPF is not bound to some weird long-term commitment that it didn't mean to make.
 
 
+At the [end](#summary) of this teck-spike, there is a comparison which summerize the different
+features that are provided by each network/service.
+
 # Nucypher
 
 It provides a decentralized key management system (KMS) and cryptographic access control layer to distributed systems. There are extra services such as FHE secure computation, dynamic access management, and secret management but they are out-of-scope. Nucypher uses PoS as underlying protocol for decentralized proxy re-encryption. 
@@ -61,7 +64,12 @@ Due to the complexity of running a node on the network, there are a variety of w
 More details WorkLock Participation to be found [here](https://blog.nucypher.com/the-worklock/)
 # Keep Network
 
-TBD
+Keep is a native token in which powers the network and supports all the apps that are and will be built on it. KEEP is required in order for someone to become a member of the Keep network; members are eligible to earn rewards by performing work on the platform. This work is the computation and availability required to select and pull the network’s off-chain “keeps” together and to read the associated data.
+
+Members are randomly selected to coordinate a distributed key generation protocol that results in a public ECDSA key for the group, which is used to produce a wallet address that is then published to the host chain.
+
+
+There is no documentation found in [keep.network](https://keep.network).
 
 # Secret Network
 
@@ -144,3 +152,10 @@ Cons:
 - The seller has to re-generate and distribute the decryption key everytime someone asking for a download.
 - It tightly coupled to IPFS 
 - It is not clean when the seller sends the decryption key.
+
+
+# Conculsion
+
+The below table lists all the supported features for the 4 discussed networks/services:
+
+TBD
