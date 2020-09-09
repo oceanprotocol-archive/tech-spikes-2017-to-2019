@@ -64,13 +64,26 @@ Due to the complexity of running a node on the network, there are a variety of w
 More details WorkLock Participation to be found [here](https://blog.nucypher.com/the-worklock/)
 # Keep Network
 
-Keep is a native token in which powers the network and supports all the apps that are and will be built on it. KEEP is required in order for someone to become a member of the Keep network; members are eligible to earn rewards by performing work on the platform. This work is the computation and availability required to select and pull the network’s off-chain “keeps” together and to read the associated data.
+"By creating a bridge between the public blockchain and private data, contracts can harness the full power of blockchain technology, without compromising on reliability or transparency. Keep is that privacy layer. We use keeps, or private enclaves, to securely encrypt and store private data. Off-chain keeps will be protected using secure multiparty computation (sMPC), generating, securing, storing, encrypting and transmitting data across many individuals.
+
+Keep provides the first production-ready sMPC system for distribution on the public Ethereum blockchain.
+
+With this system, each individual is given access to a small portion of a secret which is encrypted. To gain or share access to that secret, the outputs are reported back from all the individuals and decrypted to reveal the secret. Keep is Ethereum’s first private computer, able to store and compute data hidden even from itself. This unique approach allows for the safe transfer of information from one party to another on the public blockchain without each individual needing to be online, providing a superior solution to current hash-reveal solutions, private blockchains, and zero-knowledge proofs alone." (from reddit FAQ)
+
+[FAQ on reddit](https://www.reddit.com/r/KeepNetwork/comments/anqgb5/keep_network_frequently_asked_questions_faq/)
+
+Keep in the real world: https://blog.keep.network/dapps-daos-and-apartment-hunting-everyday-blockchain-privacy-solutions-2a836c663f12
+
+Keep is used for tBTC.
+
+Token: KEEP is a native token in which powers the network and supports all the apps that are and will be built on it. KEEP is required in order for someone to become a member of the Keep network; members are eligible to earn rewards by performing work on the platform. This work is the computation and availability required to select and pull the network’s off-chain “keeps” together and to read the associated data.
 
 Members are randomly selected to coordinate a distributed key generation protocol that results in a public ECDSA key for the group, which is used to produce a wallet address that is then published to the host chain.
 
 
 There is no enough documentation found in [keep.network](https://keep.network) but to run a KEEP worker, you should follow the KEEP documentation for running
 [Random Bacon](https://docs.keep.network/run-random-beacon.html) and This is a TDLR [tutorial to integrate the KEEP worker with their tesnet](https://medium.com/@ben_longstaff/a-beginners-quick-start-guide-to-staking-on-the-keep-network-testnet-using-digitalocean-5a74ca60adc3)
+
 ## Components
 - Owner
 
