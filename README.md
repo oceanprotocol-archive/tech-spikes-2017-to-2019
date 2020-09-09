@@ -36,7 +36,7 @@ Folder Name   |  Description | Issue |
 21-eth-xdai | compare xDai and Ethereum for Ocean token | |
 22-data-token-poc | prototype of data token as a standalone module | |
 23-ocean-v3 | Proof of concepts for Ocean protocol v3 | |
-
+25-PRE-NETs | Decentralized Proxy Re-encryption | |
 ## Updates
 
 * [11/19/2019] develop POC of data token
