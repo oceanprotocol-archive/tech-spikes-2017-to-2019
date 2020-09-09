@@ -204,7 +204,7 @@ The below table lists and summarizes all the supported features fthat are provid
 |-----------------------------------|---------|----------------------------------------------|-------|-------|
 | **Token**                 | $NU              | $SCRT   |$KEEP               |NA|
 | **Blockchain Type**              | Ethereum  | Cosmos/Tendermint | Ethereum/Parachain | Unknown |
-| **PRE Support**  | Yes        |  No (secret contracts & SGX) | Unknown | Yes (happens on the client side) |
+| **Approach to privacy**  | PRE: happens in network        |  Secret contracts & SGX | MPC | PRE: happens on client side |
 | **Node/Worker**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Valdiators + SGX support) | Yes (KEEP worker)   | No (But runs a server) |
 | **Tokonmics**        | Staking | Staking | Staking   | NA |
 | **Delegation**        | Yes (By staking or delegator) | Yes(only delegator) | Yes(only delegator) | No |
