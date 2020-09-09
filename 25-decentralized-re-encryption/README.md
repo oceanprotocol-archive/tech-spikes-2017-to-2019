@@ -180,7 +180,7 @@ Cons:
 
 - The seller has to re-generate and distribute the decryption key everytime someone asking for a download.
 - It tightly coupled to IPFS 
-- It is not clean when the seller sends the decryption key.
+- It is not clear when the seller sends the decryption key.
 
 
 # Conculsion
