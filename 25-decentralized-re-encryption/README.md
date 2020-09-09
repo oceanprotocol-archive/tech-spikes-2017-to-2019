@@ -69,7 +69,36 @@ Keep is a native token in which powers the network and supports all the apps tha
 Members are randomly selected to coordinate a distributed key generation protocol that results in a public ECDSA key for the group, which is used to produce a wallet address that is then published to the host chain.
 
 
-There is no documentation found in [keep.network](https://keep.network).
+There is no enough documentation found in [keep.network](https://keep.network) but to run a KEEP worker, you should follow the KEEP documentation for running
+[Random Bacon](https://docs.keep.network/run-random-beacon.html) and This is a TDLR [tutorial to integrate the KEEP worker with their tesnet](https://medium.com/@ben_longstaff/a-beginners-quick-start-guide-to-staking-on-the-keep-network-testnet-using-digitalocean-5a74ca60adc3)
+## Components
+- Owner
+
+The address owning KEEP tokens or KEEP token grant. The owner’s participation is not required in the day-to-day operations on the stake, so cold storage can be accommodated to the maximum extent.
+
+- Operator
+
+The address of a party authorized to operate in the network on behalf of a given owner. The operator handles the everyday operations on the delegated stake without actually owning the staked tokens. An operator can not simply transfer away delegated tokens, however, it should be noted that operator’s misbehaviour may result in slashing tokens and thus the entire staked amount is indeed at stake.
+
+- Beneficiary
+
+the address where the rewards for participation and all reimbursements are sent, earned by an operator, on behalf of an owner
+
+- Delegated stake
+
+an owner’s staked tokens, delegated to the operator by the owner. Delegation enables KEEP owners to have their wallets offline and their stake operated by operators on their behalf.
+
+- Operator contract
+
+Ethereum smart contract handling operations that may have an impact on staked tokens.
+
+- Authorizer
+
+the address appointed by owner to authorize operator contract on behalf of the owner. Operator contract must be pre-approved by authorizer before the operator is eligible to use it and join the specific part of the network.
+
+## Integration
+KEEP token owners can run full node (Including Full Ethereum Node) or use delegated stake where
+an owner’s staked tokens, delegated to the operator by the owner. Delegation enables KEEP owners to have their wallets offline and their stake operated by operators on their behalf.
 
 # Secret Network
 
