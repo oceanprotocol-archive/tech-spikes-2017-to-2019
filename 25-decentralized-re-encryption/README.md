@@ -189,9 +189,9 @@ The below table lists and summarizes all the supported features fthat are provid
 
 | Feature/Network | Nucypher | Secret.network | Keep.network | Enzypt |
 |-----------------------------------|---------|----------------------------------------------|-------|-------|
-| **Requires Token**                 | Yes ($NU)              | Yes  ($SCRT)   |Yes  ($KEEP)               |NA|
-| **Etherum Support**              | Yes  | No (lives on Cosmos/Tendermint) | Separate Parachain/Unknown | Yes |
-| **Proxy Re-encryption Support**  | Yes        |  No (secret contracts & SGX) | Unknown | Yes (happens on the client side) |
-| **Requires running Node**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Valdiators + SGX support) | Yes (KEEP worker)   | No (But runs a server |
+| **Token**                 | $NU              | $SCRT   |$KEEP               |NA|
+| **Blockchain Type**              | Ethereum  | Cosmos/Tendermint | Ethereum/Parachain | Unknown |
+| **PRE Support**  | Yes        |  No (secret contracts & SGX) | Unknown | Yes (happens on the client side) |
+| **Node/Worker**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Valdiators + SGX support) | Yes (KEEP worker)   | No (But runs a server) |
 | **Tokonmics**        | Staking | Staking | Staking   | NA |
-| **3rd Party Service Providers**        | Yes | Unknown | Unknown   | NA |
+| **Delegation**        | Yes (By staking or delegator) | Yes(only delegator) | Yes(only delegator) | No |
