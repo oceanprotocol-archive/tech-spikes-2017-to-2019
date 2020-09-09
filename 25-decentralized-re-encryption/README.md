@@ -74,7 +74,7 @@ With this system, each individual is given access to a small portion of a secret
 
 Keep in the real world: https://blog.keep.network/dapps-daos-and-apartment-hunting-everyday-blockchain-privacy-solutions-2a836c663f12
 
-Keep is used for tBTC.
+Keep is used for [tBTC](https://docs.keep.network/tbtc/index.pdf).
 
 Token: KEEP is a native token in which powers the network and supports all the apps that are and will be built on it. KEEP is required in order for someone to become a member of the Keep network; members are eligible to earn rewards by performing work on the platform. This work is the computation and availability required to select and pull the network’s off-chain “keeps” together and to read the associated data.
 
