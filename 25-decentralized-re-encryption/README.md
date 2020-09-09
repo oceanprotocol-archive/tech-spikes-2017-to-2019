@@ -20,7 +20,7 @@ In Ocean Market, ensure there's an option for people to provide an endpoint of t
 In Ocean Market, if the user chooses to use the OPF-run Provider, set the expectation that this Provider will only be run until some specific cut-off date (e.g. Dec 31, 2021). This ensures that OPF is not bound to some weird long-term commitment that it didn't mean to make.
 
 
-At the [end](#conclusion) of this teck-spike, there is a comparison which summarizes the different
+At the [end](#conclusion) of this tech spike, there is a comparison which summarizes the different
 features that are provided by each network/service.
 
 # Nucypher
@@ -196,7 +196,7 @@ Cons:
 - It is not clear when the seller sends the decryption key.
 
 
-# Conculsion
+# Conclusion
 
 The below table lists and summarizes all the supported features fthat are provided by each network/service.
 
@@ -205,6 +205,6 @@ The below table lists and summarizes all the supported features fthat are provid
 | **Token**                 | $NU              | $SCRT   |$KEEP               |NA|
 | **Blockchain Type**              | Ethereum  | Cosmos/Tendermint | Ethereum/Parachain | Unknown |
 | **Approach to privacy**  | PRE: happens in network        |  Secret contracts & SGX | MPC | PRE: happens on client side |
-| **Node/Worker**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Valdiators + SGX support) | Yes (KEEP worker)   | No (But runs a server) |
+| **Node/Worker**        | Yes (Nucypher PRE Node + Ethereum full node) | Yes (Validators + SGX support) | Yes (KEEP worker)   | No (But runs a server) |
 | **Tokonmics**        | Staking | Staking | Staking   | NA |
-| **Delegation**        | Yes (By staking or delegator) | Yes(only delegator) | Yes(only delegator) | No |
+| **Delegation**        | Yes (By staking or delegator) | Yes (only delegator) | Yes (only delegator) | No |
